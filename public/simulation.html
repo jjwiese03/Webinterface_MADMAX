@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.2.0/lib/bundle.min.js"></script>
+    <script src="/genie.jl/v5.33.7/assets/js/channels.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>     
+    
+    <script src="src/general.js"></script>
+    <script src="src/input_conditions.js"></script>
+
+
+    <title>Simulation</title>
+</head>
+<body class="prevent-select">
+    <div style="padding: 50px; width: 67%; box-sizing: border-box;">
+        <div style="position: relative; display: inline-block;">
+            <canvas class="window-style" style="background-color: white; position: relative;" id="Graph" height="400px" width="1150px"></canvas>
+        
+            <div style="position: absolute; top: 20px; right: 20px; padding: 10px; width: 135px;" class="window-style">
+                <h4 style="margin: 10px 0;">Graph Settings</h4>
+                <input type="checkbox" name="graph_pos_chkbx" id="graph_pos_chkbx" onclick="ax.load_setting_to_memory();ax.draw();">
+                <label for="graph_pos_chkbx">Positions</label><br>
+                <input type="checkbox" name="graph_dist_chkbx" id="graph_dist_chkbx" onclick="ax.load_setting_to_memory();ax.draw()">
+                <label for="graph_dist_chkbx">Distances</label>
+            </div>
+                <div id="Terminal" style="position: absolute; display: inline; bottom: 10px; right: 30px;">
+            </div>
+        </div>
+            
+
+        <div style="display: flex; flex-direction: row; margin-top: 50px; height: 350px;">
+
+            <div class="disc_params window-style">
+                <div style="display: flex; justify-content: space-around; width: 100%;">
+                    <div style="display: flex; flex-direction: column;text-align: center; align-content: center;">
+                        <h3 for="mirror_checkbox">mirror</h3>
+                        <input type="checkbox" class="mirror_checkbox" id="mirror_checkbox" onclick="ax.send_settings_to_backend();ax.draw()">
+                    </div>
+                    <div style="text-align: center;">
+                        <h3>total disccount</h3>
+                        <div class="counter">
+                            <button style="border-radius: 8px 0px 0px 8px;" id = "counter_minus" onclick="element = document.getElementById('counter_txt_id'); if (element.value>0){element.value = parseInt(element.value)-1; ax.delete_discs(1)}; ax.send_settings_to_backend();synch_graphtoinput()">-</button>
+                            <input type="text" id="counter_txt_id" value="0" onchange="element = document.getElementById('counter_txt_id'); if (element.value<0){element.value=0}else if (isNaN(element.value)){element.value=0}else {element.value=Math.round(element.value)}; if(element.value>ax.rects.length){ax.add_disc(undefined,undefined,undefined, element.value-ax.rects.length);}else{ax.delete_discs(ax.rects.length-element.value)}; ax.correct_overlap(true); ax.send_settings_to_backend();">
+                            <button style="border-radius: 0px 8px 8px 0px;" id = "counter_plus" onclick="element = document.getElementById('counter_txt_id'); if (element.value<30){element.value = parseInt(element.value)+1; ax.add_disc();ax.correct_overlap()}; ax.send_settings_to_backend();">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 id="scheibenauswahl" style="margin-bottom: 0; margin-top: 30px;"></h3>
+
+                <div style="position: relative; display: flex; justify-content: space-evenly; margin: 0 0 20px 0px; width: 100%;" id="multi_input">
+                    <div height="100px" style="display: flex; justify-content: center; align-items: center; flex-direction: column; justify-content: flex-end;">
+                        <div class="pos_dis_input" style="margin-bottom: 18px; position: relative; display: flex; border: 1px rgb(0, 0, 0) solid; border-radius: 5px; font-weight: bold;">
+                            <label id="pos_input_chbx" style="border-radius: 4px 0 0 4px;background-color: rgba(53, 134, 53, 0.82);" onclick="pos_chkbx()">pos</label>
+                            <label id="dis_input_chbx" style="border-radius: 0 4px 4px 0;" onclick="dis_chkbx()">dis</label>
+                        </div>
+
+                        <div style="display:flex; width: 100px; height: 40px; flex-direction: row-reverse; background-color: white; text-align: center; border: 2px black solid; border-radius: 10px; box-sizing: border-box;">
+                            <label class="unit_label" for="pos">cm</label>
+                            <input class="textinput_unit" type="text" id="pos" onchange="element = document.getElementById('pos'); if (element.value>1000){element.value=1000}; if (element.value<0){element.value=0}; if (isNaN(element.value)){element.value=0}; resize_font(element); synch_inputtograph(); ax.load_setting_to_memory();">
+                        </div>
+                    </div>
+                    <div >
+                        <h4 style="text-align: center;">thickness</h4>
+                        <div style="position: relative;display:flex; width: 100px; height: 40px; flex-direction: row-reverse; background-color: white; text-align: center; border: 2px black solid; border-radius: 10px; box-sizing: border-box;">
+                            <label class="unit_label" for="width">cm</label>
+                            <input class="textinput_unit" type="text" id="width" onchange="element = document.getElementById('width'); if (element.value>100){element.value=100}; if (element.value<0){element.value=0}; if (isNaN(element.value)){element.value=0}; resize_font(element); synch_inputtograph(); ax.load_setting_to_memory();">
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; flex-direction: column;">
+                        <h4 style="text-align: center;">&epsilon;</h4>
+                        <div style="position: relative;display:flex; width: 60px; height: 40px; flex-direction: row-reverse; background-color: white; text-align: center; border: 2px black solid; border-radius: 10px; box-sizing: border-box;">
+                            <input class="textinput_unit" type="text" id="dielectric" maxlength="3" onchange="element = document.getElementById('dielectric'); if (element.value<0 || isNaN(element.value)){element.value=0}; synch_inputtograph(); ax.load_setting_to_memory();">
+                        </div>
+                    </div>
+                </div>
+                <button class="button" style="background-color: rgb(229, 126, 126); margin-bottom: 20px;" onclick="ax.delete_fdiscs()">delete</button>
+            </div>
+
+            <div class="download_form">
+                <div style="display: flex;flex-direction: column; justify-content: space-around; padding:20px;" class="window-style">
+                    <button class="button" onclick="getElementById('input_select').click()">CSV Upload</button>  
+                    <input style="display: none;" id="input_select" class="button" type="file" accept=".csv">
+                    <button class="button" id="example_button" style=" text-align: center; margin-top: 20px; box-sizing: border-box;">
+                        Example
+                        <img src="arrow_down.png" alt="arrow-down" style="position: relative; top: 4px; left: 20px;">
+                    </button> 
+                </div>
+                <div style="display: inline-block; padding: 20px;" class="window-style">
+                    <input type="checkbox" id="radio_all" name="all" onclick="if(getElementById('radio_all').checked){getElementById('radio_pos').checked = true; getElementById('radio_width').checked = true; getElementById('radio_dielectric').checked = true;};">
+                    <label for="radio_all">All</label> <br>
+                    <input type="checkbox" id="radio_pos" name="position" onclick="if(!getElementById('radio_pos').checked){getElementById('radio_all').checked = false}">
+                    <label for="radio_pos">Positions</label> <br>
+                    <input type="checkbox" id="radio_width" name="width" onclick="if(!getElementById('radio_width').checked){getElementById('radio_all').checked = false}">
+                    <label for="radio_width">Width</label><br>
+                    <input type="checkbox" id="radio_dielectric" name="width" onclick="if(!getElementById('radio_dielectric').checked){getElementById('radio_all').checked = false}">
+                    <label for="radio_width">Dielectric</label> <br>
+                    <button class="button" style="margin-top: 20px; margin-bottom: 0;" onclick="data_export([getElementById('radio_pos').checked,getElementById('radio_width').checked,getElementById('radio_dielectric').checked])" type="submit">Export</button>  
+                </div>
+            </div>
+        </div>
+</div>
+
+    
+    <div style="position: relative;display: flex; flex-direction: column;height: 60%; background-color: white;" class="window-style">
+        <h2 style="text-align: center; margin-bottom: 0px;">Boostfactorcurve</h2>
+        <div id="boost_plot" style="position: relative;align-self: center; background-color: white;">
+            <div style="display: flex;position: absolute; top: 10px; left: 40px;" >
+                <label for="scale_checkbox_1" style="margin-right: 10px;">lin</label>
+                <input type="checkbox" class="scale_checkbox after_blue" id="scale_checkbox_1" onclick="update_log_lin_1(); ax.load_setting_to_memory(); ax.send_settings_to_backend();ax.draw()">      
+                <label for="scale_checkbox_1" style="margin-left: 10px;">log</label>
+            </div>
+            <div style="display: flex;position: absolute; top: 10px; right: 40px;" >
+                <label for="scale_checkbox_2" style="margin-right: 10px;">lin</label>
+                <input type="checkbox" class="scale_checkbox after_red" id="scale_checkbox_2" onclick="update_log_lin_2(); ax.load_setting_to_memory(); ax.send_settings_to_backend();ax.draw()">
+                <label for="scale_checkbox_2" style="margin-left: 10px;">log</label>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-around; margin: 0 60px; padding-bottom: 20px;" class="window-style">
+            <div>
+                <h4 style="text-align: center;">frequency range [GHz]</h4>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <input type="text" id="freq_min" class="textinput" onchange="control_freq_condition();ax.send_settings_to_backend(); ax.load_setting_to_memory();" placeholder="f_min">
+                    <h2 style="margin: 0 10px;">-</h2>
+                    <input type="text" id="freq_max" class="textinput" onchange="control_freq_condition();ax.send_settings_to_backend(); ax.load_setting_to_memory();" placeholder="f_max">
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <h4 style="text-align: center;"><math>tan(&delta;) &middot; 10<sup>-6</sup></math></h4>
+                <input type="text" id="tan_delta" class="textinput" style="width: 60px;" maxlength="5" onchange="control_tand_condition(); ax.send_settings_to_backend(); ax.load_setting_to_memory();">
+            </div>
+        </div>
+
+        
+        <div id="alert_div" style="display: flex; justify-content: center; background-color: red; margin-top: 10px;"></div>
+        <div style="margin-bottom: 20px;">
+            <h4 style="display: flex; justify-content: center;">resolution</h4>
+            <input type="range" id="slider_resolution" min="5" max="1000" onchange="ax.send_settings_to_backend(); ax.load_setting_to_memory();" style="width: 80%; margin: 0 10%;">
+        </div>
+    </div>
+
+    <script src="src/boostplot.js"></script>
+
+    <script src="src/simulation.js"></script>
+</body>
+</html>
