@@ -19,6 +19,7 @@ const slider_resolution = document.getElementById("slider_resolution");
 
 graph_pos_chkbx.checked = true
 var dis_pos_switch = true       // true == pos      false == dis
+var mouse_status_sim = false
 
 
 // Erstelle einen Efield channel
@@ -36,7 +37,7 @@ var dis_pos_switch = true       // true == pos      false == dis
 var focus_disc = [];     // speichert welche disc zuletzt im focus war
 var fdisc_indexlist = [];
 
-const fine_adjustment_size = 20 // speichert die größe des Feinjustierungskastens in px
+const fine_adjustment_size = 15 // speichert die größe des Feinjustierungskastens in px
 
 
 
@@ -141,7 +142,7 @@ class Axes{
             this.context.stroke();
             
             this.context.beginPath();   
-            this.context.rect(this.padd[3]+this.cm_to_pixel(rect.x), this.padd[0], this.cm_to_pixel(rect.width), 15);
+            this.context.rect(this.padd[3]+this.cm_to_pixel(rect.x), this.padd[0], this.cm_to_pixel(rect.width), fine_adjustment_size);
             this.context.fillStyle = "rgb(52, 71, 122)";
             this.context.fill();
 
@@ -624,6 +625,7 @@ import_button.addEventListener("change", function(f){
 });
 // EventListener
 canvas.addEventListener("mousedown", () => {
+    mouse_status_sim = true;
     for (const [index,rect] of Object.entries(ax.rects)) {
         // Rechteck verschieben
         // Prüfe ob Click in Rechteck liegt
@@ -634,7 +636,7 @@ canvas.addEventListener("mousedown", () => {
                     var scale_factor = 1
                 }
                 else{
-                    var scale_factor = 0.7
+                    var scale_factor = 0.2
                 }
                 for (const element of focus_disc){
                     dx.push([mouse_x, element.x])
@@ -643,6 +645,7 @@ canvas.addEventListener("mousedown", () => {
                     for (const [index, element] of Object.entries(focus_disc)){
                         element.x = Round(dx[index][1]+Round(ax.pixel_to_cm(mouse_x-dx[index][0])*scale_factor, 3), 10)
                     }
+                    
                     ax.correct_overlap();
                     synch_graphtoinput();
                     ax.draw();
@@ -699,7 +702,7 @@ canvas.addEventListener("mousedown", () => {
     }, 2)
 });
 
-document.addEventListener("mouseup", () => {try{clearInterval(IntervallId); /* lade die Einstellungen in den speicher wenn das Intervall existiert */ ax.load_setting_to_memory()} catch(error){}; try{clearInterval(Intervall_multiselect); ax.load_setting_to_memory();} catch(error){}; try{clearInterval(boostplot_intervall)}catch{}; ax.multiselect_arr = []; ax.draw()});
+document.addEventListener("mouseup", () => {mouse_status_sim = false; try{clearInterval(IntervallId); /* lade die Einstellungen in den speicher wenn das Intervall existiert */ ax.load_setting_to_memory()} catch(error){}; try{clearInterval(Intervall_multiselect); ax.load_setting_to_memory();} catch(error){}; try{clearInterval(boostplot_intervall)}catch{}; ax.multiselect_arr = []; ax.draw(); canvas.style.cursor = "default";});
 canvas.addEventListener("mousemove", event => {
     const canvas_coordinates = canvas.getBoundingClientRect();
     mouse_x = event.clientX - canvas_coordinates.left - ax.padd[3];
@@ -719,6 +722,17 @@ canvas.addEventListener("mousemove", event => {
     //         canvas.style.cursor = "default";
     //     }
     // };
+
+    // Änderung der Dicke (Mausänderung) (Feature vorerst herausgenommen)
+    for (const rect of ax.rects) {
+        if (mouse_x>=ax.cm_to_pixel(rect.x) && mouse_x<=ax.cm_to_pixel(rect.x+rect.width) && mouse_y<=ax.rect_height && mouse_y>=ax.rect_height-fine_adjustment_size){
+            canvas.style.cursor = "ew-resize";
+            break;
+        }
+        else if(!mouse_status_sim){
+            canvas.style.cursor = "default";
+        }
+    };
     document.getElementById("Terminal").innerHTML = "x = " + String(mouse_x) + "px <br> y = " + String(parseInt(mouse_y)) + "px";
 });
 
