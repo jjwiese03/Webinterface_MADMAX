@@ -629,29 +629,24 @@ canvas.addEventListener("mousedown", () => {
     for (const [index,rect] of Object.entries(ax.rects)) {
         // Rechteck verschieben
         // Prüfe ob Click in Rechteck liegt
-        if (mouse_x > ax.cm_to_pixel(rect.x) && mouse_x < ax.cm_to_pixel(rect.x+rect.width) && mouse_y>0){
-            if (focus_disc.some(element => element==rect) && mouse_y<ax.rect_height){
-                var dx = []
-                if(mouse_y<ax.rect_height-fine_adjustment_size){
-                    var scale_factor = 1
-                }
-                else{
-                    var scale_factor = 0.2
-                }
-                for (const element of focus_disc){
-                    dx.push([mouse_x, element.x])
-                }
-                IntervallId = setInterval(() => {
-                    for (const [index, element] of Object.entries(focus_disc)){
-                        element.x = Round(dx[index][1]+Round(ax.pixel_to_cm(mouse_x-dx[index][0])*scale_factor, 3), 10)
-                    }
-                    
-                    ax.correct_overlap();
-                    synch_graphtoinput();
-                    ax.draw();
-                }, 2);
+        if (mouse_x > ax.cm_to_pixel(rect.x) && mouse_x < ax.cm_to_pixel(rect.x+rect.width) && mouse_y>0 && mouse_y<ax.rect_height){
+            if (!(focus_disc.some(element => element==rect))){
+                focus_disc = [rect]
+                fdisc_indexlist = [index]
             }
-
+            var dx = []
+            var scale_factor = (mouse_y<ax.rect_height-fine_adjustment_size) ? 1 : 0.2
+            for (const element of focus_disc){
+                dx.push([mouse_x, element.x])
+            }
+            IntervallId = setInterval(() => {
+                for (const [index, element] of Object.entries(focus_disc)){
+                    element.x = Round(dx[index][1]+Round(ax.pixel_to_cm(mouse_x-dx[index][0])*scale_factor, 3), 10)
+                }
+                ax.correct_overlap();
+                synch_graphtoinput();
+                ax.draw();
+            }, 2);
             // sende Einstellungen in regelmäßigen Abständen an das Backend
             boostplot_intervall = setInterval(() => {try{ax.send_settings_to_backend()}catch{console.log("senden fehlgeschlagen")}}, 20);
             return;
