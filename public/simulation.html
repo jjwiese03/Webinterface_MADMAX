@@ -10,9 +10,14 @@
     <script src="/genie.jl/v5.33.7/assets/js/channels.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>     
     
-    <script src="src/general.js"></script>
-    <script src="src/input_conditions.js"></script>
-
+    
+    <script src="src/general.js" defer></script>
+    <script src="src/channels.js" defer></script>
+    <script src="src/discplot.js" defer></script>
+    <script src="src/boostplot.js" defer></script>
+    <script src="src/download_section.js" defer></script>
+    <script src="src/input_conditions.js" defer></script>
+    <script src="src/server_communication.js" defer></script>
 
     <title>Simulation</title>
 </head>
@@ -136,16 +141,14 @@
             </div>
         </div>
 
-        
         <div id="alert_div" style="display: flex; justify-content: center; background-color: red; margin-top: 10px;"></div>
         <div style="margin-bottom: 20px;">
             <h4 style="display: flex; justify-content: center;">resolution</h4>
             <input type="range" id="slider_resolution" min="5" max="1000" onchange="ax.send_settings_to_backend(); ax.load_setting_to_memory();" style="width: 80%; margin: 0 10%;">
         </div>
     </div>
-
-    <script src="src/boostplot.js"></script>
-
-    <script src="src/simulation.js"></script>
+    
+    
+    
 </body>
 </html>
