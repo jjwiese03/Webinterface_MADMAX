@@ -32,7 +32,8 @@ channel("/____/echo") do
     data = hcat(freq./10^9, boost, ref)
     Genie.WebChannels.message(client, JSON.json(transpose(data)))
 
-    # WebChannels.broadcast("____", JSON.json(transpose(data)))
+
+    # @info WebChannels.broadcast("____", JSON.json(transpose(data)))
     #Genie.WebChannels.unsubscribe_disconnected_clients()
 end
 

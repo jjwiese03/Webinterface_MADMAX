@@ -277,7 +277,6 @@ class Axes{
     }
     send_settings_to_backend(){
         //send setting data to backend
-        console.log("test", WS)
         
         if(tan_delta_field.value==""){
             document.getElementById("alert_div").innerHTML = "choose your tan(&delta;)"
@@ -287,8 +286,7 @@ class Axes{
             document.getElementById("alert_div").innerHTML = ""
 
             const disc_data = this.rects.map(element => ({"x": element.x/100, "width":element.width/100, dielect_const: element.dielect_const}));
-            document.getElementById("alert_div").innerHTML = ""
-            try{Genie.WebChannels.sendMessageTo('____', 'echo', {"client_id": "test","disc_data": disc_data, "f_min": parseFloat(freq_min_field.value)*10**9, "f_max": parseFloat(freq_max_field.value)*10**9, "n": parseInt(slider_resolution.value), "mirror": document.getElementById("mirror_checkbox").checked, "tan_delta":parseFloat(tan_delta_field.value)*10**-6})}
+            try{Genie.WebChannels.sendMessageTo('____', 'echo', {"disc_data": disc_data, "f_min": parseFloat(freq_min_field.value)*10**9, "f_max": parseFloat(freq_max_field.value)*10**9, "n": parseInt(slider_resolution.value), "mirror": document.getElementById("mirror_checkbox").checked, "tan_delta":parseFloat(tan_delta_field.value)*10**-6})}
             catch{console.log("Daten konnten nicht gesendet werden")}
         }
         else{

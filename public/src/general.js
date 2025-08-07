@@ -19,6 +19,9 @@ const freq_max_field = document.getElementById("freq_max")
 const tan_delta_field = document.getElementById("tan_delta")
 const slider_resolution = document.getElementById("slider_resolution");
 
+// session
+const session_btn1 = document.getElementById("session_start_button");
+
 
 function resize_font(element){
     let font_size = 21;
@@ -57,3 +60,16 @@ function find_stepvalue(start, stop, num){
 function Round(value, decimals){
     return parseFloat(value.toFixed(decimals))
 } 
+
+
+
+const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+function generateString(length) {
+    let result = '';
+    const charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}

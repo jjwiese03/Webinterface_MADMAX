@@ -417,7 +417,7 @@ function isDev() {
 // --------------- Initialize WebChannel ---------------
 // compatibilty with earlier versions
 if (window.CHANNEL === undefined) {
-  WS = Genie.initWebChannel(Genie.Settings.webchannels_default_route || '____');
+  Genie.initWebChannel(Genie.Settings.webchannels_default_route || '____');
 } else if (typeof window.CHANNEL === 'string') {
-  WS = Genie.initWebChannel(window.CHANNEL);
+  Genie.initWebChannel(window.CHANNEL);
 }
