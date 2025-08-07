@@ -1,3 +1,28 @@
+// discplot elements
+const canvas = document.getElementById("Graph");
+const position_field = document.getElementById("pos");
+const width_field = document.getElementById("width");
+const dielectric_field = document.getElementById("dielectric");
+const counter_field = document.getElementById("counter_txt_id");
+const import_button = document.getElementById("input_select");
+const mirror_checkbox = document.getElementById("mirror_checkbox");
+const boostfactor_plot = document.getElementById("boostfactor");
+const graph_pos_chkbx = document.getElementById("graph_pos_chkbx");
+const graph_dist_chkbx = document.getElementById("graph_dist_chkbx");
+
+// boostplot elements
+const element_ = document.getElementById("boost_plot")
+const boostplot_chkbx_1 = document.getElementById("scale_checkbox_1")
+const boostplot_chkbx_2 = document.getElementById("scale_checkbox_2")
+const freq_min_field = document.getElementById("freq_min")
+const freq_max_field = document.getElementById("freq_max")
+const tan_delta_field = document.getElementById("tan_delta")
+const slider_resolution = document.getElementById("slider_resolution");
+
+// session
+const session_btn1 = document.getElementById("session_start_button");
+
+
 function resize_font(element){
     let font_size = 21;
     element.style.fontSize = String(font_size)+"px";
@@ -36,15 +61,15 @@ function Round(value, decimals){
     return parseFloat(value.toFixed(decimals))
 } 
 
-function pos_chkbx(){
-    document.getElementById('pos_input_chbx').style.backgroundColor = 'rgba(53, 134, 53, 0.82)'
-    document.getElementById('dis_input_chbx').style.backgroundColor = 'rgba(191, 197, 191, 0.97)'
-    dis_pos_switch = true
-    synch_graphtoinput()
-}
-function dis_chkbx(){
-    document.getElementById('pos_input_chbx').style.backgroundColor = 'rgba(191, 197, 191, 0.97)'
-    document.getElementById('dis_input_chbx').style.backgroundColor = 'rgba(53, 134, 53, 0.82)'
-    dis_pos_switch = false
-    synch_graphtoinput()
+
+
+const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+function generateString(length) {
+    let result = '';
+    const charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }

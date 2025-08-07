@@ -1,8 +1,3 @@
-const element_ = document.getElementById("boost_plot")
-const boostplot_chkbx_1 = document.getElementById("scale_checkbox_1")
-const boostplot_chkbx_2 = document.getElementById("scale_checkbox_2")
-
-
 // Declare the chart dimensions and margins.
 const width = 550;
 const height = 500;
@@ -14,13 +9,6 @@ const marginLeft = 80;
 element_.width = width+marginRight+marginLeft
 element_.height = height+marginBottom+marginTop
 
-// Websocket Connection Daten verarbeiten
-window.parse_payload = function(payload) {
-    if (payload!="true" && payload!="nothing"){
-        try{update_boostplot(JSON.parse(payload))}catch(error){console.log("drawing Boostplot failed!!!")};
-    } 
-    //Genie.WebChannels.sendMessageTo('____', 'echo', 'Hello!')
-  }
 
 function update_log_lin_1(){
     if (boostplot_chkbx_1.checked){

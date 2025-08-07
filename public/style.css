@@ -169,6 +169,7 @@
             width: 30px;
             margin: 0;
             z-index: 0;
+            appearance: none;
             -webkit-appearance: none;
         }
         .scale_checkbox::before {
@@ -215,7 +216,69 @@
         }
 
         .pos_dis_input label:hover{
-            /* background-color:  rgba(203, 207, 252, 0.608); */
-            /* background-color: rgba(226, 252, 226, 0.914); */
             filter: brightness(95%);
+        }
+
+
+
+        /* Gruppenberbeitung noch in bearbeitung. Bei Beddarf löschen */
+        .session_start_button{
+            z-index: 2;
+
+            position: relative;
+            appearance: none;
+            margin: 0;
+        }
+        .session_start_button::before{
+
+            height: 40px;
+            width: 180px;
+            justify-content: center;
+            align-items: center;
+            
+            border: 2px black solid;
+            border-radius: 10px;
+            font-size: 20px;
+            background-color: rgb(126, 133, 229);
+            display: flex;
+            content: "start session";
+            position: relative;
+        }
+        .session_start_button:hover{
+            filter: brightness(85%);
+        }
+        .session_start_button:checked::before{
+            content: "stop session";
+            background-color: rgb(229, 126, 126);
+
+        }
+
+        .session_start_button ~ div{
+            -webkit-user-select: text; /* Safari */
+            -ms-user-select: text; /* IE 10 and IE 11 */
+            user-select: text; /* Standard syntax */
+            
+            z-index: 1;
+            position: relative;
+
+            font-family: 'Courier New', Courier;
+            font-size: 25px;
+            font-weight: bold;
+
+            top: -42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            border: black 1px solid;
+            border-radius: 10px;
+            transition: all 0.5s;
+        }
+
+        .session_start_button:checked ~ div{
+            padding-top: 42px;
+            width: inherit;
+            background-color: rgba(175, 175, 175, 0.622);
+            transition: all 0.5s;
+
         }

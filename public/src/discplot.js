@@ -1,38 +1,6 @@
-const canvas = document.getElementById("Graph");
-//const ctx = canvas.getContext("2d");
-
-const position_field = document.getElementById("pos");
-const width_field = document.getElementById("width");
-const dielectric_field = document.getElementById("dielectric");
-const counter_field = document.getElementById("counter_txt_id");
-const import_button = document.getElementById("input_select");
-const mirror_checkbox = document.getElementById("mirror_checkbox");
-const boostfactor_plot = document.getElementById("boostfactor");
-const graph_pos_chkbx = document.getElementById("graph_pos_chkbx");
-const graph_dist_chkbx = document.getElementById("graph_dist_chkbx");
-
-
-const freq_min_field = document.getElementById("freq_min")
-const freq_max_field = document.getElementById("freq_max")
-const tan_delta_field = document.getElementById("tan_delta")
-const slider_resolution = document.getElementById("slider_resolution");
-
 graph_pos_chkbx.checked = true
 var dis_pos_switch = true       // true == pos      false == dis
 var mouse_status_sim = false
-
-
-// Erstelle einen Efield channel
-// Genie.initWebChannel("Efield")
-// process_payload("Efield", event => {
-//     console.log("Nachricht über Efield Channel erhalten")
-// })
-
-
-// console.log(Genie.WebChannels.WebChannel.socket.readyState)
-// Genie.WebChannels.process_payload("____", event => {
-//     console.log("anfrage von Webchannel")
-// })
 
 var focus_disc = [];     // speichert welche disc zuletzt im focus war
 var fdisc_indexlist = [];
@@ -312,12 +280,12 @@ class Axes{
         
         if(tan_delta_field.value==""){
             document.getElementById("alert_div").innerHTML = "choose your tan(&delta;)"
+            update_boostplot([0,0],[0,0])
         }
         else if (freq_min_field.value.length!=0 && freq_max_field.value.length!=0){
             document.getElementById("alert_div").innerHTML = ""
 
             const disc_data = this.rects.map(element => ({"x": element.x/100, "width":element.width/100, dielect_const: element.dielect_const}));
-            document.getElementById("alert_div").innerHTML = ""
             try{Genie.WebChannels.sendMessageTo('____', 'echo', {"disc_data": disc_data, "f_min": parseFloat(freq_min_field.value)*10**9, "f_max": parseFloat(freq_max_field.value)*10**9, "n": parseInt(slider_resolution.value), "mirror": document.getElementById("mirror_checkbox").checked, "tan_delta":parseFloat(tan_delta_field.value)*10**-6})}
             catch{console.log("Daten konnten nicht gesendet werden")}
         }
@@ -494,7 +462,6 @@ function synch_graphtoinput(){
 }
 function synch_inputtograph(){
     // synchronisiere die Inputfelder mit der den Einstellungen der Scheiben im Graph
-    console.log("synch_inputtograph()")
 
     // Single Select
     if(focus_disc.length == 1){
@@ -514,9 +481,9 @@ function synch_inputtograph(){
         // focus_disc[0].dielect_const = parseFloat(dielectric_field.value);
         ax.rects.map(element => element.dielect_const=parseFloat(dielectric_field.value))
     }
+
     // Multiselect
     else if(focus_disc.length > 1){
-        console.log("dis_pos_switch: ", dis_pos_switch)
         if(dis_pos_switch){
             if (position_field.value!=""){
                 var dx = parseFloat(position_field.value)-focus_disc[0].x
@@ -548,6 +515,7 @@ function synch_inputtograph(){
 }
 
 function synch_fdisc_text(){
+    // aktualisiert den Textschriftzug der aktuell ausgewählten discs
     if(fdisc_indexlist.length > 1){
         document.getElementById("scheibenauswahl").innerHTML = "discs " + String(fdisc_indexlist[0]+1) + " - " + String(fdisc_indexlist[fdisc_indexlist.length-1]+1 + " selected")
     }
@@ -559,70 +527,6 @@ function synch_fdisc_text(){
     }
 }
 
-function data_export(indices = [true, true, true]){
-    var df = new dfd.DataFrame(ax.rects)
-    var select_cols = df.columns.filter((value, n) => indices[n])
-
-    df = df.loc({columns: select_cols})
-    df.print()
-
-    var csv = dfd.toCSV(df)
-    
-    csv = csv.replaceAll(",", ";")
-    // Blob erstellen
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-
-    // Download-Link erzeugen
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", "daten.csv");
-    link.style.display = "none";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-// Datenupload
-import_button.addEventListener("change", function(f){
-    reader_ = new FileReader();
-    reader_.readAsText(f.target.files[0])
-
-    reader_.addEventListener('load', () => {
-        alert("Data is overwritten!")
-
-        data = reader_.result.replaceAll("\r", "").split("\n")
-
-        if (data[data.length-1] == ""){
-            data.pop();
-        }
-
-        header = data[0].split(";")
-        const no_rectx = !header.some((e) => e ==="x")
-        data.shift();
-
-        ax.clear_discs();
-        for (var element of data){
-            var default_rect = {"x": 0, "width": 0.1, "dielect_const": 24}
-            if (no_rectx && ax.rects.length!=0){
-                default_rect["x"] = ax.rects[ax.rects.length-1].x+ax.rects[ax.rects.length-1].width
-            }
-            for (var [i, e] of element.split(";").entries()){
-                default_rect[header[i]] = Round(parseFloat(e), 10)
-            }
-            ax.rects.push(default_rect)
-        }
-
-        ax.draw();
-        ax.send_settings_to_backend()
-
-        focus_disc = [];
-        fdisc_indexlist = [];
-        synch_graphtoinput();
-        ax.correct_overlap(true);
-        ax.load_setting_to_memory();
-    });
-});
 // EventListener
 canvas.addEventListener("mousedown", () => {
     mouse_status_sim = true;
@@ -651,45 +555,6 @@ canvas.addEventListener("mousedown", () => {
             boostplot_intervall = setInterval(() => {try{ax.send_settings_to_backend()}catch{console.log("senden fehlgeschlagen")}}, 20);
             return;
         }
-
-
-        // // Rechteck skalieren (Feature vorerst herausgenommen)
-        // // Prüfe ob Click am Rand des Rechtecks liegt
-        // else if (mouse_x<=rect.x && mouse_x>=rect.x-3){
-        //     focus_disc = [rect];
-        //     var mausposition = mouse_x;
-        //     IntervallId = setInterval(() => {
-        //             if(ax.pixel_to_cm(rect.width)-mouse_x+mausposition>0){
-        //                 rect.x = parseFloat(ax.pixel_to_cm(mouse_x).toFixed(3))
-        //                 rect.width = parseFloat((ax.pixel_to_cm(ax.cm_to_pixel(rect.width)-mouse_x+mausposition)).toFixed(3))
-        //                 mausposition = mouse_x;
-        //                 ax.correct_overlap()
-        //             }
-        //             else{
-        //                 rect.width = 0
-        //             }
-        //             synch_graphtoinput();
-        //             ax.draw()
-        //     }, 2)
-        //     return;
-        // }
-        // else if (mouse_x>=ax.cm_to_pixel(rect.x+rect.width) && mouse_x<=ax.cm_to_pixel(rect.x+rect.width)+3){
-        //     focus_disc = [rect];
-        //     var mausposition = mouse_x;
-        //     IntervallId = setInterval(() => {
-        //         if(ax.cm_to_pixel(rect.width)+mouse_x-mausposition>0){
-        //             rect.width = parseFloat((rect.width+ax.pixel_to_cm(mouse_x-mausposition)).toFixed(3))
-        //             mausposition = mouse_x;
-        //             ax.correct_overlap()
-        //         }
-        //         else{
-        //             rect.width = 0
-        //         }
-        //         synch_graphtoinput();
-        //         ax.draw()
-        //     }, 2)
-        //     return;
-        // }
     }
     const origin = [mouse_x, mouse_y]
     Intervall_multiselect = setInterval(() => {
@@ -703,21 +568,6 @@ canvas.addEventListener("mousemove", event => {
     mouse_x = event.clientX - canvas_coordinates.left - ax.padd[3];
     mouse_y = canvas_coordinates.top - event.clientY + canvas.height - ax.padd[2];
     
-    // // Änderung der Dicke (Mausänderung) (Feature vorerst herausgenommen)
-    // for (const rect of ax.rects) {
-    //     if ((mouse_x<ax.cm_to_pixel(rect.x) && mouse_x>=ax.cm_to_pixel(rect.x)-3)||(mouse_x>ax.cm_to_pixel(rect.x)+ax.cm_to_pixel(rect.width) && mouse_x<=ax.cm_to_pixel(rect.x+rect.width)+3)){
-    //         setTimeout(() => {
-    //             if ((mouse_x<ax.cm_to_pixel(rect.x) && mouse_x>=ax.cm_to_pixel(rect.x)-3)||(mouse_x>ax.cm_to_pixel(rect.x+rect.width) && mouse_x<=ax.cm_to_pixel(rect.x+rect.width)+3)){
-    //                 canvas.style.cursor = "col-resize";
-    //             }
-    //         }, 4);
-    //         break;
-    //     }
-    //     else{
-    //         canvas.style.cursor = "default";
-    //     }
-    // };
-
     // Änderung der Dicke (Mausänderung) (Feature vorerst herausgenommen)
     for (const rect of ax.rects) {
         if (mouse_x>=ax.cm_to_pixel(rect.x) && mouse_x<=ax.cm_to_pixel(rect.x+rect.width) && mouse_y<=ax.rect_height && mouse_y>=ax.rect_height-fine_adjustment_size){
