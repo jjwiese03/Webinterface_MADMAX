@@ -91,10 +91,7 @@
                 <div style="display: flex;flex-direction: column; justify-content: space-around; padding:20px;" class="window-style">
                     <button class="button" onclick="getElementById('input_select').click()">CSV Upload</button>  
                     <input style="display: none;" id="input_select" class="button" type="file" accept=".csv">
-                    <button class="button" id="example_button" style=" text-align: center; margin-top: 20px; box-sizing: border-box;">
-                        Example
-                        <img src="arrow_down.png" alt="arrow-down" style="position: relative; top: 4px; left: 20px;">
-                    </button> 
+                    <button class="button" style="margin-top: 20px;" onclick="load_example()">Example</button>  
                 </div>
                 <div style="display: inline-block; padding: 20px;" class="window-style">
                     <input type="checkbox" id="radio_all" name="all" onclick="if(getElementById('radio_all').checked){getElementById('radio_pos').checked = true; getElementById('radio_width').checked = true; getElementById('radio_dielectric').checked = true;};">
@@ -107,11 +104,6 @@
                     <label for="radio_width">Dielectric</label> <br>
                     <button class="button" style="margin-top: 20px; margin-bottom: 0;" onclick="data_export([getElementById('radio_pos').checked,getElementById('radio_width').checked,getElementById('radio_dielectric').checked])" type="submit">Export</button>  
                 </div>
-            </div>
-
-            <div class="window-style" style="margin-left: 50px; padding: 20px;">
-                <input type="checkbox" style="width: 100%;" class="session_start_button" id="session_start_button" onclick="session()" name="session_start_button" id="session_start_button">  
-                <div for="session_start_button">...</div>
             </div>
         </div>
     </div>
