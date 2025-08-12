@@ -55,8 +55,8 @@ import_button.addEventListener("change", function(f){
         ax.draw();
         ax.send_settings_to_backend()
 
-        focus_disc = [];
-        fdisc_indexlist = [];
+        ax.focus_disc = [];
+        ax.fdisc_indexlist = [];
         synch_graphtoinput();
         ax.correct_overlap(true);
         ax.load_setting_to_memory();
@@ -76,8 +76,8 @@ function load_example(){
     ]
     ax.draw();
 
-    focus_disc = [];
-    fdisc_indexlist = [];
+    ax.focus_disc = [];
+    ax.fdisc_indexlist = [];
     synch_graphtoinput();
     ax.correct_overlap(true);
     ax.send_settings_to_backend()
