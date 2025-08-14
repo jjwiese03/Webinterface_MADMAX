@@ -10,40 +10,6 @@ element_.width = width+marginRight+marginLeft
 element_.height = height+marginBottom+marginTop
 
 
-function update_log_lin_1(){
-    if (boostplot_chkbx_1.checked){
-        y = d3.scaleLog()
-            .domain([1, 100])
-            .range([height - marginBottom, marginTop])
-            .nice();
-        y_axis_1.call(d3.axisLeft(y))
-
-    }
-    else{
-        y = d3.scaleLinear()
-            .domain([1, 100])
-            .range([height - marginBottom, marginTop])
-            .nice();
-        y_axis_1.call(d3.axisLeft(y))           
-    }
-}
-function update_log_lin_2(){
-    if (boostplot_chkbx_2.checked){
-        y2 = d3.scaleLog()
-            .domain([0.1, 1])
-            .range([height - marginBottom, marginTop])
-            .nice();
-        y_axis_2.call(d3.axisRight(y2))
-
-    }
-    else{
-        y2 = d3.scaleLinear()
-            .domain([0, 2])
-            .range([height - marginBottom, marginTop])
-            .nice();
-        y_axis_2.call(d3.axisRight(y2))           
-    }
-}
 
 // Declare the x (horizontal position) scale.
 var x = d3.scaleLinear([0, 5], [marginLeft, width - marginRight])
@@ -158,14 +124,50 @@ function update_boostplot(data){
         .call(d3.axisBottom(x));
 
     y_axis_1.call(d3.axisLeft(y));
+    y_axis_2.call(d3.axisRight(y2));
 
     grid.call(d3.axisRight(y).tickSizeInner(width-marginLeft-marginRight));
     grid.selectAll(".tick text").remove();
 
-    y_axis_2.call(d3.axisRight(y2));
 
     path.attr("d", line(data));
     path_ref.attr("d", line_ref(data));
+}
+
+
+function update_log_lin_1(){
+    if (boostplot_chkbx_1.checked){
+        y = d3.scaleLog()
+            .domain([1, 100])
+            .range([height - marginBottom, marginTop])
+            .nice();
+        y_axis_1.call(d3.axisLeft(y))
+
+    }
+    else{
+        y = d3.scaleLinear()
+            .domain([1, 100])
+            .range([height - marginBottom, marginTop])
+            .nice();
+        y_axis_1.call(d3.axisLeft(y))           
+    }
+}
+function update_log_lin_2(){
+    if (boostplot_chkbx_2.checked){
+        y2 = d3.scaleLog()
+            .domain([0.1, 1])
+            .range([height - marginBottom, marginTop])
+            .nice();
+        y_axis_2.call(d3.axisRight(y2))
+
+    }
+    else{
+        y2 = d3.scaleLinear()
+            .domain([0, 2])
+            .range([height - marginBottom, marginTop])
+            .nice();
+        y_axis_2.call(d3.axisRight(y2))           
+    }
 }
 
 
@@ -186,10 +188,6 @@ svg.on("mousemove touchmove", (event)=> {
         if (mouse_status){
             sel_rect.attr("x", Math.min(rect_x, mouse_x)).attr("width", Math.abs(mouse_x-rect_x))
         }
-    }
-    else if (mouse_x<=marginLeft){
-        zoomline.attr("x1", marginLeft)
-            .attr("x2", marginLeft)
     }
     else {
         zoomline.attr("x1", width-marginRight)

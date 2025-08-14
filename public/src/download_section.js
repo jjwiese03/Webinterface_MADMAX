@@ -1,6 +1,6 @@
 
 function data_export(indices = [true, true, true]){
-    var df = new dfd.DataFrame(ax.dics)
+    var df = new dfd.DataFrame(ax.discs)
     var select_cols = df.columns.filter((value, n) => indices[n])
 
     df = df.loc({columns: select_cols})
@@ -43,22 +43,21 @@ import_button.addEventListener("change", function(f){
         ax.clear_discs();
         for (var element of data){
             var default_rect = {"x": 0, "width": 0.1, "dielect_const": 24}
-            if (no_rectx && ax.dics.length!=0){
-                default_rect["x"] = ax.dics[ax.dics.length-1].x+ax.dics[ax.dics.length-1].width
+            if (no_rectx && ax.discs.length!=0){
+                default_rect["x"] = ax.discs[ax.discs.length-1].x+ax.discs[ax.discs.length-1].width
             }
             for (var [i, e] of element.split(";").entries()){
                 default_rect[header[i]] = Round(parseFloat(e), 10)
             }
-            ax.dics.push(default_rect)
+            ax.discs.push(default_rect)
         }
+        ax.correct_overlap(true);
+        focus_disc = [];
+        fdisc_indexlist = [];
 
         ax.draw();
         ax.send_settings_to_backend()
-
-        focus_disc = [];
-        fdisc_indexlist = [];
         synch_graphtoinput();
-        ax.correct_overlap(true);
         ax.load_setting_to_memory();
     });
 });
@@ -66,7 +65,7 @@ import_button.addEventListener("change", function(f){
 
 function load_example(){
     ax.clear_discs();
-    ax.dics = [{ x: 0.71, width: 0.1, dielect_const: 24 },
+    ax.discs = [{ x: 0.71, width: 0.1, dielect_const: 24 },
         { x: 1.52, width: 0.1, dielect_const: 24 },
         { x: 2.33, width: 0.1, dielect_const: 24 },
         { x: 3.14, width: 0.1, dielect_const: 24 },
