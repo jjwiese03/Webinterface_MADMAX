@@ -16,7 +16,7 @@ class Plot{
         this.context.font = "17px Arial";
         this.rect_height = this.element.height-this.padd[0]-this.padd[2];
         
-        this.dics = [];
+        this.discs = [];
         this.focus_disc = [];     // speichert welche disc zuletzt im focus war
         this.fdisc_indexlist = [];
 
@@ -172,33 +172,33 @@ class Plot{
         return Math.trunc((this.element.height-this.padd[0]-this.padd[2])/2*(1+E/(this.Emax)))
     }
     add_disc(n = 1){
-        var dielect_const = (this.dics.length>0) ? this.dics[0].dielect_const : 24;
+        var dielect_const = (this.discs.length>0) ? this.discs[0].dielect_const : 24;
         for (var i = 0; i<n; i++){
-            if(this.dics.length>0){
-                x = Round(this.dics.slice(-1)[0].x+this.dics.slice(-1)[0].width, 10);
-                this.dics.push({x: x, width: 0.1, dielect_const: dielect_const});
+            if(this.discs.length>0){
+                var x = Round(this.discs.slice(-1)[0].x+this.discs.slice(-1)[0].width, 10);
+                this.discs.push({x: x, width: 0.1, dielect_const: dielect_const});
             }
             else{
                 // Falls keine Discs existieren füge eins bei x = 0 dazu
-                this.dics.push({x: 0, width: 0.1, dielect_const: dielect_const});
+                this.discs.push({x: 0, width: 0.1, dielect_const: dielect_const});
             }
         }
 
-        this.focus_disc = [this.dics.slice(-1)[0]];
-        this.fdisc_indexlist = [this.dics.length-1]
+        this.focus_disc = [this.discs.slice(-1)[0]];
+        this.fdisc_indexlist = [this.discs.length-1]
         synch_fdisc_text()
 
         this.draw();
         this.correct_overlap(true);
         synch_graphtoinput();
         ax.load_to_memory();
-        return this.dics.slice(-1)[0];
+        return this.discs.slice(-1)[0];
     }
     delete_discs(n = 1){
         // deletes the last n discs
         for (var i = 0; i<n; i++){
             // synch indexlist of focusdiscs
-            this.fdisc_indexlist = this.fdisc_indexlist.filter(element => element !== this.dics.length-1)
+            this.fdisc_indexlist = this.fdisc_indexlist.filter(element => element !== this.discs.length-1)
             synch_fdisc_text()
 
             this.discs.pop();
@@ -210,7 +210,7 @@ class Plot{
         // deletes all focus_discs
         for (const value of this.focus_disc){
             if (value != null){
-                this.dics = this.dics.filter(item => item != value)
+                this.discs = this.discs.filter(item => item != value)
                 this.focus_disc = [];
                 this.fdisc_indexlist = []
                 synch_fdisc_text()
@@ -235,7 +235,7 @@ class Plot{
         // bestimme die ausgewählten discs
         this.focus_disc = []
         this.fdisc_indexlist = []
-        this.dics.forEach((rect, index) => {
+        this.discs.forEach((rect, index) => {
             if(this.isOverlap([this.cm_to_pixel(rect.x), this.cm_to_pixel(rect.x)+this.cm_to_pixel(rect.width)], [origin[0], mouse[0]]) && this.isOverlap([0,this.element.height-this.padd[0]-this.padd[2]],[mouse[1],origin[1]])){
                 this.focus_disc.push(rect)
                 this.fdisc_indexlist.push(index)
@@ -282,7 +282,7 @@ class Plot{
     correct_overlap(flexible_xmax=false){
         /* ToDo: Verlagere diese Codezeilen in eine andere Funtion, sodass sie nicht bei jeder Korrektur des Overlaps geladen werden*/
         if(this.focus_disc.length==0){
-            var last_fdisc = ax.dics[ax.dics.length-1]
+            var last_fdisc = ax.discs[ax.discs.length-1]
 
         }
         else{
@@ -294,12 +294,12 @@ class Plot{
         var length1 = 0;
         var length2 = 0;
 
-        while(index1<this.dics.length-1 && this.dics[index1]!=this.focus_disc[0]){
-            length1 += this.dics[index1].width
+        while(index1<this.discs.length-1 && this.discs[index1]!=this.focus_disc[0]){
+            length1 += this.discs[index1].width
             index1++
         }
-        for(var i = index1 + this.focus_disc.length; i < this.dics.length; i++){
-            length2 += this.dics[i].width;
+        for(var i = index1 + this.focus_disc.length; i < this.discs.length; i++){
+            length2 += this.discs[i].width;
         }
 
         var index2 = index1 + this.focus_disc.length - 1
@@ -368,7 +368,7 @@ class Plot{
     load_from_memory(){
         // lade die Einstellungen aus memory 
         // code is piece of shit
-        this.dics = this.memory[this.memory_pos]["data"]
+        this.discs = this.memory[this.memory_pos]["data"]
         this.xmthis = this.memory[this.memory_pos]["xmthis"]
         freq_min_field.value = this.memory[this.memory_pos]["freq"][0]
         freq_max_field.value = this.memory[this.memory_pos]["freq"][1]
@@ -381,7 +381,7 @@ class Plot{
         boostplot_chkbx_2.checked = this.memory[this.memory_pos]["boostplot_log_lin_scale"][1]
 
         this.focus_disc = []
-        this.fdisc_indexlist.forEach(element => this.focus_disc.push(this.dics[element]))
+        this.fdisc_indexlist.forEach(element => this.focus_disc.push(this.discs[element]))
 
         
         this.draw();
@@ -404,12 +404,12 @@ function synch_graphtoinput(){
                 position_field.value = ax.focus_disc[0].x;
             }
             else{
-                position_field.value = Round(ax.dics[ax.fdisc_indexlist[0]].x-ax.dics[ax.fdisc_indexlist[0]-1].x-ax.dics[ax.fdisc_indexlist[0]-1].width, 10);
+                position_field.value = Round(ax.discs[ax.fdisc_indexlist[0]].x-ax.discs[ax.fdisc_indexlist[0]-1].x-ax.discs[ax.fdisc_indexlist[0]-1].width, 10);
             }
         }
         width_field.value = ax.focus_disc[0].width;
         dielectric_field.value = ax.focus_disc[0].dielect_const;
-        counter_field.value = Object.keys(ax.dics).length;
+        counter_field.value = Object.keys(ax.discs).length;
     } 
     else if (ax.focus_disc.length == 0){
         position_field.value = "";
@@ -464,7 +464,7 @@ function synch_inputtograph(){
                 ax.focus_disc[0].x = parseFloat(position_field.value);
             }
             else{
-                ax.focus_disc[0].x = Round(parseFloat(position_field.value) + ax.dics[ax.fdisc_indexlist[0]-1].x + ax.dics[ax.fdisc_indexlist[0]-1].width, 10)
+                ax.focus_disc[0].x = Round(parseFloat(position_field.value) + ax.discs[ax.fdisc_indexlist[0]-1].x + ax.discs[ax.fdisc_indexlist[0]-1].width, 10)
             }
         }
         ax.focus_disc[0].width = parseFloat(width_field.value);
@@ -561,7 +561,7 @@ canvas.addEventListener("mousemove", event => {
     mouse_y = canvas_coordinates.top - event.clientY + canvas.height - ax.padd[2];
     
     
-    for (const rect of ax.dics) {
+    for (const rect of ax.discs) {
         if (mouse_x>=ax.cm_to_pixel(rect.x) && mouse_x<=ax.cm_to_pixel(rect.x+rect.width) && mouse_y<=ax.rect_height && mouse_y>=ax.rect_height-fine_adjustment_size){
             canvas.style.cursor = "ew-resize";
             break;
@@ -579,7 +579,7 @@ canvas.addEventListener("mousemove", event => {
 canvas.addEventListener("wheel", (event) => { 
     if(event.shiftKey){
         const step = 1;
-        const last_disc = ax.dics[ax.dics.length-1]
+        const last_disc = ax.discs[ax.discs.length-1]
         console.log(event.deltaY)
 
         if (event.deltaY>0){
@@ -608,7 +608,7 @@ document.addEventListener("keydown", (event)=>{
     if (event.shiftKey && lr_status_frects==="ArrowLeft"){
         if(event.code==="ArrowLeft"){
             if(ax.fdisc_indexlist.length!=0, ax.fdisc_indexlist[0]>0){
-                ax.focus_disc.unshift(ax.dics[ax.fdisc_indexlist[0]-1])
+                ax.focus_disc.unshift(ax.discs[ax.fdisc_indexlist[0]-1])
                 ax.fdisc_indexlist.unshift(ax.fdisc_indexlist[0]-1)
             }
         }
@@ -621,8 +621,8 @@ document.addEventListener("keydown", (event)=>{
     }
     if (event.shiftKey && lr_status_frects==="ArrowRight"){
         if(event.code==="ArrowRight"){
-            if(ax.fdisc_indexlist.slice(-1)[0]<ax.dics.length-1){
-                ax.focus_disc.push(ax.dics[parseInt(ax.fdisc_indexlist.slice(-1))+1])
+            if(ax.fdisc_indexlist.slice(-1)[0]<ax.discs.length-1){
+                ax.focus_disc.push(ax.discs[parseInt(ax.fdisc_indexlist.slice(-1))+1])
                 ax.fdisc_indexlist.push(parseInt(ax.fdisc_indexlist.slice(-1))+1)
             }
         }
