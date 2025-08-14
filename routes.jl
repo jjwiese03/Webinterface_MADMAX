@@ -1,5 +1,5 @@
 module Routes
-include("transfer_matrix.jl")
+include("simulation.jl")
 using Genie, Genie.Router, Genie.WebChannels, Genie.Assets, JSON
 
 
