@@ -26,7 +26,9 @@ channel("/____/echo") do
     ref = abs2.(tm[:,1])
 
     data = hcat(freq./10^9, boost, ref)
-    Genie.WebChannels.message(client, JSON.json(transpose(data)))
+    # Genie.WebChannels.message(client, JSON.json(transpose(data)))
+    JSON.json(transpose(data))
+    
 end
 
 
