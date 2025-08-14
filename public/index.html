@@ -49,8 +49,8 @@
                     <div style="text-align: center;">
                         <h3>total disccount</h3>
                         <div class="counter">
-                            <button style="border-radius: 8px 0px 0px 8px;" id = "counter_minus" onclick="element = document.getElementById('counter_txt_id'); if (element.value>0){element.value = parseInt(element.value)-1; ax.delete_discs(1)}; ax.send_settings_to_backend();synch_graphtoinput()">-</button>
-                            <input type="text" id="counter_txt_id" value="0" onchange="element = document.getElementById('counter_txt_id'); if (element.value<0){element.value=0}else if (isNaN(element.value)){element.value=0}else {element.value=Math.round(element.value)}; if(element.value>ax.rects.length){ax.add_disc(undefined,undefined,undefined, element.value-ax.rects.length);}else{ax.delete_discs(ax.rects.length-element.value)}; ax.correct_overlap(true); ax.send_settings_to_backend();">
+                            <button style="border-radius: 8px 0px 0px 8px;" id = "counter_minus" onclick="element = document.getElementById('counter_txt_id'); if (element.value>0){element.value = parseInt(element.value)-1; ax.delete_discs()}; ax.send_settings_to_backend();synch_graphtoinput()">-</button>
+                            <input type="text" id="counter_txt_id" value="0" onchange="element = document.getElementById('counter_txt_id'); if (element.value<0){element.value=0}else if (isNaN(element.value)){element.value=0}else {element.value=Math.round(element.value)}; if(element.value>ax.rects.length){ax.add_disc(element.value-ax.rects.length);}else{ax.delete_discs(ax.rects.length-element.value)}; ax.correct_overlap(true); ax.send_settings_to_backend();">
                             <button style="border-radius: 0px 8px 8px 0px;" id = "counter_plus" onclick="element = document.getElementById('counter_txt_id'); if (element.value<30){element.value = parseInt(element.value)+1; ax.add_disc();ax.correct_overlap()}; ax.send_settings_to_backend();">+</button>
                         </div>
                     </div>

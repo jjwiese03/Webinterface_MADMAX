@@ -2,8 +2,6 @@ graph_pos_chkbx.checked = true
 var dis_pos_switch = true       // true == pos      false == dis
 var mouse_status_sim = false
 
-var focus_disc = [];     // speichert welche disc zuletzt im focus war
-var fdisc_indexlist = [];
 
 const fine_adjustment_size = 15 // speichert die größe des Feinjustierungskastens in px
 
@@ -18,7 +16,10 @@ class Plot{
         this.context.font = "17px Arial";
         this.rect_height = this.element.height-this.padd[0]-this.padd[2];
         
-        this.discs = [];
+        this.dics = [];
+        this.focus_disc = [];     // speichert welche disc zuletzt im focus war
+        this.fdisc_indexlist = [];
+
         this.multiselect_arr = [];      // Arr to capture the location and dimensions of the multiselect rect
 
         this.memory = []        // speichert die Disc- und Frequenzeinstellungen der letzten 10 Schritte
@@ -26,18 +27,8 @@ class Plot{
 
         this.xmax = 10;
         this.ticks = [];
-        this.yticks = [];
         this.unit = "cm";
         this.draw()
-    }
-
-    pos_canvas_to_graph(x,y){
-        // berechnet die Koordinaten (in Pixeln) von Canvas-Koordinaten in die des Koordinatensystems
-        return {"x":x-this.padd[3], "y":this.element.height-y-this.padd[2]}
-    }
-    pos_graph_to_canvas(x,y){
-        // berechnet die Koordinaten (in Pixeln) des Koordinatensystems in die des Canvas
-        return {"x":x+this.padd[3], "y":this.element.height-this.padd[2]-y}
     }
     draw(){
         this.context.clearRect(0, 0, canvas.width, canvas.height)
@@ -88,7 +79,7 @@ class Plot{
         for (const rect of this.discs) {
             this.context.beginPath();   
             this.context.rect(this.padd[3]+this.cm_to_pixel(rect.x), this.padd[0], this.cm_to_pixel(rect.width), this.rect_height);
-            if (focus_disc.some(element => element==rect)){
+            if (this.focus_disc.some(element => element==rect)){
                 this.context.fillStyle = "rgba(133, 144, 170, 0.54)";
             }
             else {
@@ -180,63 +171,54 @@ class Plot{
     E_to_pixel(E){
         return Math.trunc((this.element.height-this.padd[0]-this.padd[2])/2*(1+E/(this.Emax)))
     }
-    add_disc(x=null, width=0.1, dielect_const=24, n=1){
-
-        if (this.discs.length>0){
-            dielect_const = this.discs[0].dielect_const
-        }
-        if (x == null){
-            for (var i = 0; i<n; i++){
-                try{
-                    x = Round(this.discs.slice(-1)[0].x+this.discs.slice(-1)[0].width, 10);
-                    this.discs.push({x: x, width: width, dielect_const: dielect_const});
-
-                }
-                catch{
-                    // Falls keine Discs existieren füge eins bei x = 0 dazu
-                    this.discs.push({x: 0, width: width, dielect_const: dielect_const});
-                }
+    add_disc(n = 1){
+        var dielect_const = (this.dics.length>0) ? this.dics[0].dielect_const : 24;
+        for (var i = 0; i<n; i++){
+            if(this.dics.length>0){
+                x = Round(this.dics.slice(-1)[0].x+this.dics.slice(-1)[0].width, 10);
+                this.dics.push({x: x, width: 0.1, dielect_const: dielect_const});
+            }
+            else{
+                // Falls keine Discs existieren füge eins bei x = 0 dazu
+                this.dics.push({x: 0, width: 0.1, dielect_const: dielect_const});
             }
         }
-        else{
-            this.discs.push({x: x, width: width, dielect_const: dielect_const});
-        }
 
-        focus_disc = [this.discs.slice(-1)[0]];
-        fdisc_indexlist = [this.discs.length-1]
+        this.focus_disc = [this.dics.slice(-1)[0]];
+        this.fdisc_indexlist = [this.dics.length-1]
         synch_fdisc_text()
 
         this.draw();
         this.correct_overlap(true);
         synch_graphtoinput();
-        ax.load_setting_to_memory();
-        return this.discs.slice(-1)[0];
+        ax.load_to_memory();
+        return this.dics.slice(-1)[0];
     }
-    delete_discs(n = 0){
+    delete_discs(n = 1){
         // deletes the last n discs
-        for (var i = 1; i<=n; i++){
+        for (var i = 0; i<n; i++){
             // synch indexlist of focusdiscs
-            fdisc_indexlist = fdisc_indexlist.filter(element => element !== this.discs.length-1)
+            this.fdisc_indexlist = this.fdisc_indexlist.filter(element => element !== this.dics.length-1)
             synch_fdisc_text()
 
             this.discs.pop();
             this.draw();
         }
-        ax.load_setting_to_memory()
+        ax.load_to_memory()
     }
     delete_fdiscs(){
         // deletes all focus_discs
-        for (const value of focus_disc){
+        for (const value of this.focus_disc){
             if (value != null){
-                this.discs = this.discs.filter(item => item != value)
-                focus_disc = [];
-                fdisc_indexlist = []
+                this.dics = this.dics.filter(item => item != value)
+                this.focus_disc = [];
+                this.fdisc_indexlist = []
                 synch_fdisc_text()
                 synch_graphtoinput();
                 this.draw();
             }
         }
-        ax.load_setting_to_memory()
+        ax.load_to_memory()
     }
     clear_discs(){
         this.discs = [];
@@ -251,12 +233,12 @@ class Plot{
         this.multiselect_arr = [origin, mouse]
 
         // bestimme die ausgewählten discs
-        focus_disc = []
-        fdisc_indexlist = []
-        this.discs.forEach((rect, index) => {
+        this.focus_disc = []
+        this.fdisc_indexlist = []
+        this.dics.forEach((rect, index) => {
             if(this.isOverlap([this.cm_to_pixel(rect.x), this.cm_to_pixel(rect.x)+this.cm_to_pixel(rect.width)], [origin[0], mouse[0]]) && this.isOverlap([0,this.element.height-this.padd[0]-this.padd[2]],[mouse[1],origin[1]])){
-                focus_disc.push(rect)
-                fdisc_indexlist.push(index)
+                this.focus_disc.push(rect)
+                this.fdisc_indexlist.push(index)
             }
         });
 
@@ -284,9 +266,9 @@ class Plot{
         }
     }
 
-    update_scale(start=0, unit="cm", num=5){
+    update_scale(start=0, unit="cm"){
         this.unit = unit;
-        let step = find_stepvalue(start, this.xmax, num);
+        let step = find_stepvalue(start, this.xmax, 5);
         this.ticks = arange(start, this.xmax, step);
         this.draw();
     }
@@ -299,12 +281,12 @@ class Plot{
     }
     correct_overlap(flexible_xmax=false){
         /* ToDo: Verlagere diese Codezeilen in eine andere Funtion, sodass sie nicht bei jeder Korrektur des Overlaps geladen werden*/
-        if(focus_disc.length==0){
-            var last_fdisc = ax.discs[ax.discs.length-1]
+        if(this.focus_disc.length==0){
+            var last_fdisc = ax.dics[ax.dics.length-1]
 
         }
         else{
-            var last_fdisc = focus_disc[focus_disc.length-1];
+            var last_fdisc = this.focus_disc[this.focus_disc.length-1];
         }
 
         const scale_length = this.xmax;
@@ -312,30 +294,30 @@ class Plot{
         var length1 = 0;
         var length2 = 0;
 
-        while(index1<this.discs.length-1 && this.discs[index1]!=focus_disc[0]){
-            length1 += this.discs[index1].width
+        while(index1<this.dics.length-1 && this.dics[index1]!=this.focus_disc[0]){
+            length1 += this.dics[index1].width
             index1++
         }
-        for(var i = index1 + focus_disc.length; i < this.discs.length; i++){
-            length2 += this.discs[i].width;
+        for(var i = index1 + this.focus_disc.length; i < this.dics.length; i++){
+            length2 += this.dics[i].width;
         }
 
-        var index2 = index1 + focus_disc.length - 1
+        var index2 = index1 + this.focus_disc.length - 1
 
         // korrigiere die focus_discs
-        for(var i = 0; i<focus_disc.length-1; i++){
-            if(focus_disc[i].x+focus_disc[i].width>focus_disc[i+1].x){
-                focus_disc[i+1].x=focus_disc[i].x+focus_disc[i].width
+        for(var i = 0; i<this.focus_disc.length-1; i++){
+            if(this.focus_disc[i].x+this.focus_disc[i].width>this.focus_disc[i+1].x){
+                this.focus_disc[i+1].x=this.focus_disc[i].x+this.focus_disc[i].width
             }
         }
         
         // sorge dafür, dass keine negativen Positionen möglich sind
-        if (focus_disc.length!=0 && focus_disc[0].x<length1){
-            const diff_x = length1-focus_disc[0].x
-            focus_disc.reverse().forEach((element) => {
+        if (this.focus_disc.length!=0 && this.focus_disc[0].x<length1){
+            const diff_x = length1-this.focus_disc[0].x
+            this.focus_disc.reverse().forEach((element) => {
                 element.x += diff_x
             })
-            focus_disc.reverse()
+            this.focus_disc.reverse()
         }
         // sorge dafür, dass keine zu großen Positionen möglich sind
         if(scale_length<last_fdisc.x+last_fdisc.width+length2){
@@ -344,7 +326,7 @@ class Plot{
             }
             else{
                 const diff_x = scale_length-length2-last_fdisc.x-last_fdisc.width
-                focus_disc.forEach((element) => {
+                this.focus_disc.forEach((element) => {
                     element.x += diff_x
                 })   
             }  
@@ -365,7 +347,7 @@ class Plot{
             }
         }
 
-    load_setting_to_memory(){
+    load_to_memory(){
         if(this.memory.length >= 10){
             this.memory.pop()
         }
@@ -373,7 +355,7 @@ class Plot{
             "freq":[freq_min_field.value, freq_max_field.value], 
             "tand": tan_delta_field.value, 
             "slider":slider_resolution.value, 
-            "fdisc_indexlist":fdisc_indexlist,
+            "fdisc_indexlist":this.fdisc_indexlist,
             "graph_settings":[graph_pos_chkbx.checked, graph_dist_chkbx.checked],
             "boostplot_log_lin_scale":[boostplot_chkbx_1.checked, boostplot_chkbx_2.checked],
             "xmax":this.xmax});
@@ -383,27 +365,53 @@ class Plot{
             this.memory_pos = 0
         }
     }
+    load_from_memory(){
+        // lade die Einstellungen aus memory 
+        // code is piece of shit
+        this.dics = this.memory[this.memory_pos]["data"]
+        this.xmthis = this.memory[this.memory_pos]["xmthis"]
+        freq_min_field.value = this.memory[this.memory_pos]["freq"][0]
+        freq_max_field.value = this.memory[this.memory_pos]["freq"][1]
+        tan_delta_field.value = this.memory[this.memory_pos]["tand"]
+        slider_resolution.value = this.memory[this.memory_pos]["slider"]
+        this.fdisc_indexlist = this.memory[this.memory_pos]["fdisc_indexlist"]
+        graph_pos_chkbx.checked = this.memory[this.memory_pos]["graph_settings"][0]
+        graph_dist_chkbx.checked = this.memory[this.memory_pos]["graph_settings"][1]
+        boostplot_chkbx_1.checked = this.memory[this.memory_pos]["boostplot_log_lin_scale"][0]
+        boostplot_chkbx_2.checked = this.memory[this.memory_pos]["boostplot_log_lin_scale"][1]
+
+        this.focus_disc = []
+        this.fdisc_indexlist.forEach(element => this.focus_disc.push(this.dics[element]))
+
+        
+        this.draw();
+        synch_graphtoinput();
+        this.update_scale()
+        this.send_settings_to_backend();
+        update_log_lin_1();
+        update_log_lin_2();
+    }
 }
 
 function synch_graphtoinput(){
     // synchronisiert die Einstellungen der Scheiben im Graph mit den Inputfeldern
-    if (focus_disc.length == 1){
+    if (ax.focus_disc.length == 1){
         if(dis_pos_switch){
-            position_field.value = focus_disc[0].x;    
+            position_field.value = ax.focus_disc[0].x;    
         }
         else{
-            if(fdisc_indexlist[0]==0){
-                position_field.value = focus_disc[0].x;
+            if(ax.fdisc_indexlist[0]==0){
+                position_field.value = ax.focus_disc[0].x;
             }
             else{
-                position_field.value = Round(ax.discs[fdisc_indexlist[0]].x-ax.discs[fdisc_indexlist[0]-1].x-ax.discs[fdisc_indexlist[0]-1].width, 10);
+                position_field.value = Round(ax.dics[ax.fdisc_indexlist[0]].x-ax.dics[ax.fdisc_indexlist[0]-1].x-ax.dics[ax.fdisc_indexlist[0]-1].width, 10);
             }
         }
-        width_field.value = focus_disc[0].width;
-        dielectric_field.value = focus_disc[0].dielect_const;
-        counter_field.value = Object.keys(ax.discs).length;
+        width_field.value = ax.focus_disc[0].width;
+        dielectric_field.value = ax.focus_disc[0].dielect_const;
+        counter_field.value = Object.keys(ax.dics).length;
     } 
-    else if (focus_disc.length == 0){
+    else if (ax.focus_disc.length == 0){
         position_field.value = "";
         width_field.value = "";
         dielectric_field.value = "";
@@ -416,22 +424,22 @@ function synch_graphtoinput(){
         counter_field.value = Object.keys(ax.discs).length;
 
         if(dis_pos_switch){
-            position_field.value = focus_disc[0].x;
+            position_field.value = ax.focus_disc[0].x;
         }
         else{
             var distances = [];
-            for (var i = 1; i < focus_disc.length; i++){
-                distances.push(Round(focus_disc[i].x-focus_disc[i-1].x-focus_disc[i-1].width, 6))
+            for (var i = 1; i < ax.focus_disc.length; i++){
+                distances.push(Round(ax.focus_disc[i].x-ax.focus_disc[i-1].x-ax.focus_disc[i-1].width, 6))
             }
             if(distances.every((element)=> element === distances[0])){
                 position_field.value = distances[0];
             }
         }
-        if(focus_disc.map((value) => value.width).every((element)=> element === focus_disc[0].width)){
-            width_field.value = focus_disc[0].width;
+        if(ax.focus_disc.map((value) => value.width).every((element)=> element === ax.focus_disc[0].width)){
+            width_field.value = ax.focus_disc[0].width;
         }
-        if(focus_disc.map((value) => value.dielect_const).every((element)=> element === focus_disc[0].dielect_const)){
-            dielectric_field.value = focus_disc[0].dielect_const;
+        if(ax.focus_disc.map((value) => value.dielect_const).every((element)=> element === ax.focus_disc[0].dielect_const)){
+            dielectric_field.value = ax.focus_disc[0].dielect_const;
         }
     }
     try{
@@ -447,44 +455,44 @@ function synch_inputtograph(){
     // synchronisiere die Inputfelder mit der den Einstellungen der Scheiben im Graph
 
     // Single Select
-    if(focus_disc.length == 1){
+    if(ax.focus_disc.length == 1){
         if(dis_pos_switch){
-            focus_disc[0].x = parseFloat(position_field.value);
+            ax.focus_disc[0].x = parseFloat(position_field.value);
         }
         else{
-            if(fdisc_indexlist[0]==0){
-                focus_disc[0].x = parseFloat(position_field.value);
+            if(ax.fdisc_indexlist[0]==0){
+                ax.focus_disc[0].x = parseFloat(position_field.value);
             }
             else{
-                focus_disc[0].x = Round(parseFloat(position_field.value) + ax.discs[fdisc_indexlist[0]-1].x + ax.discs[fdisc_indexlist[0]-1].width, 10)
+                ax.focus_disc[0].x = Round(parseFloat(position_field.value) + ax.dics[ax.fdisc_indexlist[0]-1].x + ax.dics[ax.fdisc_indexlist[0]-1].width, 10)
             }
         }
-        focus_disc[0].width = parseFloat(width_field.value);
+        ax.focus_disc[0].width = parseFloat(width_field.value);
 
         // focus_disc[0].dielect_const = parseFloat(dielectric_field.value);
         ax.discs.map(element => element.dielect_const=parseFloat(dielectric_field.value))
     }
 
     // Multiselect
-    else if(focus_disc.length > 1){
+    else if(ax.focus_disc.length > 1){
         if(dis_pos_switch){
             if (position_field.value!=""){
-                var dx = parseFloat(position_field.value)-focus_disc[0].x
-                console.log(parseFloat(position_field.value)-focus_disc[0].x)
-                focus_disc.forEach(element => {
+                var dx = parseFloat(position_field.value)-ax.focus_disc[0].x
+                console.log(parseFloat(position_field.value)-ax.focus_disc[0].x)
+                ax.focus_disc.forEach(element => {
                     element.x += dx + 0
                 })
             }
         }
         else{
             if(width_field.value!=""){
-                focus_disc.forEach(element => {
+                ax.focus_disc.forEach(element => {
                     element.width = parseFloat(width_field.value);
                 })
             }
             if(position_field.value!=""){
-                var curr_pos = focus_disc[0].x
-                focus_disc.forEach((element) => {
+                var curr_pos = ax.focus_disc[0].x
+                ax.focus_disc.forEach((element) => {
                     element.x = curr_pos;
                     curr_pos += element.width + parseFloat(position_field.value);
                 })
@@ -499,11 +507,11 @@ function synch_inputtograph(){
 
 function synch_fdisc_text(){
     // aktualisiert den Textschriftzug der aktuell ausgewählten discs
-    if(fdisc_indexlist.length > 1){
-        document.getElementById("scheibenauswahl").innerHTML = "discs " + String(fdisc_indexlist[0]+1) + " - " + String(fdisc_indexlist[fdisc_indexlist.length-1]+1 + " selected")
+    if(ax.fdisc_indexlist.length > 1){
+        document.getElementById("scheibenauswahl").innerHTML = "discs " + String(ax.fdisc_indexlist[0]+1) + " - " + String(ax.fdisc_indexlist[ax.fdisc_indexlist.length-1]+1 + " selected")
     }
-    else if(fdisc_indexlist.length == 1){
-        document.getElementById("scheibenauswahl").innerHTML = "disc " + String(fdisc_indexlist[0]+1 + " selected")
+    else if(ax.fdisc_indexlist.length == 1){
+        document.getElementById("scheibenauswahl").innerHTML = "disc " + String(ax.fdisc_indexlist[0]+1 + " selected")
     }
     else{
         document.getElementById("scheibenauswahl").innerHTML = "no disc selected"
@@ -517,18 +525,18 @@ canvas.addEventListener("mousedown", () => {
         // Rechteck verschieben
         // Prüfe ob Click in Rechteck liegt
         if (mouse_x > ax.cm_to_pixel(rect.x) && mouse_x < ax.cm_to_pixel(rect.x+rect.width) && mouse_y>0 && mouse_y<ax.rect_height){
-            if (!(focus_disc.some(element => element==rect))){
-                focus_disc = [rect]
-                fdisc_indexlist = [parseInt(index)]
+            if (!(ax.focus_disc.some(element => element==rect))){
+                ax.focus_disc = [rect]
+                ax.fdisc_indexlist = [parseInt(index)]
                 synch_fdisc_text();
             }
             var dx = []
             var scale_factor = (mouse_y<ax.rect_height-fine_adjustment_size) ? 1 : 0.2
-            for (const element of focus_disc){
+            for (const element of ax.focus_disc){
                 dx.push([mouse_x, element.x])
             }
             IntervallId = setInterval(() => {
-                for (const [index, element] of Object.entries(focus_disc)){
+                for (const [index, element] of Object.entries(ax.focus_disc)){
                     element.x = Round(dx[index][1]+Round(ax.pixel_to_cm(mouse_x-dx[index][0])*scale_factor, 3), 10)
                 }
                 ax.correct_overlap();
@@ -546,14 +554,14 @@ canvas.addEventListener("mousedown", () => {
     }, 2)
 });
 
-document.addEventListener("mouseup", () => {mouse_status_sim = false; try{clearInterval(IntervallId); /* lade die Einstellungen in den speicher wenn das Intervall existiert */ ax.load_setting_to_memory()} catch(error){}; try{clearInterval(Intervall_multiselect); ax.load_setting_to_memory();} catch(error){}; try{clearInterval(boostplot_intervall)}catch{}; ax.multiselect_arr = []; ax.draw(); canvas.style.cursor = "default";});
+document.addEventListener("mouseup", () => {mouse_status_sim = false; try{clearInterval(IntervallId); /* lade die Einstellungen in den speicher wenn das Intervall existiert */ ax.load_to_memory()} catch(error){}; try{clearInterval(Intervall_multiselect); ax.load_to_memory();} catch(error){}; try{clearInterval(boostplot_intervall)}catch{}; ax.multiselect_arr = []; ax.draw(); canvas.style.cursor = "default";});
 canvas.addEventListener("mousemove", event => {
     const canvas_coordinates = canvas.getBoundingClientRect();
     mouse_x = event.clientX - canvas_coordinates.left - ax.padd[3];
     mouse_y = canvas_coordinates.top - event.clientY + canvas.height - ax.padd[2];
     
-    // Änderung der Dicke (Mausänderung) (Feature vorerst herausgenommen)
-    for (const rect of ax.discs) {
+    
+    for (const rect of ax.dics) {
         if (mouse_x>=ax.cm_to_pixel(rect.x) && mouse_x<=ax.cm_to_pixel(rect.x+rect.width) && mouse_y<=ax.rect_height && mouse_y>=ax.rect_height-fine_adjustment_size){
             canvas.style.cursor = "ew-resize";
             break;
@@ -571,7 +579,8 @@ canvas.addEventListener("mousemove", event => {
 canvas.addEventListener("wheel", (event) => { 
     if(event.shiftKey){
         const step = 1;
-        const last_disc = ax.discs[ax.discs.length-1]
+        const last_disc = ax.dics[ax.dics.length-1]
+        console.log(event.deltaY)
 
         if (event.deltaY>0){
             ax.xmax += step
@@ -598,29 +607,29 @@ document.addEventListener("keydown", (event)=>{
 
     if (event.shiftKey && lr_status_frects==="ArrowLeft"){
         if(event.code==="ArrowLeft"){
-            if(fdisc_indexlist.length!=0, fdisc_indexlist[0]>0){
-                focus_disc.unshift(ax.discs[fdisc_indexlist[0]-1])
-                fdisc_indexlist.unshift(fdisc_indexlist[0]-1)
+            if(ax.fdisc_indexlist.length!=0, ax.fdisc_indexlist[0]>0){
+                ax.focus_disc.unshift(ax.dics[ax.fdisc_indexlist[0]-1])
+                ax.fdisc_indexlist.unshift(ax.fdisc_indexlist[0]-1)
             }
         }
         else if(event.code==="ArrowRight"){
-            if(fdisc_indexlist.length>1){
-                focus_disc.shift()
-                fdisc_indexlist.shift()
+            if(ax.fdisc_indexlist.length>1){
+                ax.focus_disc.shift()
+                ax.fdisc_indexlist.shift()
             }
         }
     }
     if (event.shiftKey && lr_status_frects==="ArrowRight"){
         if(event.code==="ArrowRight"){
-            if(fdisc_indexlist.slice(-1)[0]<ax.discs.length-1){
-                focus_disc.push(ax.discs[parseInt(fdisc_indexlist.slice(-1))+1])
-                fdisc_indexlist.push(parseInt(fdisc_indexlist.slice(-1))+1)
+            if(ax.fdisc_indexlist.slice(-1)[0]<ax.dics.length-1){
+                ax.focus_disc.push(ax.dics[parseInt(ax.fdisc_indexlist.slice(-1))+1])
+                ax.fdisc_indexlist.push(parseInt(ax.fdisc_indexlist.slice(-1))+1)
             }
         }
         else if(event.code==="ArrowLeft"){
-            if(fdisc_indexlist.length>1){
-                focus_disc.pop()
-                fdisc_indexlist.pop()
+            if(ax.fdisc_indexlist.length>1){
+                ax.focus_disc.pop()
+                ax.fdisc_indexlist.pop()
             }
         }
     }
@@ -637,43 +646,17 @@ document.addEventListener("keyup", (up_event)=>{
 
 // implementiere Strg+Z und Strg+Y
 
-function load_from_memory(){
-    // lade die Einstellungen aus memory
-    ax.discs = ax.memory[ax.memory_pos]["data"]
-    ax.xmax = ax.memory[ax.memory_pos]["xmax"]
-    freq_min_field.value = ax.memory[ax.memory_pos]["freq"][0]
-    freq_max_field.value = ax.memory[ax.memory_pos]["freq"][1]
-    tan_delta_field.value = ax.memory[ax.memory_pos]["tand"]
-    slider_resolution.value = ax.memory[ax.memory_pos]["slider"]
-    fdisc_indexlist = ax.memory[ax.memory_pos]["fdisc_indexlist"]
-    graph_pos_chkbx.checked = ax.memory[ax.memory_pos]["graph_settings"][0]
-    graph_dist_chkbx.checked = ax.memory[ax.memory_pos]["graph_settings"][1]
-    boostplot_chkbx_1.checked = ax.memory[ax.memory_pos]["boostplot_log_lin_scale"][0]
-    boostplot_chkbx_2.checked = ax.memory[ax.memory_pos]["boostplot_log_lin_scale"][1]
-
-    focus_disc = []
-    fdisc_indexlist.forEach(element => focus_disc.push(ax.discs[element]))
-
-    
-    ax.draw();
-    synch_graphtoinput();
-    ax.update_scale()
-    ax.send_settings_to_backend();
-    update_log_lin_1();
-    update_log_lin_2();
-}
-
 document.addEventListener("keydown", event => {
     if(event.ctrlKey){
         if (event.code == "KeyY" && ax.memory_pos < ax.memory.length-1){
             ax.memory_pos += 1
             // lade die Einstellungen aus memory
-            load_from_memory();
+            ax.load_from_memory();
         }
         if (event.code == "KeyZ" && ax.memory_pos > 0){
             ax.memory_pos -= 1
             // lade die Einstellungen aus memory
-            load_from_memory();
+            ax.load_from_memory();
         }
     }
 })
@@ -682,5 +665,5 @@ document.addEventListener("keydown", event => {
 
 ax = new Plot(canvas);
 ax.update_scale();
-focus_disc = [ax.add_disc(3, 0.1, 24)];
+ax.focus_disc = [ax.add_disc()];
 synch_graphtoinput();

@@ -1,3 +1,4 @@
+
 // Declare the chart dimensions and margins.
 const width = 550;
 const height = 500;
