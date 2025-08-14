@@ -8,8 +8,7 @@ Genie.config.websockets_server = true # enable the websockets server
 route("/")do 
     Assets.channels_support()
     Genie.WebChannels.unsubscribe_disconnected_clients()
-    @info Genie.WebChannels.clients()
-    serve_static_file("simulation.html")
+    serve_static_file("index.html")
 end
 
 channel("/____/echo") do
