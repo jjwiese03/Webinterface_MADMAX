@@ -51,14 +51,16 @@ import_button.addEventListener("change", function(f){
             }
             ax.discs.push(default_rect)
         }
+        ax.correct_overlap(true);
+        focus_disc = [];
+        fdisc_indexlist = [];
 
         ax.draw();
         ax.send_settings_to_backend()
 
-        ax.focus_disc = [];
-        ax.fdisc_indexlist = [];
+        focus_disc = [];
+        fdisc_indexlist = [];
         synch_graphtoinput();
-        ax.correct_overlap(true);
         ax.load_setting_to_memory();
     });
 });
