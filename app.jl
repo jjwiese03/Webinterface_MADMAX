@@ -1,5 +1,6 @@
 module App
-include("transfer_matrix.jl")
+include("simulation.jl")
+transfer_matrix([1],[1],[1])
 using Genie, Genie.Router, Genie.WebChannels, Genie.Assets, JSON
 
 
@@ -23,17 +24,13 @@ channel("/____/echo") do
     tan_delta = params(:payload)["tan_delta"] 
     nm = (params(:payload)["mirror"]) ? 1e15 : 1
     
-    tm = transfer_matrix(Pos, freq, pos, thickness, tand=tan_delta, eps=eps[1], nm=nm)
+    tm = transfer_matrix(freq, pos, thickness, tand=tan_delta, eps=eps[1], nm=nm)
 
     boost = abs2.(tm[:,2])
     ref = abs2.(tm[:,1])
 
     data = hcat(freq./10^9, boost, ref)
-    Genie.WebChannels.message(client, JSON.json(transpose(data)))
-
-
-    # @info WebChannels.broadcast("____", JSON.json(transpose(data)))
-    #Genie.WebChannels.unsubscribe_disconnected_clients()
+    JSON.json(transpose(data))
 end
 
 

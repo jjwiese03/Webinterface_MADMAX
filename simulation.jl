@@ -5,10 +5,8 @@ export transfer_matrix, Dist, Pos
 const c0 = 299792458.
 
 abstract type Space end
-abstract type Dist <: Space end
-abstract type Pos  <: Space end
 
-function transfer_matrix(::Type{Pos},freqs::Union{Real,AbstractVector{<:Real}},
+function transfer_matrix(freqs::Union{Real,AbstractVector{<:Real}},
         position::AbstractVector{<:Real}, thickness::AbstractVector{<:Real};
         eps::Real=24.0,tand::Real=0.0,nm::Real=1e15)::Matrix{ComplexF64}
 
