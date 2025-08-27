@@ -1,6 +1,6 @@
 using StaticArrays, LinearAlgebra
 
-export transfer_matrix, Dist, Pos
+export transfer_matrix
 
 const c0 = 299792458.
 
