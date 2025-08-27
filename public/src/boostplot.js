@@ -152,6 +152,7 @@ function update_log_lin_1(){
             .nice();
         y_axis_1.call(d3.axisLeft(y))           
     }
+    ax.send_settings_to_backend()
 }
 function update_log_lin_2(){
     if (boostplot_chkbx_2.checked){
@@ -169,6 +170,7 @@ function update_log_lin_2(){
             .nice();
         y_axis_2.call(d3.axisRight(y2))           
     }
+    ax.send_settings_to_backend()
 }
 
 

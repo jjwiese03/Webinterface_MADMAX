@@ -26,6 +26,7 @@ class Plot{
         this.memory_pos = 0     // speichert welcher Zustand aus memory gerade gezeigt wird (antiproportional, also 0 = letzter Eintrag aus memory und memory.length = erster Eintrag)
 
         this.xmax = 10;
+        this.Emax = 5;
         this.ticks = [];
         this.unit = "cm";
         this.draw()
@@ -248,7 +249,6 @@ class Plot{
     }
     send_settings_to_backend(){
         //send setting data to backend
-        console.log(this.discs)
         
         if(tan_delta_field.value==""){
             document.getElementById("alert_div").innerHTML = "choose your tan(&delta;)"

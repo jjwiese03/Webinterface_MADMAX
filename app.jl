@@ -33,5 +33,9 @@ channel("/____/echo") do
     JSON.json(transpose(data))
 end
 
+channel("/____/efield")do
+    @info "success"
+    
+end
 
 end
