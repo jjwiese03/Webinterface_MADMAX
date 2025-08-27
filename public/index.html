@@ -66,20 +66,20 @@
 
                         <div style="display:flex; width: 100px; height: 40px; flex-direction: row-reverse; background-color: white; text-align: center; border: 2px black solid; border-radius: 10px; box-sizing: border-box;">
                             <label class="unit_label" for="pos">cm</label>
-                            <input class="textinput_unit" type="text" id="pos" onchange="element = document.getElementById('pos'); if (element.value>1000){element.value=1000}; if (element.value<0){element.value=0}; if (isNaN(element.value)){element.value=0}; resize_font(element); synch_inputtograph(); ax.load_setting_to_memory();">
+                            <input class="textinput_unit" type="text" id="pos" onchange="element = document.getElementById('pos'); if (element.value>1000){element.value=1000}; if (element.value<0){element.value=0}; if (isNaN(element.value)){element.value=0}; resize_font(element); synch_inputtograph(); ax.load_to_memory();">
                         </div>
                     </div>
                     <div >
                         <h4 style="text-align: center;">thickness</h4>
                         <div style="position: relative;display:flex; width: 100px; height: 40px; flex-direction: row-reverse; background-color: white; text-align: center; border: 2px black solid; border-radius: 10px; box-sizing: border-box;">
                             <label class="unit_label" for="width">cm</label>
-                            <input class="textinput_unit" type="text" id="width" onchange="element = document.getElementById('width'); if (element.value>100){element.value=100}; if (element.value<0){element.value=0}; if (isNaN(element.value)){element.value=0}; resize_font(element); synch_inputtograph(); ax.load_setting_to_memory();">
+                            <input class="textinput_unit" type="text" id="width" onchange="element = document.getElementById('width'); if (element.value>100){element.value=100}; if (element.value<0){element.value=0}; if (isNaN(element.value)){element.value=0}; resize_font(element); synch_inputtograph(); ax.load_to_memory();">
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; flex-direction: column;">
                         <h4 style="text-align: center;">&epsilon;</h4>
                         <div style="position: relative;display:flex; width: 60px; height: 40px; flex-direction: row-reverse; background-color: white; text-align: center; border: 2px black solid; border-radius: 10px; box-sizing: border-box;">
-                            <input class="textinput_unit" type="text" id="dielectric" maxlength="3" onchange="element = document.getElementById('dielectric'); if (element.value<0 || isNaN(element.value)){element.value=0}; synch_inputtograph(); ax.load_setting_to_memory();">
+                            <input class="textinput_unit" type="text" id="dielectric" maxlength="3" onchange="element = document.getElementById('dielectric'); if (element.value<0 || isNaN(element.value)){element.value=0}; synch_inputtograph(); ax.load_to_memory();">
                         </div>
                     </div>
                 </div>
@@ -113,12 +113,12 @@
         <div id="boost_plot" style="position: relative;align-self: center; background-color: white;">
             <div style="display: flex;position: absolute; top: 10px; left: 40px;" >
                 <label for="scale_checkbox_1" style="margin-right: 10px;">lin</label>
-                <input type="checkbox" class="scale_checkbox after_blue" id="scale_checkbox_1" onclick="update_log_lin_1(); ax.load_setting_to_memory(); ax.send_settings_to_backend();ax.draw()">      
+                <input type="checkbox" class="scale_checkbox after_blue" id="scale_checkbox_1" onclick="update_log_lin_1(); ax.load_to_memory(); ax.send_settings_to_backend();ax.draw()">      
                 <label for="scale_checkbox_1" style="margin-left: 10px;">log</label>
             </div>
             <div style="display: flex;position: absolute; top: 10px; right: 40px;" >
                 <label for="scale_checkbox_2" style="margin-right: 10px;">lin</label>
-                <input type="checkbox" class="scale_checkbox after_red" id="scale_checkbox_2" onclick="update_log_lin_2(); ax.load_setting_to_memory(); ax.send_settings_to_backend();ax.draw()">
+                <input type="checkbox" class="scale_checkbox after_red" id="scale_checkbox_2" onclick="update_log_lin_2(); ax.load_to_memory(); ax.send_settings_to_backend();ax.draw()">
                 <label for="scale_checkbox_2" style="margin-left: 10px;">log</label>
             </div>
         </div>
@@ -126,21 +126,21 @@
             <div>
                 <h4 style="text-align: center;">frequency range [GHz]</h4>
                 <div style="display: flex; justify-content: center; align-items: center;">
-                    <input type="text" id="freq_min" class="textinput" onchange="control_freq_condition();ax.send_settings_to_backend(); ax.load_setting_to_memory();" placeholder="f_min">
+                    <input type="text" id="freq_min" class="textinput" onchange="control_freq_condition();ax.send_settings_to_backend(); ax.load_to_memory();" placeholder="f_min">
                     <h2 style="margin: 0 10px;">-</h2>
-                    <input type="text" id="freq_max" class="textinput" onchange="control_freq_condition();ax.send_settings_to_backend(); ax.load_setting_to_memory();" placeholder="f_max">
+                    <input type="text" id="freq_max" class="textinput" onchange="control_freq_condition();ax.send_settings_to_backend(); ax.load_to_memory();" placeholder="f_max">
                 </div>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center;">
                 <h4 style="text-align: center;"><math>tan(&delta;) &middot; 10<sup>-6</sup></math></h4>
-                <input type="text" id="tan_delta" class="textinput" style="width: 60px;" maxlength="5" onchange="control_tand_condition(); ax.send_settings_to_backend(); ax.load_setting_to_memory();">
+                <input type="text" id="tan_delta" class="textinput" style="width: 60px;" maxlength="5" onchange="control_tand_condition(); ax.send_settings_to_backend(); ax.load_to_memory();">
             </div>
         </div>
 
         <div id="alert_div" style="display: flex; justify-content: center; background-color: red; margin-top: 10px;"></div>
         <div style="margin-bottom: 20px;">
             <h4 style="display: flex; justify-content: center;">resolution</h4>
-            <input type="range" id="slider_resolution" min="5" max="1000" onchange="ax.send_settings_to_backend(); ax.load_setting_to_memory();" style="width: 80%; margin: 0 10%;">
+            <input type="range" id="slider_resolution" min="5" max="1000" onchange="ax.send_settings_to_backend(); ax.load_to_memory();" style="width: 80%; margin: 0 10%;">
         </div>
     </div>
     

@@ -61,7 +61,7 @@ import_button.addEventListener("change", function(f){
         focus_disc = [];
         fdisc_indexlist = [];
         synch_graphtoinput();
-        ax.load_setting_to_memory();
+        ax.load_to_memory();
     });
 });
 
@@ -83,5 +83,5 @@ function load_example(){
     synch_graphtoinput();
     ax.correct_overlap(true);
     ax.send_settings_to_backend()
-    ax.load_setting_to_memory();
+    ax.load_to_memory();
 }
