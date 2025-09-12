@@ -7,7 +7,7 @@ using Genie, Genie.Router, Genie.WebChannels, Genie.Assets, JSON
 Genie.config.websockets_server = true # enable the websockets server
 
 route("/")do 
-    Assets.channels_support()
+    Genie.Assets.channels_support()
     Genie.WebChannels.unsubscribe_disconnected_clients()
     serve_static_file("index.html")
 end
