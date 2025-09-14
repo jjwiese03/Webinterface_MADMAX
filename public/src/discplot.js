@@ -252,7 +252,7 @@ class Plot{
         
         if(tan_delta_field.value==""){
             document.getElementById("alert_div").innerHTML = "choose your tan(&delta;)"
-            update_boostplot([0,0],[0,0])
+            update_boostplot([[0,0],[0,0]])
         }
         else if (freq_min_field.value.length!=0 && freq_max_field.value.length!=0){
             document.getElementById("alert_div").innerHTML = ""
@@ -263,7 +263,7 @@ class Plot{
         }
         else{
             document.getElementById("alert_div").innerHTML = "specify a valid frequency range"
-            update_boostplot([0,0],[0,0])
+            update_boostplot([[0,0],[0,0]])
         }
     }
 
@@ -668,3 +668,13 @@ ax = new Plot(canvas);
 ax.update_scale();
 ax.focus_disc = [ax.add_disc()];
 synch_graphtoinput();
+// function openFullscreen() {
+//   if (document.documentElement.requestFullscreen) {
+//     document.documentElement.requestFullscreen();
+//   } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+//     document.documentElement.webkitRequestFullscreen();
+//   } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+//     document.documentElement.msRequestFullscreen();
+//   }
+// }
+// openFullscreen()

@@ -8,6 +8,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/danfojs@1.2.0/lib/bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>     
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     
     
     <script src="src/utils.js" defer></script>
@@ -20,7 +22,7 @@
 
     <title>Simulation</title>
 </head>
-<body class="prevent-select">
+<body class="prevent-select" style="display: grid; grid-auto-flow: column;">
     <div style="padding: 50px; width: 67%; box-sizing: border-box;">
         <div style="position: relative; display: inline-block;">
             <canvas class="window-style" style="background-color: white; position: relative;" id="Graph" height="400px" width="1150px"></canvas>
@@ -108,7 +110,7 @@
     </div>
 
     
-    <div style="position: relative;display: flex; flex-direction: column;height: 60%; background-color: white;" class="window-style">
+    <div style="position: relative; margin-right: 60px; display: flex; flex-direction: column; background-color: white;" class="window-style">
         <h2 style="text-align: center; margin-bottom: 0px;">Boostfactorcurve</h2>
         <div id="boost_plot" style="position: relative;align-self: center; background-color: white;">
             <div style="display: flex;position: absolute; top: 10px; left: 40px;" >
@@ -132,7 +134,9 @@
                 </div>
             </div>
             <div style="display: flex; flex-direction: column; align-items: center;">
-                <h4 style="text-align: center;"><math>tan(&delta;) &middot; 10<sup>-6</sup></math></h4>
+                <h4 style="text-align: center;">
+                    \( \tan(\delta) \cdot 10^{-6} \)
+                </h4>
                 <input type="text" id="tan_delta" class="textinput" style="width: 60px;" maxlength="5" onchange="control_tand_condition(); ax.send_settings_to_backend(); ax.load_to_memory();">
             </div>
         </div>
@@ -144,7 +148,7 @@
         </div>
     </div>
     
-    
+
     
 </body>
 </html>
