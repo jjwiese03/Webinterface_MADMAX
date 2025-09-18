@@ -103,6 +103,7 @@ var path_ref = svg.append("path")
     .attr("stroke-width", 2)
 
 function update_boostplot(data){
+    try{
     // filtere die Nullen, da sonst die log-Achsengrenzen Fehler machen
     data = data.filter(d => (d[1] != 0 && d[2] != 0))
 
@@ -133,6 +134,8 @@ function update_boostplot(data){
 
     path.attr("d", line(data));
     path_ref.attr("d", line_ref(data));
+    }
+    catch{}
 }
 
 
