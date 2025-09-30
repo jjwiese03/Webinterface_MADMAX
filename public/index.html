@@ -23,9 +23,9 @@
     <title>Simulation</title>
 </head>
 <body class="prevent-select" style="display: grid; grid-auto-flow: column;">
-    <div style="padding: 50px; width: 67%; box-sizing: border-box;">
-        <div style="position: relative; display: inline-block;">
-            <canvas class="window-style" style="background-color: white; position: relative;" id="Graph" height="400px" width="1150px"></canvas>
+    <div style="padding: 50px; width: 67vw; box-sizing: border-box;">
+        <div style="position: relative; display: inline-block; width: 100%;">
+            <canvas class="window-style" style="background-color: white; position: relative; width: 100%; box-sizing: border-box;" height="400px" width="1150px" id="Graph"></canvas>
         
             <div style="position: absolute; top: 20px; right: 20px; padding: 10px; width: 135px;" class="window-style">
                 <h4 style="margin: 10px 0;">Graph Settings</h4>
@@ -34,12 +34,10 @@
                 <input type="checkbox" name="graph_dist_chkbx" id="graph_dist_chkbx" onclick="ax.load_to_memory();ax.draw()">
                 <label for="graph_dist_chkbx">Distances</label>
             </div>
-                <div id="Terminal" style="position: absolute; display: inline; bottom: 10px; right: 30px;">
-            </div>
         </div>
             
 
-        <div style="display: flex; flex-direction: row; margin-top: 50px; height: 350px;">
+        <div style="display: flex; flex-direction: row; justify-content: space-between;margin-top: 50px; height: 350px; width: 100%;  box-sizing: border-box;">
 
             <div class="disc_params window-style">
                 <div style="display: flex; justify-content: space-around; width: 100%;">
@@ -105,6 +103,9 @@
                     <label for="radio_width">Dielectric</label> <br>
                     <button class="button" style="margin-top: 20px; margin-bottom: 0;" onclick="data_export([getElementById('radio_pos').checked,getElementById('radio_width').checked,getElementById('radio_dielectric').checked])" type="submit">Export</button>  
                 </div>
+            </div>
+            <div class="window-style" style="width: 500px; background-color: white;">
+
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@
             background-color: rgba(189, 189, 189, 0.295);
             font-family: 'Courier New', Courier;
             height: 100%;
+            width: 100%;
             display: flex;
             align-items: center;
         }
@@ -100,7 +101,6 @@
         }
         .download_form{
             height: inherit;
-            margin-left: 50px;
             box-sizing: border-box;
             display: flex;
             align-items: center;

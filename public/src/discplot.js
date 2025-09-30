@@ -5,7 +5,8 @@ var mouse_status_sim = false
 
 const fine_adjustment_size = 15 // speichert die größe des Feinjustierungskastens in px
 
-
+canvas.width  = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
 
 class Plot{
     constructor(element){
@@ -571,7 +572,6 @@ canvas.addEventListener("mousemove", event => {
             canvas.style.cursor = "default";
         }
     };
-    document.getElementById("Terminal").innerHTML = "x = " + String(mouse_x) + "px <br> y = " + String(parseInt(mouse_y)) + "px";
 });
 
 
