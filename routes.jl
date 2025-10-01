@@ -9,7 +9,7 @@ route("/")do
     serve_static_file("index.html")
 end
 
-channel("/____/echo") do
+channel("/Boost/echo") do
     payload = params(:payload)
     client =  params(:WS_CLIENT)
 
@@ -31,5 +31,21 @@ channel("/____/echo") do
     
 end
 
+channel("/Efield/echo") do
+    payload = params(:payload)
+
+    pos = [element["x"] for element in params(:payload)["disc_data"]]
+    thickness = [element["width"] for element in params(:payload)["disc_data"]]
+    eps = [element["dielect_const"] for element in params(:payload)["disc_data"]]
+    freq = collect(LinRange(params(:payload)["f_min"], params(:payload)["f_max"], params(:payload)["n"]))
+    tan_delta = params(:payload)["tan_delta"] 
+    nm = (params(:payload)["mirror"]) ? 1e15 : 1
+
+    JSON.json([[0,0],[1,5],[3,-2]])
+end
+
+channel("/Noise/echo") do 
+    
+end
 
 end

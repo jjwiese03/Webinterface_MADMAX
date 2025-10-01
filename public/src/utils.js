@@ -19,9 +19,6 @@ const freq_max_field = document.getElementById("freq_max")
 const tan_delta_field = document.getElementById("tan_delta")
 const slider_resolution = document.getElementById("slider_resolution");
 
-// session
-const session_btn1 = document.getElementById("session_start_button");
-
 
 function resize_font(element){
     let font_size = 21;
