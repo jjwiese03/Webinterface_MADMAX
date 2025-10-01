@@ -1,73 +1,63 @@
 
 
 // Declare the chart dimensions and margins.
-const width = 500;
-const height = 300;
-const marginTop = 30;
-const marginRight = 60;
-const marginBottom = 30;
-const marginLeft = 60;
+const noise_plot_width = 500;
+const noise_plot_height = 300;
+const noise_plot_marginTop = 30;
+const noise_plot_marginRight = 60;
+const noise_plot_marginBottom = 30;
+const noise_plot_marginLeft = 60;
 
 const element = document.getElementById("noise_plot")
-element.width = width+marginRight+marginLeft
-element.height = height+marginBottom+marginTop
+element.width = noise_plot_width+noise_plot_marginRight+noise_plot_marginLeft
+element.height = noise_plot_height+noise_plot_marginBottom+noise_plot_marginTop
 
     
 // Declare the x (horizontal position) scale.
-var x = d3.scaleLinear([0, 5], [marginLeft, width - marginRight])
+var noise_x = d3.scaleLinear([0, 5], [noise_plot_marginLeft, noise_plot_width - noise_plot_marginRight])
 
 // Declare the y (vertical position) scale.
-var y = d3.scaleLinear([0, 100], [height - marginBottom, marginTop])
-var y2 = d3.scaleLinear([0, 2], [height - marginBottom, marginTop])
+var noise_y = d3.scaleLinear([0, 100], [noise_plot_height - noise_plot_marginBottom, noise_plot_marginTop])
 
 // Create the SVG container.
 const noise_svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("width", noise_plot_width)
+    .attr("height", noise_plot_height);
 
 // Add the x-axis
 var x_axis = noise_svg.append("g")
-    .attr("transform", `translate(0,${height - marginBottom})`)
+    .attr("transform", `translate(0,${noise_plot_height - noise_plot_marginBottom})`)
     .attr("stroke-width", 1.5)
-    .call(d3.axisBottom(x));
+    .call(d3.axisBottom(noise_x));
 
 // Add the y-axis
 var y_axis_1 = noise_svg.append("g")
-    .attr("transform", `translate(${marginLeft},0)`)
+    .attr("transform", `translate(${noise_plot_marginLeft},0)`)
     .attr("stroke-width", 1.5)
-    .call(d3.axisLeft(y));
+    .call(d3.axisLeft(noise_y));
 
 var y_axis_2 = noise_svg.append("g")
-    .attr("transform", `translate(${width - marginRight},0)`)
+    .attr("transform", `translate(${noise_plot_width - noise_plot_marginRight},0)`)
     .attr("stroke-width", 1.5)
-    .call(d3.axisRight(y2));
+    .call(d3.axisRight(noise_y));
 
 // Add grid
 
 var grid = noise_svg.append("g")
-    .attr("transform", `translate(${marginLeft},0)`)
+    .attr("transform", `translate(${noise_plot_marginLeft},0)`)
     .attr("stroke-width", 0.7)
     .attr("opacity", 0.3)
-    .call(d3.axisRight(y).tickSizeInner(width-marginLeft-marginRight));
+    .call(d3.axisRight(noise_y).tickSizeInner(noise_plot_width-noise_plot_marginLeft-noise_plot_marginRight));
 
 grid.selectAll(".tick text").remove();
 
-// Zoom-Linie
-
-const zoomline = noise_svg.append("g")
-    .append("line")
-    .attr("y1", height-marginTop)
-    .attr("y2", marginBottom)
-    .attr("x1", marginLeft)
-    .attr("x2", marginLeft)
-    .attr("stroke", "black");
 
 noise_svg.append("text")
     .text("frequency [GHz]")
-    .attr("y", height-marginBottom+40)
-    .attr("x", width/2-50)
+    .attr("y", noise_plot_height-noise_plot_marginBottom+40)
+    .attr("x", noise_plot_width/2-50)
 
-var path = svg.append("path")
+var noise_path = svg.append("path")
     .attr("id", "svg")
     .attr("fill", "none")
     .attr("stroke", "steelblue")
