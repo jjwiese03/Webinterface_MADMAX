@@ -90,3 +90,8 @@ function update_noiseplot(data){
 }
 
 
+// Steuerung der Noise Settings
+
+function noise_settings_clicked(){
+    
+}

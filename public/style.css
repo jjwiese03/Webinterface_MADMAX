@@ -218,3 +218,23 @@
         .pos_dis_input label:hover{
             filter: brightness(95%);
         }
+
+        .noise_settings_btn{
+            position: absolute;
+            right: 5px;
+            top: 5px;
+
+            box-sizing: border-box;
+            padding: 3px;
+            border: 2px black solid;
+            border-radius: 10px;
+            background-color:  rgb(126, 133, 229);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+        .noise_settings_btn:hover{
+            cursor: pointer;
+            filter: brightness(85%);
+        }
