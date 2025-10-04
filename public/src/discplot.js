@@ -248,7 +248,7 @@ class Plot{
         synch_graphtoinput();
         synch_fdisc_text();
     }
-    send_settings_to_backend(WebChannel = 'Boost'){
+    send_settings_to_backend(){
         //send setting data to backend
         
         if(tan_delta_field.value==""){
@@ -259,7 +259,12 @@ class Plot{
             document.getElementById("alert_div").innerHTML = ""
 
             const disc_data = this.discs.map(element => ({"x": element.x/100, "width":element.width/100, dielect_const: element.dielect_const}));
-            try{Genie.WebChannels.sendMessageTo(WebChannel, 'echo', {"disc_data": disc_data, "f_min": parseFloat(freq_min_field.value)*10**9, "f_max": parseFloat(freq_max_field.value)*10**9, "n": parseInt(slider_resolution.value), "mirror": document.getElementById("mirror_checkbox").checked, "tan_delta":parseFloat(tan_delta_field.value)*10**-6})}
+            const data = {"disc_data": disc_data, "f_min": parseFloat(freq_min_field.value)*10**9, "f_max": parseFloat(freq_max_field.value)*10**9, "n": parseInt(slider_resolution.value), "mirror": document.getElementById("mirror_checkbox").checked, "tan_delta":parseFloat(tan_delta_field.value)*10**-6};
+            try
+            {
+                Genie.WebChannels.sendMessageTo('Boost', 'echo', data)
+                Genie.WebChannels.sendMessageTo('Noise', 'echo', data)
+            }
             catch{console.log("Daten konnten nicht gesendet werden")}
         }
         else{

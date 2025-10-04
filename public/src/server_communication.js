@@ -10,7 +10,7 @@ window.parse_payload = function(WebSocket, payload) {
     if (WebSocket.channel == "Boost"){
         try{
             update_boostplot(JSON.parse(payload))
-            update_noiseplot(JSON.parse(payload))
+            // update_noiseplot(JSON.parse(payload))
         }
         catch(error){
             console.log("drawing Boostplot failed!!!", error)

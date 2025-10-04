@@ -8,9 +8,9 @@ const noise_plot_marginRight = 60;
 const noise_plot_marginBottom = 30;
 const noise_plot_marginLeft = 60;
 
-const element = document.getElementById("noise_plot")
-element.width = noise_plot_width+noise_plot_marginRight+noise_plot_marginLeft
-element.height = noise_plot_height+noise_plot_marginBottom+noise_plot_marginTop
+const element_noiseplot = document.getElementById("noise_plot")
+element_noiseplot.width = noise_plot_width+noise_plot_marginRight+noise_plot_marginLeft
+element_noiseplot.height = noise_plot_height+noise_plot_marginBottom+noise_plot_marginTop
 
     
 // Declare the x (horizontal position) scale.

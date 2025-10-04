@@ -45,7 +45,20 @@ channel("/Efield/echo") do
 end
 
 channel("/Noise/echo") do 
+    payload = params(:payload)
+    client =  params(:WS_CLIENT)
+
+    pos = [element["x"] for element in payload["disc_data"]]
+    thickness = [element["width"] for element in payload["disc_data"]]
+    eps = [element["dielect_const"] for element in payload["disc_data"]]
+    freq = collect(LinRange(payload["f_min"], payload["f_max"], payload["n"]))
+    tan_delta = payload["tan_delta"] 
+    nm = (payload["mirror"]) ? 1e15 : 1
     
+
+    noise = sin.(freq)
+    data_noise = hcat(freq./10^9, noise)
+    JSON.json(transpose(data_noise))
 end
 
 end
