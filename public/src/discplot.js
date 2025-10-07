@@ -250,10 +250,11 @@ class Plot{
     }
     send_settings_to_backend(webchannel = 'Boost'){
         //send setting data to backend
+        try{control_freq_condition()}catch{};
         
         if(tan_delta_field.value==""){
             document.getElementById("alert_div").innerHTML = "choose your tan(&delta;)"
-            reset_boostplot()
+            clear_boostplot()
         }
         else if (freq_min_field.value.length!=0 && freq_max_field.value.length!=0){
             document.getElementById("alert_div").innerHTML = ""
@@ -277,7 +278,7 @@ class Plot{
         }
         else{
             document.getElementById("alert_div").innerHTML = "specify a valid frequency range"
-            reset_boostplot()
+            clear_boostplot()
         }
     }
 

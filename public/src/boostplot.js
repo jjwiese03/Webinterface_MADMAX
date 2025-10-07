@@ -134,13 +134,16 @@ function update_boostplot(data){
 
     path.attr("d", line(data));
     path_ref.attr("d", line_ref(data));
+
+
     path.style("display", "grid");
     path_ref.style("display", "grid");
+    grid.style("display", "grid");
     }
     catch{}
 }
 
-function reset_boostplot(){
+function clear_boostplot(){
     
     x_axis.call(d3.axisBottom(d3.scaleIdentity().range(x.range())).tickFormat(() => "").ticks(5))
     y_axis_1.call(d3.axisLeft(d3.scaleIdentity().range(y.range())).tickFormat(() => ""))
@@ -148,12 +151,13 @@ function reset_boostplot(){
 
     path.style("display", "none");
     path_ref.style("display", "none");
+    grid.style("display", "none");
 }
 
 function update_log_lin_1(){
     if (boostplot_chkbx_1.checked){
         y = d3.scaleLog()
-            .domain([1, 1])
+            .domain([1, 100])
             .range([height - marginBottom, marginTop])
             .nice();
         y_axis_1.call(d3.axisLeft(y))
@@ -161,7 +165,7 @@ function update_log_lin_1(){
     }
     else{
         y = d3.scaleLinear()
-            .domain([0, 0])
+            .domain([1, 100])
             .range([height - marginBottom, marginTop])
             .nice();
         y_axis_1.call(d3.axisLeft(y))           
@@ -171,7 +175,7 @@ function update_log_lin_1(){
 function update_log_lin_2(){
     if (boostplot_chkbx_2.checked){
         y2 = d3.scaleLog()
-            .domain([1, 1])
+            .domain([0.1, 1])
             .range([height - marginBottom, marginTop])
             .nice();
         y_axis_2.call(d3.axisRight(y2))
@@ -179,7 +183,7 @@ function update_log_lin_2(){
     }
     else{
         y2 = d3.scaleLinear()
-            .domain([0, 0])
+            .domain([0, 2])
             .range([height - marginBottom, marginTop])
             .nice();
         y_axis_2.call(d3.axisRight(y2))           
@@ -278,4 +282,5 @@ document.addEventListener("keyup", (event) => {
 boost_plot.append(svg.node());
 update_log_lin_1();
 update_log_lin_2();
+clear_boostplot();
 

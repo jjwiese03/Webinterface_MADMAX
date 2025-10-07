@@ -225,8 +225,7 @@
         .after_red::after{
             background-color: rgb(155, 38, 38);
         }
-
-
+        
         .pos_dis_input label{
             padding: 3px 8px;
             background-color: rgba(191, 197, 191, 0.97);
