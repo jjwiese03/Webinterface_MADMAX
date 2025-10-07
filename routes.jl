@@ -54,11 +54,33 @@ channel("/Noise/echo") do
     freq = collect(LinRange(payload["f_min"], payload["f_max"], payload["n"]))
     tan_delta = payload["tan_delta"] 
     nm = (payload["mirror"]) ? 1e15 : 1
-    
 
+    # spezifische Noise Parameter
+    radius = payload["radius"] 
+    attenuation = payload["attenuation"] 
+    l_taper = payload["l_taper"] 
+
+    
+    
+    # Simulation der Daten
+    refl_sim = TMSimulation(3, [:l2, :l3, :l4],
+                            Dict(
+                                :l_taper => 166e-3,
+                                :l1 => 16e-3,
+                                :d_disk => 1e-3,
+                                :eps_disk => 9.36,
+                                :mirror_cond => 3.77e7,
+                                :attenuation => 1e-4,
+                                :tand_disk => 1e-3,
+                                :radius => 98e-3
+                            ), nothing)
+    
+    sim_res = simulate(refl_sim, 18e9:1e6:20e9, [12e-3, 12e-3, 8.1e-3])
     noise = sin.(freq)
-    data_noise = hcat(freq./10^9, noise)
-    JSON.json(transpose(data_noise))
+
+    # Formatierung der Simulationsergebnisse
+    noise = hcat(freq./10^9, noise)
+    JSON.json(transpose(noise))
 end
 
 end

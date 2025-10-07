@@ -19,6 +19,12 @@ const freq_max_field = document.getElementById("freq_max")
 const tan_delta_field = document.getElementById("tan_delta")
 const slider_resolution = document.getElementById("slider_resolution");
 
+// noise textinputs
+const radius = document.getElementById("radius")
+const attenuation = document.getElementById("attenuation");
+const l_taper = document.getElementById("l_taper");
+
+
 
 function resize_font(element){
     let font_size = 21;

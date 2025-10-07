@@ -248,28 +248,36 @@ class Plot{
         synch_graphtoinput();
         synch_fdisc_text();
     }
-    send_settings_to_backend(){
+    send_settings_to_backend(webchannel = 'Boost'){
         //send setting data to backend
         
         if(tan_delta_field.value==""){
             document.getElementById("alert_div").innerHTML = "choose your tan(&delta;)"
-            update_boostplot([[0,0],[0,0]])
+            reset_boostplot()
         }
         else if (freq_min_field.value.length!=0 && freq_max_field.value.length!=0){
             document.getElementById("alert_div").innerHTML = ""
 
             const disc_data = this.discs.map(element => ({"x": element.x/100, "width":element.width/100, dielect_const: element.dielect_const}));
-            const data = {"disc_data": disc_data, "f_min": parseFloat(freq_min_field.value)*10**9, "f_max": parseFloat(freq_max_field.value)*10**9, "n": parseInt(slider_resolution.value), "mirror": document.getElementById("mirror_checkbox").checked, "tan_delta":parseFloat(tan_delta_field.value)*10**-6};
+            const data = {"disc_data": disc_data, 
+                "f_min": parseFloat(freq_min_field.value)*10**9, 
+                "f_max": parseFloat(freq_max_field.value)*10**9, 
+                "n": parseInt(slider_resolution.value), 
+                "mirror": document.getElementById("mirror_checkbox").checked, 
+                "tan_delta": parseFloat(tan_delta_field.value)*10**-6,
+                "radius": parseFloat(radius.value),
+                "attenuation": parseFloat(attenuation.value),
+                "l_taper": parseFloat(l_taper.value)
+            };
             try
             {
-                Genie.WebChannels.sendMessageTo('Boost', 'echo', data)
-                Genie.WebChannels.sendMessageTo('Noise', 'echo', data)
+                Genie.WebChannels.sendMessageTo(webchannel, 'echo', data)
             }
-            catch{console.log("Daten konnten nicht gesendet werden")}
+            catch{console.log("Daten konnten nicht gesendet werden"); reset_boostplot()}
         }
         else{
             document.getElementById("alert_div").innerHTML = "specify a valid frequency range"
-            update_boostplot([[0,0],[0,0]])
+            reset_boostplot()
         }
     }
 
@@ -492,11 +500,6 @@ function synch_inputtograph(){
             }
         }
         else{
-            if(width_field.value!=""){
-                ax.focus_disc.forEach(element => {
-                    element.width = parseFloat(width_field.value);
-                })
-            }
             if(position_field.value!=""){
                 var curr_pos = ax.focus_disc[0].x
                 ax.focus_disc.forEach((element) => {
@@ -504,6 +507,11 @@ function synch_inputtograph(){
                     curr_pos += element.width + parseFloat(position_field.value);
                 })
             }
+        }
+        if(width_field.value!=""){
+                ax.focus_disc.forEach(element => {
+                    element.width = parseFloat(width_field.value);
+                })
         }
         ax.discs.map(element => element.dielect_const=parseFloat(dielectric_field.value)) 
     }
@@ -673,13 +681,3 @@ ax = new Plot(canvas);
 ax.update_scale();
 ax.focus_disc = [ax.add_disc()];
 synch_graphtoinput();
-// function openFullscreen() {
-//   if (document.documentElement.requestFullscreen) {
-//     document.documentElement.requestFullscreen();
-//   } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
-//     document.documentElement.webkitRequestFullscreen();
-//   } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
-//     document.documentElement.msRequestFullscreen();
-//   }
-// }
-// openFullscreen()

@@ -2,8 +2,8 @@
 
 // Declare the chart dimensions and margins.
 const noise_plot_width = 500;
-const noise_plot_height = 300;
-const noise_plot_marginTop = 30;
+const noise_plot_height = 280;
+const noise_plot_marginTop = 10;
 const noise_plot_marginRight = 60;
 const noise_plot_marginBottom = 30;
 const noise_plot_marginLeft = 60;
@@ -92,6 +92,12 @@ function update_noiseplot(data){
 
 // Steuerung der Noise Settings
 
+
 function noise_settings_clicked(){
-    
+    const checkbox = document.getElementById("noise_settings_chkbx");
+    const background = document.getElementById("noise_plot");
+
+    if (checkbox.checked == true){
+        
+    }
 }

@@ -13,11 +13,11 @@ element_.height = height+marginBottom+marginTop
 
 
 // Declare the x (horizontal position) scale.
-var x = d3.scaleLinear([0, 5], [marginLeft, width - marginRight])
+var x = d3.scaleLinear([0, 0], [marginLeft, width - marginRight])
 
 // Declare the y (vertical position) scale.
-var y = d3.scaleLinear([0, 100], [height - marginBottom, marginTop])
-var y2 = d3.scaleLinear([0, 2], [height - marginBottom, marginTop])
+var y = d3.scaleLinear([0, 0], [height - marginBottom, marginTop])
+var y2 = d3.scaleLinear([0, 0], [height - marginBottom, marginTop])
 
 // Create the SVG container.
 const svg = d3.create("svg")
@@ -134,15 +134,26 @@ function update_boostplot(data){
 
     path.attr("d", line(data));
     path_ref.attr("d", line_ref(data));
+    path.style("display", "grid");
+    path_ref.style("display", "grid");
     }
     catch{}
 }
 
+function reset_boostplot(){
+    
+    x_axis.call(d3.axisBottom(d3.scaleIdentity().range(x.range())).tickFormat(() => "").ticks(5))
+    y_axis_1.call(d3.axisLeft(d3.scaleIdentity().range(y.range())).tickFormat(() => ""))
+    y_axis_2.call(d3.axisRight(d3.scaleIdentity().range(y2.range())).tickFormat(() => ""));
+
+    path.style("display", "none");
+    path_ref.style("display", "none");
+}
 
 function update_log_lin_1(){
     if (boostplot_chkbx_1.checked){
         y = d3.scaleLog()
-            .domain([1, 100])
+            .domain([1, 1])
             .range([height - marginBottom, marginTop])
             .nice();
         y_axis_1.call(d3.axisLeft(y))
@@ -150,7 +161,7 @@ function update_log_lin_1(){
     }
     else{
         y = d3.scaleLinear()
-            .domain([1, 100])
+            .domain([0, 0])
             .range([height - marginBottom, marginTop])
             .nice();
         y_axis_1.call(d3.axisLeft(y))           
@@ -160,7 +171,7 @@ function update_log_lin_1(){
 function update_log_lin_2(){
     if (boostplot_chkbx_2.checked){
         y2 = d3.scaleLog()
-            .domain([0.1, 1])
+            .domain([1, 1])
             .range([height - marginBottom, marginTop])
             .nice();
         y_axis_2.call(d3.axisRight(y2))
@@ -168,7 +179,7 @@ function update_log_lin_2(){
     }
     else{
         y2 = d3.scaleLinear()
-            .domain([0, 2])
+            .domain([0, 0])
             .range([height - marginBottom, marginTop])
             .nice();
         y_axis_2.call(d3.axisRight(y2))           
