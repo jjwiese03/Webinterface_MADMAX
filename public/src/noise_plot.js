@@ -87,17 +87,7 @@ function update_noiseplot(data){
     noise_grid.selectAll(".tick text").remove();
     
     noise_path.attr("d", noise_line(data));
+    noise_path.style("display", "grid")
 }
 
 
-// Steuerung der Noise Settings
-
-
-function noise_settings_clicked(){
-    const checkbox = document.getElementById("noise_settings_chkbx");
-    const background = document.getElementById("noise_plot");
-
-    if (checkbox.checked == true){
-        
-    }
-}

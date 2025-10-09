@@ -48,6 +48,7 @@ channel("/Noise/echo") do
     payload = params(:payload)
     client =  params(:WS_CLIENT)
 
+    # allgemeine Parameter
     pos = [element["x"] for element in payload["disc_data"]]
     thickness = [element["width"] for element in payload["disc_data"]]
     eps = [element["dielect_const"] for element in payload["disc_data"]]
@@ -60,27 +61,14 @@ channel("/Noise/echo") do
     attenuation = payload["attenuation"] 
     l_taper = payload["l_taper"] 
 
-    
-    
-    # Simulation der Daten
-    refl_sim = TMSimulation(3, [:l2, :l3, :l4],
-                            Dict(
-                                :l_taper => 166e-3,
-                                :l1 => 16e-3,
-                                :d_disk => 1e-3,
-                                :eps_disk => 9.36,
-                                :mirror_cond => 3.77e7,
-                                :attenuation => 1e-4,
-                                :tand_disk => 1e-3,
-                                :radius => 98e-3
-                            ), nothing)
-    
-    sim_res = simulate(refl_sim, 18e9:1e6:20e9, [12e-3, 12e-3, 8.1e-3])
-    noise = sin.(freq)
 
-    # Formatierung der Simulationsergebnisse
-    noise = hcat(freq./10^9, noise)
-    JSON.json(transpose(noise))
+    
+    # Simulation des Noise
+    Ergebnis = Simulationsfunktion(Paramater...)
+    # Das Ergebnis muss die Form [[x1,y1],[x2,y2],[x3,y3]...] haben
+    # Wenn wir später mehrere Funktionen (y,z,w ...) plotten hat das Ergebnis die Form [[x1,y1,z1,w1],[x2,y2,z2,w2]...]
+
+    JSON.json(transpose(Ergebnis))
 end
 
 end

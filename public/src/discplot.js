@@ -259,6 +259,9 @@ class Plot{
         else if (freq_min_field.value.length!=0 && freq_max_field.value.length!=0){
             document.getElementById("alert_div").innerHTML = ""
 
+            // clear Noise Path
+            noise_path.style("display", "none")
+
             const disc_data = this.discs.map(element => ({"x": element.x/100, "width":element.width/100, dielect_const: element.dielect_const}));
             const data = {"disc_data": disc_data, 
                 "f_min": parseFloat(freq_min_field.value)*10**9, 

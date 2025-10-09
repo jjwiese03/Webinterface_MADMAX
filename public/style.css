@@ -225,7 +225,7 @@
         .after_red::after{
             background-color: rgb(155, 38, 38);
         }
-        
+
         .pos_dis_input label{
             padding: 3px 8px;
             background-color: rgba(191, 197, 191, 0.97);
@@ -245,7 +245,7 @@
         .noise_settings_btn{
             position: absolute;
             box-sizing: border-box;
-            right: 5px;
+            right: 15px;
             top: 5px;
             padding: 3px;
             border: 2px black solid;
