@@ -240,7 +240,8 @@
 
         }
         #noise_settings{
-            display: flex; 
+            display: grid; 
+            height: 300px;
         }
         .noise_settings_btn{
             position: absolute;
