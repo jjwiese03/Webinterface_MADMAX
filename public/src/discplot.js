@@ -271,7 +271,14 @@ class Plot{
                 "tan_delta": parseFloat(tan_delta_field.value)*10**-6,
                 "radius": parseFloat(radius.value),
                 "attenuation": parseFloat(attenuation.value),
-                "l_taper": parseFloat(l_taper.value)
+                "l_taper": parseFloat(l_taper.value),
+                "lna_short_delay": parseFloat(lna_short_delay.value),
+                "lna_open_delay": parseFloat(lna_open_delay.value),
+                "lna_booster_delay": parseFloat(lna_booster_delay.value),
+                "V_noise": parseFloat(V_noise.value),
+                "l_noise": parseFloat(l_noise.value),
+                "corr_mag": parseFloat(corr_mag.value),
+                "corr_phi": parseFloat(l_taper.value),
             };
             try
             {

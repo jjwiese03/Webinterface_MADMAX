@@ -60,6 +60,14 @@ channel("/Noise/echo") do
     radius = payload["radius"] 
     attenuation = payload["attenuation"] 
     l_taper = payload["l_taper"] 
+    lna_short_delay = payload["lna_short_delay"] 
+    lna_open_delay = payload["lna_open_delay"] 
+    lna_booster_delay = payload["lna_booster_delay"] 
+    V_noise = payload["V_noise"] 
+    l_noise = payload["l_noise"] 
+    corr_mag = payload["corr_mag"] 
+    corr_phi = payload["corr_phi"] 
+
 
 
     

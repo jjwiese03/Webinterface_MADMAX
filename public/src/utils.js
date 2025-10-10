@@ -23,6 +23,13 @@ const slider_resolution = document.getElementById("slider_resolution");
 const radius = document.getElementById("radius")
 const attenuation = document.getElementById("attenuation");
 const l_taper = document.getElementById("l_taper");
+const lna_short_delay = document.getElementById("lna_short_delay")
+const lna_open_delay = document.getElementById("lna_open_delay")
+const lna_booster_delay = document.getElementById("lna_booster_delay")
+const V_noise = document.getElementById("V_noise")
+const l_noise = document.getElementById("l_noise")
+const corr_mag = document.getElementById("corr_mag")
+const corr_phi = document.getElementById("corr_phi")
 
 
 
