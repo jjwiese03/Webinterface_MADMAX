@@ -91,3 +91,6 @@ function update_noiseplot(data){
 }
 
 
+function show_alert(){
+    const noise_alert = document.getElementById("noise_alert")
+}
