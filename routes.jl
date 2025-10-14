@@ -1,7 +1,7 @@
 module Routes
 include("simulation.jl")
 using Genie, Genie.Router, Genie.WebChannels, Genie.Assets, JSON
-# using MADboost
+using MADboost
 
 route("/")do 
     Assets.channels_support()
