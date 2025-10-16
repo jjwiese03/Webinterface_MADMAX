@@ -5,7 +5,6 @@ const wc_noise = Genie.initWebChannel('Noise');
 
 // Websocket Connection Daten verarbeiten
 window.parse_payload = function(WebSocket, payload) {
-
     // Verarbeite eingehende Boostdaten 
     if (WebSocket.channel == "Boost"){
         try{
@@ -13,7 +12,7 @@ window.parse_payload = function(WebSocket, payload) {
             // update_noiseplot(JSON.parse(payload))
         }
         catch(error){
-            console.log("drawing Boostplot failed!!!", error)
+            // console.log("drawing Boostplot failed!!!", error)
         }
     }
 
@@ -23,7 +22,7 @@ window.parse_payload = function(WebSocket, payload) {
             ax.draw_E_field(JSON.parse(payload))
         }
         catch(error){
-            console.log("drawing Efield failed!!!", error)
+            // console.log("drawing Efield failed!!!", error)
         }
     }
     // Verarbeite Daten über Noise
@@ -32,7 +31,7 @@ window.parse_payload = function(WebSocket, payload) {
             update_noiseplot(JSON.parse(payload))
         }
         catch(error){
-            console.log("drawing Efield failed!!!", error)
+            // console.log("drawing Efield failed!!!", error)
         }
     }
 }
