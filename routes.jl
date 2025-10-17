@@ -66,8 +66,6 @@ channel("/Noise/echo") do
     corr_mag = payload["corr_mag"] 
     corr_phi = payload["corr_phi"] 
 
-
-
     
     # Simulation des Noise
 
