@@ -1,0 +1,51 @@
+name: 🐞 Bug melden
+description: Melde einen Fehler, damit wir ihn beheben können
+title: "[Bug]: "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke, dass du dir die Zeit nimmst, einen Bug zu melden 🙌  
+        Bitte fülle die folgenden Felder so genau wie möglich aus.
+
+  - type: input
+    id: version
+    attributes:
+      label: Betroffene Version
+      description: Welche Version der Software ist betroffen?
+      placeholder: z.B. v1.2.3
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Fehlerbeschreibung
+      description: Beschreibe klar und verständlich, was nicht funktioniert.
+      placeholder: |
+        Was ist passiert?
+        Was hast du erwartet?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zum Reproduzieren
+      description: Wie kann man den Fehler reproduzieren?
+      placeholder: |
+        1. Gehe zu '...'
+        2. Klicke auf '...'
+        3. Siehe Fehler
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes Verhalten
+      description: Was sollte stattdessen passieren?
+    validations:
+      require
