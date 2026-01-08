@@ -1,5 +1,5 @@
-name: 🐞 Bug melden
-description: Melde einen Fehler, damit wir ihn beheben können
+name: Bug Report
+description: Report a problem or unexpected behavior
 title: "[Bug]: "
 labels: ["bug"]
 
@@ -7,75 +7,76 @@ body:
   - type: markdown
     attributes:
       value: |
-        Danke, dass du dir die Zeit nimmst, einen Bug zu melden 🙌  
-        Bitte fülle die folgenden Felder so genau wie möglich aus.
+        Thanks for taking the time to report a bug  
+        Please fill out the information below as clearly as possible.
 
   - type: input
     id: version
     attributes:
-      label: Betroffene Version
-      description: Welche Version der Software ist betroffen?
-      placeholder: z.B. v1.2.3
+      label: Affected Version
+      description: Which version of the software are you using?
+      placeholder: e.g. main branch 
 
   - type: textarea
     id: description
     attributes:
-      label: Fehlerbeschreibung
-      description: Beschreibe klar und verständlich, was nicht funktioniert.
+      label: Bug Description
+      description: Clearly describe what the bug is.
       placeholder: |
-        Was ist passiert?
-        Was hast du erwartet?
+        What happened?
+        What did you expect to happen?
     validations:
       required: true
 
   - type: textarea
     id: steps
     attributes:
-      label: Schritte zum Reproduzieren
-      description: Wie kann man den Fehler reproduzieren?
+      label: Steps to Reproduce
+      description: How can we reproduce the issue?
       placeholder: |
-        1. Gehe zu '...'
-        2. Klicke auf '...'
-        3. Siehe Fehler
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
     validations:
       required: true
 
   - type: textarea
     id: expected
     attributes:
-      label: Erwartetes Verhalten
-      description: Was sollte stattdessen passieren?
+      label: Expected Behavior
+      description: What did you expect to happen?
 
   - type: textarea
     id: logs
     attributes:
-      label: Logs / Fehlermeldungen
-      description: Falls vorhanden, füge relevante Logs oder Fehlermeldungen ein.
+      label: Logs / Error Messages
+      description: Paste any relevant logs or error messages here.
       render: shell
 
   - type: dropdown
     id: os
     attributes:
-      label: Betriebssystem
+      label: Operating System
       options:
         - Windows
         - macOS
         - Linux
         - Android
         - iOS
-        - Sonstiges
+        - Other
 
   - type: input
     id: environment
     attributes:
-      label: Umgebung
-      description: Browser, Node-Version, Python-Version o. Ä.
-      placeholder: z.B. Chrome 120, Node.js 20
+      label: Environment
+      description: Browser, julia version, etc.
+      placeholder: e.g. Chrome 120
 
   - type: checkboxes
     id: confirmation
     attributes:
-      label: Bestätigung
+      label: Confirmation
       options:
-        - label: Ich habe geprüft, dass dieser Bug noch nicht gemeldet wurde.
+        - label: I have checked that this issue has not already been reported.
           required: true
+
