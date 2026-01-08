@@ -2,7 +2,7 @@ name: 🐞 Bug melden
 description: Melde einen Fehler, damit wir ihn beheben können
 title: "[Bug]: "
 labels: ["bug"]
-assignees: []
+
 body:
   - type: markdown
     attributes:
@@ -16,8 +16,6 @@ body:
       label: Betroffene Version
       description: Welche Version der Software ist betroffen?
       placeholder: z.B. v1.2.3
-    validations:
-      required: false
 
   - type: textarea
     id: description
@@ -47,5 +45,37 @@ body:
     attributes:
       label: Erwartetes Verhalten
       description: Was sollte stattdessen passieren?
-    validations:
-      require
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Fehlermeldungen
+      description: Falls vorhanden, füge relevante Logs oder Fehlermeldungen ein.
+      render: shell
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Betriebssystem
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iOS
+        - Sonstiges
+
+  - type: input
+    id: environment
+    attributes:
+      label: Umgebung
+      description: Browser, Node-Version, Python-Version o. Ä.
+      placeholder: z.B. Chrome 120, Node.js 20
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe geprüft, dass dieser Bug noch nicht gemeldet wurde.
+          required: true
