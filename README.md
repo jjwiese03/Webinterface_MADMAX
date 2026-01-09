@@ -22,7 +22,7 @@
 
 ## Project description 
 
-This simulation tool was developed as part of a bachelor’s thesis at RWTH Aachen University [link](. It is designed as a web application, as the goal is to make it accessible online in the future. The purpose of the tool is to visualize key properties of the MADMAX experiment as a function of the experimental settings.
+This simulation tool was developed as part of a bachelor’s thesis at RWTH Aachen University [link](https://www.institut3a.physik.rwth-aachen.de/global/show_document.asp?id=aaaaaaaaddzwdlm). It is designed as a web application, as the goal is to make it accessible online in the future. The purpose of the tool is to visualize key properties of the MADMAX experiment as a function of the experimental settings.
 
 ## Table of contents
 
@@ -36,7 +36,7 @@ To start the application, execute the file “start.jl”. To do this, navigate 
 
 ## Status
 
-Das Tool kann lokal auf Rechnern gestartet werden und läuft dabei bisher flüssig und fehlerfrei. 
+The tool can be launched locally on personal computers and has so far been running smoothly and without errors.
 
 ## Further Delevopment
 
