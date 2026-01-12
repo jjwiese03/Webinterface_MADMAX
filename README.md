@@ -24,19 +24,28 @@
 
 This simulation tool was developed as part of a bachelor’s thesis at RWTH Aachen University ([link](https://www.institut3a.physik.rwth-aachen.de/global/show_document.asp?id=aaaaaaaaddzwdlm)). It is designed as a web application, as the goal is to make it accessible online in the future. The purpose of the tool is to visualize key properties of the MADMAX experiment as a function of the experimental settings.
 
+## Branches
+
 ## Table of contents
 
 - [Quick start](#quick-start)
 - [Status](#status)
-- [About the Genie Framework]()
+- [About the Genie Framework](about-the-genie-framework)
 
 ## Quick start
 
 To start the application, execute the file “start.jl”. To do this, navigate to the file path of the unpacked download folder in your Julia Terminal and execute the command include(“start.jl”). The web interface is now hosted locally on your computer and you can call up the website in the browser under “http://127.0.0.1:8000/”.
 
+## What's included
+
+
+
 ## Status
 
-The tool can be launched locally on personal computers and has so far been running smoothly and without errors.
+The tool is currently fully functional on local machines and meets the fundamental requirements. These include, first, the ability to adjust all experimental parameters intuitively and with high precision, and second, the clear visualization of both the boost factor and the reflectivity.
 
 ## Further Delevopment
+
+## About the Genie Framework
+
 
