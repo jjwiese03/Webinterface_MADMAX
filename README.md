@@ -26,6 +26,14 @@ This simulation tool was developed as part of a bachelor’s thesis at RWTH Aach
 
 ## Branches
 
+
+The Branch strategy of this project separates stable releases from ongoing development.
+The main branch always contains tested, stable code and is used for official releases.
+Active development happens on the dev branch, where new changes are integrated.
+Individual tasks are developed in feature/* branches, while fix/* branches are used for targeted bug fixes.
+Once finished, these branches are merged back into dev.
+When the development state is stable, dev is merged into main and versioned (for example using Git tags). 
+
 ## Table of contents
 
 - [Quick start](#quick-start)
