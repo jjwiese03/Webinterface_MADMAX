@@ -54,6 +54,8 @@ The tool is currently fully functional on local machines and meets the fundament
 
 Work has already begun on visualizing the electromagnetic noise. However, this feature has not yet been fully completed and is currently not a priority.
 
+The visualization of the electric fields in the disc plot is currently under development. The implementation of a suitable simulation in the backend is still pending.
+
 ## Further Delevopment
 
 
