@@ -26,11 +26,19 @@ This simulation tool was developed as part of a bachelor’s thesis at RWTH Aach
 
 ## Branches
 
+
+The Branch strategy of this project separates stable releases from ongoing development.
+The main branch always contains tested, stable code and is used for official releases.
+Active development happens on the dev branch, where new changes are integrated.
+Individual tasks are developed in feature/* branches, while fix/* branches are used for targeted bug fixes.
+Once finished, these branches are merged back into dev.
+When the development state is stable, dev is merged into main and versioned (for example using Git tags). 
+
 ## Table of contents
 
 - [Quick start](#quick-start)
 - [Status](#status)
-- [About the Genie Framework](about-the-genie-framework)
+- [About the Genie Framework](#about-the-genie-framework)
 
 ## Quick start
 
@@ -44,7 +52,13 @@ To start the application, execute the file “start.jl”. To do this, navigate 
 
 The tool is currently fully functional on local machines and meets the fundamental requirements. These include, first, the ability to adjust all experimental parameters intuitively and with high precision, and second, the clear visualization of both the boost factor and the reflectivity.
 
+Work has already begun on visualizing the electromagnetic noise. However, this feature has not yet been fully completed and is currently not a priority.
+
+The visualization of the electric fields in the disc plot is currently under development. The implementation of a suitable simulation in the backend is still pending.
+
 ## Further Delevopment
+
+
 
 ## About the Genie Framework
 
