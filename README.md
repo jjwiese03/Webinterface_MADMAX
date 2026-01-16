@@ -13,7 +13,7 @@
     <br>
     <a href="https://github.com/jjwiese03/Webinterface_MADMAX/issues/new?assignees=-&labels=bug&template=bugreport.yml">Report bug</a>
     ·
-    <a href="mailto:jan.wiesmann@rwth-aachen.de">collaborate</a>
+    <a href="mailto:jan.wiesmann@rwth-aachen.de">Collaborate</a>
   </p>
 </p>
 
