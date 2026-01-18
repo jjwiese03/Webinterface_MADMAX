@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>MADMAX Documentation</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
@@ -22,7 +22,16 @@
             <h1>Simulation</h1>
             <!-- <a style="position: absolute; height: 100%; width: 100%;" href="index.html"></a> -->
         </a>
-        <a class="header-button" href="https://github.com/jjwiese03/Webinterface_MADMAX/archive/refs/heads/main.zip">download</a>
+        <a class="header-button" id="download-button" href="https://github.com/jjwiese03/Webinterface_MADMAX/archive/refs/heads/main.zip">
+            <span class="header-button-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="40%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke-width="3"></path>
+                        <polyline class="arrow" points="7 10 12 15 17 10" stroke-width="3"></polyline>
+                        <line class="arrow" x1="12" y1="15" x2="12" y2="3" stroke-width="3"></line>
+                </svg>
+            </span>
+            <span>Download</span>
+        </a>
     </header>
 
     <!--second header-->
@@ -34,8 +43,10 @@
             <a href="mailto:jan.wiesmann@rwth-aachen.de">Contact</a>
             &nbsp &middot &nbsp
             <a href="https://github.com/jjwiese03/Webinterface_MADMAX/issues/new?assignees=-&labels=bug&template=bugreport.yml">Report bug</a>
+            &nbsp &middot &nbsp
+            <a href="https://github.com/jjwiese03/Webinterface_MADMAX">GitHub</a>
         </div>
-        <!-- <img style="position: absolute; top: 0; height: 100%;" src="madmax_setup_bw_header.jpg" alt=""> -->
+        <a href="in_progress.html" class="second-header-button">docs</a>
     </div>
 
     
@@ -43,6 +54,9 @@
 
     <div class="page-content">
         <div class="docs-overview">
+            <!--title-->
+            <h1 class="docs-overview-title">Lessons</h1>
+
             <!--rows-->
             <div class="row ">
                 <!--cols-->
@@ -55,14 +69,12 @@
                         <div class="card-body">
                             <h5 class="card-title mb-3">
                                 <span class="theme-icon-holder card-icon-holder">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 -960 960 960"><path d="M440-80v-160H240L120-360l120-120h200v-80H160v-240h280v-80h80v80h200l120 120-120 120H520v80h280v240H520v160h-80ZM240-640h447l40-40-40-40H240v80Zm33 320h447v-80H273l-40 40 40 40Zm-33-320v-80 80Zm480 320v-80 80Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 -960 960 960" ><path d="m226-559 78 33q14-28 29-54t33-52l-56-11-84 84Zm142 83 114 113q42-16 90-49t90-75q70-70 109.5-155.5T806-800q-72-5-158 34.5T492-656q-42 42-75 90t-49 90Zm178-65q-23-23-23-56.5t23-56.5q23-23 57-23t57 23q23 23 23 56.5T660-541q-23 23-57 23t-57-23Zm19 321 84-84-11-56q-26 18-52 32.5T532-299l33 79Zm313-653q19 121-23.5 235.5T708-419l20 99q4 20-2 39t-20 33L538-80l-84-197-171-171-197-84 167-168q14-14 33.5-20t39.5-2l99 20q104-104 218-147t235-24ZM157-321q35-35 85.5-35.5T328-322q35 35 34.5 85.5T327-151q-25 25-83.5 43T82-76q14-103 32-161.5t43-83.5Zm57 56q-10 10-20 36.5T180-175q27-4 53.5-13.5T270-208q12-12 13-29t-11-29q-12-12-29-11.5T214-265Z"/></svg>
                                 </span>
-                                <span class="card-title-text">introduction</span>
+                                <span class="card-title-text">Get Started</span>
                             </h5>
-                            <div class="card-text">get a quick start into the Simulation App</div>
-                            <a class="card-link-mask" href="introduction.html"></a>
-
+                            <div class="card-text">Install the app and set it up</div>
+                            <a class="card-link-mask" href="in_progress.html"></a>
                         </div>
                     </div>
                 </div>
@@ -75,32 +87,12 @@
                         <div class="card-body">
                             <h5 class="card-title mb-3">
                                 <span class="theme-icon-holder card-icon-holder">
-
                                     <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 -960 960 960"><path d="M440-80v-160H240L120-360l120-120h200v-80H160v-240h280v-80h80v80h200l120 120-120 120H520v80h280v240H520v160h-80ZM240-640h447l40-40-40-40H240v80Zm33 320h447v-80H273l-40 40 40 40Zm-33-320v-80 80Zm480 320v-80 80Z"/></svg>
                                 </span>
                                 <span class="card-title-text">introduction</span>
                             </h5>
-                            <div class="card-text">get a quick start into the Simulation App</div>
-                            <a class="card-link-mask" href="introduction.html"></a>
-
-                        </div>
-                    </div>
-                </div>
-                <!--card 1-->
-                <div class="col-12 col-lg-4 py-3">
-                    <!--card shadow-->
-                    <div class="card">
-                        <!--card-->
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">
-                                <span class="theme-icon-holder card-icon-holder">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 -960 960 960"><path d="M440-80v-160H240L120-360l120-120h200v-80H160v-240h280v-80h80v80h200l120 120-120 120H520v80h280v240H520v160h-80ZM240-640h447l40-40-40-40H240v80Zm33 320h447v-80H273l-40 40 40 40Zm-33-320v-80 80Zm480 320v-80 80Z"/></svg>
-                                </span>
-                                <span class="card-title-text">introduction</span>
-                            </h5>
-                            <div class="card-text">get a quick start into the Simulation App</div>
-                            <a class="card-link-mask" href="introduction.html"></a>
+                            <div class="card-text">Learn how to use the App</div>
+                            <a class="card-link-mask" href="in_progress.html"></a>
 
                         </div>
                     </div>
@@ -116,10 +108,29 @@
 
                                     <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 -960 960 960"><path d="M440-80v-160H240L120-360l120-120h200v-80H160v-240h280v-80h80v80h200l120 120-120 120H520v80h280v240H520v160h-80ZM240-640h447l40-40-40-40H240v80Zm33 320h447v-80H273l-40 40 40 40Zm-33-320v-80 80Zm480 320v-80 80Z"/></svg>
                                 </span>
+                                <span class="card-title-text">in progress</span>
+                            </h5>
+                            <div class="card-text">wait for more content</div>
+                            <a class="card-link-mask" href="in_progress.html"></a>
+
+                        </div>
+                    </div>
+                </div>
+                <!--card 1-->
+                <div class="col-12 col-lg-4 py-3">
+                    <!--card shadow-->
+                    <div class="card">
+                        <!--card-->
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <span class="theme-icon-holder card-icon-holder">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 -960 960 960"><path d="M440-80v-160H240L120-360l120-120h200v-80H160v-240h280v-80h80v80h200l120 120-120 120H520v80h280v240H520v160h-80ZM240-640h447l40-40-40-40H240v80Zm33 320h447v-80H273l-40 40 40 40Zm-33-320v-80 80Zm480 320v-80 80Z"/></svg>
+                                </span>
                                 <span class="card-title-text">introduction</span>
                             </h5>
                             <div class="card-text">get a quick start into the Simulation App</div>
-                            <a class="card-link-mask" href="introduction.html"></a>
+                            <a class="card-link-mask" href="in_progress.html"></a>
 
                         </div>
                     </div>
@@ -138,13 +149,11 @@
                                 <span class="card-title-text">introduction</span>
                             </h5>
                             <div class="card-text">get a quick start into the Simulation App</div>
-                            <a class="card-link-mask" href="introduction.html"></a>
+                            <a class="card-link-mask" href="in_progress.html"></a>
 
                         </div>
                     </div>
                 </div>
-                
-
 
             </div>
         </div>

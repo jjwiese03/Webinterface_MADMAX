@@ -13,6 +13,7 @@
   --red-color: rgb(155, 38, 38);
   --madmax-orange: #F4A12D;
   --madmax-orange-light: #face90;
+  --madmax-orange-light-ct: #fcc373;
   --madmax-gray: #7C7C7B;
   --madmax-gray-light: #7c7c7b75;
   
@@ -20,11 +21,14 @@
 
 html, body {
   font-family: 'Poppins', sans-serif;
+  background-color: rgb(234, 234, 255);
+  background-image: radial-gradient(rgb(234, 234, 255), white);
 }
 
 header {
   position: sticky;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   background-color: white;
   width: 100vw;
@@ -43,9 +47,9 @@ header {
 }
 
 .header-button{
+  display: flex;
   background-color: var(--madmax-orange-light);
-  align-self: center;
-  align-content: center;
+  align-items: center;
   height: 7vh;
   padding: 0 2em;
   margin-right: 5vw;
@@ -54,14 +58,34 @@ header {
   font-weight:600;
   text-decoration: none;
   color: black;
+  min-width: 150px;
+  gap: 15px;
+  transition: all .1s;
+}
+.header-button:hover{
+  box-shadow: 0 0 5px var(--madmax-gray-light);
+  transform: translateY(-2px);
+  background-color: var(--madmax-orange-light-ct);
+  transition: all .1s;
+}
 
+.header-button-icon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.header-button-icon  .arrow{
+  transition: all .3s ease;
+}
+.header-button:hover .header-button-icon  .arrow{
+  transform: translateY(3px);
 }
 
 .second-header{
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: var(--madmax-gray-light);
   align-items: center;
   padding: 3em 0;
 }
@@ -79,14 +103,45 @@ header {
   flex-direction: row;
 }
 
+.second-header-button{
+  display: flex;
+  margin-top: 30px;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 100px;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all .1s;
+}
+
+.second-header-button:hover{
+  box-shadow: 0 0 5px black;
+  transform: translateY(-2px);
+  transition: all .1s;
+}
+
 .page-content{
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 
 .docs-overview{
-  width: 80vw;
-  margin-top: 10vh;
+  width: 70vw;
+  align-self: center;
+
+  background-color: rgb(255, 255, 255);
+  padding: 40px;
+  border-radius: 50px;
+}
+
+
+.docs-overview-title{
+  text-align: center;
+  margin-bottom: 1em;
 }
 
 .card-link-mask{
@@ -107,7 +162,8 @@ header {
 }
 .card:hover{
   box-shadow: 0px 3px 10px var(--madmax-gray-light);
-  transition: box-shadow .1s;
+  background-color: var(--madmax-orange-light-ct);
+  transition: all .1s;
 }
 
 .card-title{
