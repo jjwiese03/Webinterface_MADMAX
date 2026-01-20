@@ -21,7 +21,6 @@
 
 html, body {
   font-family: 'Poppins', sans-serif;
-  background-color: rgb(234, 234, 255);
   background-image: radial-gradient(rgb(234, 234, 255), white);
 }
 
@@ -81,6 +80,7 @@ header {
 .header-button:hover .header-button-icon  .arrow{
   transform: translateY(3px);
 }
+
 
 .second-header{
   position: relative;
