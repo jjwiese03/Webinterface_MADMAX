@@ -14,6 +14,8 @@
     <a href="https://github.com/jjwiese03/Webinterface_MADMAX/issues/new?assignees=-&labels=bug&template=bugreport.yml">Report bug</a>
     ·
     <a href="mailto:jan.wiesmann@rwth-aachen.de">Collaborate</a>
+    .
+    <a href="https://jjwiese03.github.io/Webinterface_MADMAX/index.html">Documentation</a>
   </p>
 </p>
 
@@ -24,21 +26,13 @@
 
 This simulation tool was developed as part of a bachelor’s thesis at RWTH Aachen University ([link](https://www.institut3a.physik.rwth-aachen.de/global/show_document.asp?id=aaaaaaaaddzwdlm)). It is designed as a web application, as the goal is to make it accessible online in the future. The purpose of the tool is to visualize key properties of the MADMAX experiment as a function of the experimental settings.
 
-## Branches
-
-
-The Branch strategy of this project separates stable releases from ongoing development.
-The main branch always contains tested, stable code and is used for official releases.
-Active development happens on the dev branch, where new changes are integrated.
-Individual tasks are developed in feature/* branches, while fix/* branches are used for targeted bug fixes.
-Once finished, these branches are merged back into dev.
-When the development state is stable, dev is merged into main and versioned (for example using Git tags). 
 
 ## Table of contents
 
 - [Quick start](#quick-start)
 - [Status](#status)
-- [About the Genie Framework](#about-the-genie-framework)
+- [Documentation](#documentation)
+- [Branches](#branches)
 
 ## Quick start
 
@@ -52,3 +46,16 @@ The tool is currently fully functional on local machines and meets the fundament
 Work has already begun on visualizing the electromagnetic noise. However, this feature has not yet been fully completed and is currently not a priority.
 
 The visualization of the electric fields in the disc plot is currently under development. The implementation of a suitable simulation in the backend is still pending.
+
+## Documentation
+
+The documentation for this project is currently still under construction and can be found [here](https://jjwiese03.github.io/Webinterface_MADMAX/index.html).
+
+## Branches
+
+The Branch strategy of this project separates stable releases from ongoing development.
+The main branch always contains tested, stable code and is used for official releases.
+Active development happens on the dev branch, where new changes are integrated.
+Individual tasks are developed in feature/* branches, while fix/* branches are used for targeted bug fixes.
+Once finished, these branches are merged back into dev.
+When the development state is stable, dev is merged into main and versioned (for example using Git tags). 
