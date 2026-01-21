@@ -257,7 +257,18 @@ class Plot{
         else if (freq_min_field.value.length!=0 && freq_max_field.value.length!=0){
             document.getElementById("alert_div").innerHTML = ""
 
-            const disc_data = this.discs.map(element => ({"x": element.x/100, "width":element.width/100, dielect_const: element.dielect_const}));
+            
+            // this.discs.map(element => ({"x": element.x/100, "width":element.width/100, dielect_const: element.dielect_const}));
+            var disc_data = [[],[],[]]  
+            
+            this.discs.forEach(element => {
+                disc_data[0].push(element.x)
+                disc_data[1].push(element.width)
+                disc_data[2].push(element.dielect_const)
+            })
+
+            console.log(disc_data)
+            
             try{Genie.WebChannels.sendMessageTo(wc, 'echo', {"disc_data": disc_data, "f_min": parseFloat(freq_min_field.value)*10**9, "f_max": parseFloat(freq_max_field.value)*10**9, "n": parseInt(slider_resolution.value), "mirror": document.getElementById("mirror_checkbox").checked, "tan_delta":parseFloat(tan_delta_field.value)*10**-6})}
             catch{console.log("Daten konnten nicht gesendet werden")}
         }

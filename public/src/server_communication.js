@@ -1,6 +1,6 @@
 // WebChannel initialisieren 
 wc_Efield = Genie.initWebChannel('Efield');
-wc_boost = Genie.initWebChannel('Boost')
+wc_boost = Genie.initWebChannel('Boost');
 
 // Websocket Connection Daten verarbeiten
 window.parse_payload = function(WebSocket, payload) {
