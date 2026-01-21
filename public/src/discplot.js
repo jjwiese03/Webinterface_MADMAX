@@ -581,7 +581,6 @@ canvas.addEventListener("wheel", (event) => {
     if(event.shiftKey){
         const step = 1;
         const last_disc = ax.discs[ax.discs.length-1]
-        console.log(event.deltaY)
 
         if (event.deltaY>0){
             ax.xmax += step
