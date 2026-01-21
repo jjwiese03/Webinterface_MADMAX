@@ -42,10 +42,7 @@ When the development state is stable, dev is merged into main and versioned (for
 
 ## Quick start
 
-To start the application, execute the file “start.jl”. To do this, navigate to the file path of the unpacked download folder in your Julia Terminal and execute the command include(“start.jl”). The web interface is now hosted locally on your computer and you can call up the website in the browser under “http://127.0.0.1:8000/”.
-
-## What's included
-
+To start the application, download the reposetory and execute the file “start.jl” in the main folder. To do this, navigate to the file path of the unpacked download folder in your Julia Terminal and execute the command include(“start.jl”). The web interface is now hosted locally on your computer and you can call up the website in the browser under “http://127.0.0.1:8000/”.
 
 
 ## Status
@@ -55,11 +52,3 @@ The tool is currently fully functional on local machines and meets the fundament
 Work has already begun on visualizing the electromagnetic noise. However, this feature has not yet been fully completed and is currently not a priority.
 
 The visualization of the electric fields in the disc plot is currently under development. The implementation of a suitable simulation in the backend is still pending.
-
-## Further Delevopment
-
-
-
-## About the Genie Framework
-
-
