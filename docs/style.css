@@ -16,7 +16,22 @@
   --madmax-orange-light-ct: #fcc373;
   --madmax-gray: #7C7C7B;
   --madmax-gray-light: #7c7c7b75;
-  
+}
+
+@media screen {
+  .header-button{
+    display: none !important;
+  }
+  .header-logo {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+  }
+  html, body {
+    background-image: radial-gradient(rgb(221, 221, 255), white) !important;
+  }
 }
 
 html, body {
@@ -31,6 +46,7 @@ header {
   justify-content: space-between;
   background-color: white;
   width: 100vw;
+  box-shadow: 0 0 10px rgb(204, 204, 204);
 }
 
 
