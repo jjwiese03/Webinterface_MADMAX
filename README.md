@@ -36,7 +36,7 @@ This simulation tool was developed as part of a bachelor’s thesis at RWTH Aach
 
 ## Quick start
 
-To start the application, download the reposetory and execute the file “start.jl” in the main folder. To do this, navigate to the file path of the unpacked download folder in your Julia Terminal and execute the command include(“start.jl”). The web interface is now hosted locally on your computer and you can call up the website in the browser under “http://127.0.0.1:8000/”.
+To start the application, download the reposetory and execute the file “start.jl” in the main folder. To do this, navigate to the file path of the unpacked download folder in your Julia Terminal and execute the command include(“start.jl”). The web interface is now hosted locally on your computer and you can call up the website in the [browser](http://127.0.0.1:8000/).
 
 
 ## Status
