@@ -1,0 +1,97 @@
+CSS
+
+.navbar {
+    width: fit-content;
+    margin: 0 auto;
+    justify-content: center;
+    color: white;
+
+    width: 100%;
+    box-sizing:content-box;
+    border-radius: 50vh;
+    background-color: var(--madmax-yellow-light);
+
+    /* border: var(--line-color-1) solid 1px; */
+    &:hover {
+        background-color:transparent;
+    }
+}
+
+.navbar-links {
+    box-sizing: content-box;
+
+    font-size: small;
+    display: flex;
+    justify-content: center;
+
+    gap: 3px;
+
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;    
+}
+
+.navbar-links li{
+    padding: 5px 15px;
+
+    cursor: pointer;
+    border-radius: 50vh;
+    transition: background 0.15s, color 0.15s;
+
+}
+
+.navbar-links li:hover{
+    cursor: pointer;
+    color: white;
+    background-color: var(--madmax-yellow-light);
+    transition: background 0.15s, color 0.15s;
+}
+
+.link-active {
+    font-weight: bold;
+    color: white !important;
+    background-color: var(--madmax-yellow) !important;
+}
+
+
+JS
+
+console.log("navbar.js loaded");
+const navbars = document.getElementsByClassName("navbar");
+
+
+for (let i = 0; i < navbars.length; i++) {
+
+    const navbar = navbars[i];
+    
+    const tabWindow = document.getElementById(navbar.dataset.tabid);
+
+    const links = navbar.getElementsByClassName("navbar-links")[0].children;
+
+    for (let j = 0; j < links.length; j++) {
+        const link = links[j];
+
+        link.addEventListener("click", () => {
+            console.log("clicked link: " + link.innerText);
+            for (let k = 0; k < links.length; k++) {
+                const otherLink = links[k];
+                if (otherLink !== link) {
+                    otherLink.classList.remove("link-active");
+                }
+            }
+            link.classList.add("link-active");
+        });
+    }
+}
+
+
+html
+<nav class="navbar" data-tabID="DiscSettings">
+
+                        <ul class="navbar-links">
+                            <li class="link-active" onclick="document.getElementById('tab-general').style.display = 'none'; document.getElementById('tab-individual').style.display = 'flex';">individual</li>
+                            <li onclick="document.getElementById('tab-general').style.display = 'flex'; document.getElementById('tab-individual').style.display = 'none';">general</li>
+                        </ul>
+
+                    </nav> 
+
