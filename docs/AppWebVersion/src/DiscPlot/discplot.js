@@ -1,4 +1,4 @@
-import { find_stepvalue, arange, Round, colors } from "./utils.js";
+import { find_stepvalue, arange, Round, colors } from "../utils.js";
 
 // Section Material:
 const mirror_checkbox = document.getElementById("mirror_checkbox");
@@ -34,6 +34,45 @@ let BoostplotIntervall = null;   // speichert das Intervall, in dem die Boostplo
 
 const fine_adjustment_size = 15 // speichert die größe des Feinjustierungskastens in px
 
+class PlotEvent{
+    /**
+     * represents an event occurring in the disc plot.
+     *
+     * @param {string}  Event Type, e.g. "disc_position_change", "disc_selection_change", "scale_change"
+     */
+    constructor(type){
+        const events = ["disc_position_change", "disc_selection_change", "scale_change"]
+        if (!events.some(element => element == type)){throw new Error("unknown event type")}
+
+        this.type = type;
+        this.timeStamp = Date.now();
+        this.importance = "low";
+    }
+}
+
+class Disc {
+    /**
+     * represents a disc in the disc plot.
+     *
+     * @param {number} x - The x-coordinate of the disc.
+     * @param {number} width - The width of the disc.
+     */
+    constructor(x, width){
+        this.x = x;
+        this.width = width;
+
+        this.selected = false;   // speichert, ob die Scheibe aktuell ausgewählt ist
+    }
+}
+
+class DiscConfig {
+    /**
+     * represents the configuration of the discs in the disc plot.
+     */
+    constructor(discs){
+
+    }
+}
 
 
 class Plot{
@@ -60,7 +99,7 @@ class Plot{
         this.unit = "cm";
         this.draw()
     }
-    draw(){
+    draw(axis=true, discs=true){
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
         // Diese Funktion zeichnet ein Axensystem samt Inhalt
     

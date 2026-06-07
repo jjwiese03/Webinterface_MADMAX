@@ -56,11 +56,11 @@
                             <div class="standard-counter-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g fill="#fff" stroke=var(--madmax-yellow) stroke-width="5"><ellipse rx="15" ry="45" cx="65" cy="50"/><ellipse rx="15" ry="45" cx="50" cy="50"/><ellipse rx="15" ry="45" cx="35" cy="50"/></g></svg><div class="standard-counter">
 
-                                    <button id="disc-number-minus" class="standard-counter-btn border-left">
+                                    <button id="disc-number-minus" class="standard-counter-btn border-left" onclick="const numberInput = document.getElementById('disc-number-input'); numberInput.value = Math.max(parseInt(numberInput.value) - 1, 0);">
                                         <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" width="80%" fill="#000000"><path d="M200-440v-80h560v80H200Z"/></svg>
                                     </button>
-                                    <input id="disc-number-input" onchange="const diff =  parseFloat(document.getElementById('disc-number-input').value) - discplot.discs.length; if (diff>0) {discplot.add_disc(Math.abs(diff))} else {discplot.pop_disc(Math.abs(diff))};" type="text" class="standard-number-input" style="border-radius: 0; width: 40px; box-shadow: none; border: none;" name="">
-                                    <button class="standard-counter-btn border-right">
+                                    <input id="disc-number-input" type="text" class="standard-number-input" style="border-radius: 0; width: 40px; box-shadow: none; border: none;" name="">
+                                    <button class="standard-counter-btn border-right" onclick="const numberInput = document.getElementById('disc-number-input'); numberInput.value = parseInt(numberInput.value) + 1;">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="80%" fill="#000000"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                                     </button>
                                 </div>

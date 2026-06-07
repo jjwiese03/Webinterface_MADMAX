@@ -106,10 +106,11 @@ header {
 .second-header-button{
   display: flex;
   margin-top: 30px;
+  padding: 0 2em;
   align-items: center;
   justify-content: center;
   height: 40px;
-  width: 100px;
+  width: fit-content;
   background-color: black;
   color: white;
   border-radius: 10px;
