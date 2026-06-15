@@ -44,7 +44,6 @@
 
 .bubble {
   background: white;
-  /* z-index: 5; */
   top: anchor(top);
   right: anchor(right);
   bottom: anchor(bottom);

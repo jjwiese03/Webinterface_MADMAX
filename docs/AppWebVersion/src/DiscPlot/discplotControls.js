@@ -1,5 +1,5 @@
 /**
- * @file controls.js
+ * @file discplotControls.js
  * @author Jan Wiesmann
  * @version 0.0.1
  * @created 2026-06-05
@@ -16,17 +16,21 @@
 import discplot from "./discplot.js";
 
 /* Mirror Checkbox */
-document.getElementById("mirror_checkbox").addEventListener("change", discplot.draw());
+document.getElementById("mirror_checkbox").addEventListener("change", function() {discplot.draw()});
+
+/* Plot Checkbox */
+document.getElementById("graph_dist_chkbx").addEventListener("change", function() {discplot.draw()});
+document.getElementById("graph_pos_chkbx").addEventListener("change", function() {discplot.draw()});
 
 
 /* Positioning Inputs */
 document.getElementById("disc-number-input").onchange = function() {
     console.log("disc number input changed")
-    const diff =  parseFloat(document.getElementById('disc-number-input').value) - discplot.discs.length;
+    const diff =  parseFloat(document.getElementById('disc-number-input').value) - discplot.discConfig.length;
     if (diff > 0) {
-        discplot.add_disc(Math.abs(diff));
+        discplot.addDisc(Math.abs(diff));
     } else {
-        discplot.pop_disc(Math.abs(diff));
+        discplot.addDisc(Math.abs(diff));
     }
 };
 
@@ -34,7 +38,6 @@ const position_input = document.getElementById("position-input");
 const rel_poisition_input = document.getElementById("rel_position-input");  
 const width_input = document.getElementById("width-input");
 
-// const diff =  parseFloat(document.getElementById('disc-number-input').value) - discplot.discs.length; if (diff>0) {discplot.add_disc(Math.abs(diff))} else {discplot.pop_disc(Math.abs(diff))};
 
 
 let compilationStatus = true;

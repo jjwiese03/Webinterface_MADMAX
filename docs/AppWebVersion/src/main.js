@@ -1,7 +1,7 @@
 import discplot from "./DiscPlot/discplot.js";
-import Interactions from "./DiscPlot/discplotActions.js";
-import Controls from "./DiscPlot/controls.js";
-import { buildBoostplot } from "./boostplot.js";
+import Event from "./DiscPlot/Event.js";
+import Controls from "./DiscPlot/discplotControls.js";
+import clickEvent from "./DiscPlot/clickEvent.js"
 
 
 console.log("main loaded")

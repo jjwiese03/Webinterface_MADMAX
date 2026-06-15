@@ -77,6 +77,14 @@ export function buildBoostplot(data) {
     });
 }
 
-buildBoostplot([{x: 0, y: 0}, {x: 2, y: 4}, {x: 4, y: 1}])
+export function updateBoostplot() {
+    // calculate the boostfactor for the current disc settings and update the boostplot
+    const freq = Array.from({ length: 100 }, (_, i) => (1 + i) * 1e9);
+    const { reflectivity, boostfactor } = transfer_matrix(freq, discplot.discs.map(d => d.x), discplot.discs.map(d => d.width));
+    
+    const data = Array.from(boostfactor, (val, i) => ({ x: freq[i], y: val }));
+    buildBoostplot(data);
+}
 
-console.log("boostplot loaded")
+
+buildBoostplot([{x: 0, y: 0}, {x: 2, y: 4}, {x: 4, y: 1}])

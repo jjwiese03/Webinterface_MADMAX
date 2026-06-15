@@ -1,0 +1,55 @@
+.iconCheckbox {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--madmax-yellow-light);
+    border-radius: 10px;
+    border: 1px solid transparent; /* statt border: none */
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.iconCheckbox input {
+    position: absolute;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.iconCheckbox input:checked + svg {
+    stroke: white;
+    fill: white;
+    transition: all .2s;
+}
+.iconCheckbox svg {
+    width: 20px;
+    height: 20px;
+    margin: 7px;
+    transition: transform .15s ease;
+    stroke: gray;
+    fill: gray;
+    transition: all .2s;
+
+}
+
+.iconCheckbox:hover {
+    box-shadow: 0 0 5px rgb(185, 185, 185);
+    /* border: 1px solid  var(--madmax-yellow); */
+    transition: all .2s;
+
+    svg {
+        transform: scale(1.1);
+        transition: all .2s;
+    }
+}
+
+.iconCheckbox:has(input:checked) {
+    background-color: var(--madmax-yellow);
+    transition: all .2s;
+
+}

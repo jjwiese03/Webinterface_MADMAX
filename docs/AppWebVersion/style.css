@@ -78,9 +78,6 @@ html, body{
     text-align: center;
     color: var(--madmax-yellow-light);
 }
-.tabbed-card{
-    padding: 0px inherit;
-}
 .tab-window{
     display: flex;
     justify-content: center;

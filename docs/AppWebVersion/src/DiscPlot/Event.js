@@ -1,5 +1,20 @@
+/**
+ * @file discplotActions.js
+ * @author Jan Wiesmann
+ * @version 0.0.1
+ * @created 2026-06-05
+ *
+ * Discplot Actions Module
+ *
+ * This file implements actions triggered by changes in the discplot (f.e. update input fields etc.).
+ *
+ *
+ * Usage:
+ * No public API is exposed by this module. It is used internally by the Discplot component to manage user interactions and update the plot accordingly.
+ */
+
 import discplot from "./discplot.js";
-import { buildBoostplot } from "../boostplot.js";
+import { updateBoostplot } from "../boostplot.js";
 import { transfer_matrix } from "../transfer_matrix.js";
 
 
@@ -21,29 +36,20 @@ const width_input = document.getElementById("width-input");
 discplot.onchange = function(event) {
   // function is called when a change in the settings occurs
 
-    function updateBoostplot() {
-        // calculate the boostfactor for the current disc settings and update the boostplot
-        const freq = Array.from({ length: 100 }, (_, i) => (1 + i) * 1e9);
-        const { reflectivity, boostfactor } = transfer_matrix(freq, discplot.discs.map(d => d.x), discplot.discs.map(d => d.width));
-        
-        const data = Array.from(boostfactor, (val, i) => ({ x: freq[i], y: val }));
-        buildBoostplot(data);
-    }
-
     switch (event.type) {
         case "disc_position_change":
-            position_input.value = discplot.focus_disc[0].x;
+            position_input.value = discplot.focusDiscs[0].position;
             
-
-            updateBoostplot()
+            // updateBoostplot();
             break;
         case "disc_selection_change":
-            console.log("disc selection changed")
+            
             break;
         default:
-            console.log("unknown change")
+            throw new Error("event type not recognized: " + event.type);  
     }
 };
+
 
 let compilationStatus = true;
 export default compilationStatus;
