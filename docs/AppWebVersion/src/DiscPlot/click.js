@@ -1,6 +1,6 @@
 /**
  * 
- * @file clickEvent.js
+ * @file click.js
  * @author Jan Wiesmann
  * @version 0.0.1
  * @created 2026-06-05
@@ -18,7 +18,7 @@ import discplot from "./discplot.js"
 
 
 function onDisc(event) {
-    /** Returns the disc which is targeted the event. If no disc is targeted it returns null. 
+    /** Returns the disc which is targeted by the event. If no disc is targeted it returns null. 
      * 
      * Function: Implements Binary search to find the disc.
     *    
@@ -30,13 +30,20 @@ function onDisc(event) {
     // start binary search
     var start = 0;
     var end = discplot.discConfig.discs.length - 1;
-    var mid = Math.floor((end - start) / 2);
+    var mid = start + Math.floor((end - start) / 2);
 
     var midDisc;
     var discLeftSide;
     var discRightSide;
+
+    let safety = 0;
     while (start != end) {
-        mid = Math.floor((end - start) / 2);
+        if (++safety > 100000) {
+            throw new Error("Possible infinite loop detected");
+        }
+
+        mid = start + Math.floor((end - start) / 2);
+        
 
         midDisc = discplot.discConfig.discs[mid]
 
@@ -44,10 +51,10 @@ function onDisc(event) {
         discRightSide = discplot.cm_to_pixel(midDisc.position + midDisc.width) + discplot.padd[3]
 
         if (X < discLeftSide) {
-            end = mid;
+            end = mid - 1;
         }
         else if (X > discRightSide) {
-            start = mid;
+            start = mid + 1;
         }
         else {
             return midDisc;
@@ -59,6 +66,7 @@ function onDisc(event) {
     discLeftSide = discplot.cm_to_pixel(leftOver.position) + discplot.padd[3]
     discRightSide = discplot.cm_to_pixel(leftOver.position + leftOver.width) + discplot.padd[3]
 
+    console.log(discplot.discConfig.discs)
     if (X > discLeftSide && X < discRightSide) {
         return leftOver;
     }
@@ -66,13 +74,25 @@ function onDisc(event) {
     return null;
 }
 
-discplot.discCanvas.addEventListener("click", (event) => {
+var actionIntervall;
+
+discplot.discCanvas.addEventListener("mousedown", (event) => {
     const disc = onDisc(event)
     
     if (disc != null) disc.selected = true;
-    else discplot.discConfig.clearFocus();
+    if (disc != null) console.log(disc.index);
+
+    else discplot.discConfig.clearSelection();
+
+    // actionIntervall = setInterval( (disc) => {
+
+    // }, 16, disc)
 
     discplot.draw();
+})
+
+discplot.discCanvas.addEventListener("click", (event) => {
+    // clearIntervall(action)
 })
 
 

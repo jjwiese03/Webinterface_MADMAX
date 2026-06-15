@@ -84,7 +84,12 @@ class Plot{
     }
     init(){
         this.updateScale(10, "cm");     // initiiert die Achse mit einem Standard Intervall von 10cm und der Einheit cm
-        this.discConfig.addDisc(new Disc(this, 1, 0.5, 24, false));
+        this.addDisc();
+        this.addDisc();
+        this.addDisc();
+        this.addDisc();
+
+
         this.draw(true);
     }
     draw(axis = false, discs = true) {
@@ -243,17 +248,26 @@ class Plot{
         }
         
     }
-    addDisc(position=null, width=0.1, epsilon=1, selected=true){
-        const disc = new Disc(this, position, width, epsilon, selected);
+    addDisc(position=null, width=0.1, epsilon=1, select = false){
 
-        this.discConfig.addDisc(disc);
+        if (position == null) {
+            if (this.discConfig.lastDisc == null) {
+                position = 0;
+            }
+            else {
+                position = this.discConfig.lastDisc.position + this.discConfig.lastDisc.width
+            }
+        };
+        
+        const disc = this.discConfig.addDisc([position, width, epsilon, false]);
+        if (select) {disc.select()}
         this.draw()
 
         return disc;
     }
     updateScale(xmax=10, unit="cm"){
-        this.axis.setXmax(xmax);
-        this.axis.setUnit(unit);
+        if (xmax != null) {this.axis.setXmax(xmax)};
+        if (unit != null) {this.axis.setUnit(unit)};
         this.axis.updateTicks();
 
         this.draw();
