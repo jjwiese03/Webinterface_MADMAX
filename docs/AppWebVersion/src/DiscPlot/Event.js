@@ -40,6 +40,7 @@ discplot.onchange = function(event) {
         case "disc_position_change":
             position_input.value = discplot.focusDiscs[0].position;
             
+            discplot.draw();
             // updateBoostplot();
             break;
         case "disc_selection_change":

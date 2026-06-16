@@ -30,19 +30,24 @@ export class Disc {
     delete(){
         this.collection.deleteDisc(this);
     }
-    select(){
-        this.collection.selectDisc(this)
+    selectDisc(deselect = true){
+        this.collection.selectDisc(this, deselect);
     }
-    movePosition(position) {
+    movePosition(value, dx = false) {
         /**
          * moves the disc to an new Position. 
          * 
-         * @param {number} position  New Position 
+         * @param {number} value - value that defines the new position
+         * @param {number} dx - decides if the value is an absolute or relative position 
          */
 
-        this.position = position;
+        if (dx) {
+            this.position += value;
+        }
+        else {
+            this.position = value;
+        }
 
-        
     }
 }
 
@@ -56,10 +61,13 @@ export class DiscCollection {
     get length(){
         return this.discs.length;
     }
-    get selectDiscs(){
+    get selectedDiscs(){
+        /**
+         * returns the discs, that are currently selected
+         */
         return this.discs.filter(disc => disc.selected);
     }
-    get selectDiscIndices(){
+    get selectedDiscIndices(){
         return this.discs.map(disc => disc.selected ? this.indexOf(disc) : null).filter(index => index !== null);
     }
     get lastDisc(){
@@ -69,31 +77,31 @@ export class DiscCollection {
         return this.discs.length > 0 ? this.discs[this.discs.length - 1] : null;
     }
     get firstDisc(){
+        /**
+         * time complexity: O(1)
+         */
         return this.discs.length > 0 ? this.discs[0] : null;
     }
     indexOf(disc){
         /**
          * implentes binary search to find the index of given disc ( time complexity: O(log(n)) )
          */
-        const discs = this.discs;
-
         var start = 0;
-        var end = discs.length - 1;
-        var mid = Math.floor((end - start) / 2);
-
+        var end = this.discs.length - 1;
+        var mid;
         while (end != start) {
-console.log("while")
-            if (discs[mid] = disc) {
+            mid = start + Math.floor((end - start) / 2);
+
+            if (this.discs[mid] == disc) {
                 return mid;
             }
-            else if (discs[mid].position >= disc.position) {
+            else if (this.discs[mid].position >= disc.position) {
                 end = mid - 1;
             }
             else {
                 start = mid + 1;
             }
         }
-
         return start;
     }
     deleteDisc(disc){
@@ -116,8 +124,8 @@ console.log("while")
         if (disc == null) return;
 
         disc = (Array.isArray(disc) && disc.length >= 4) ? new Disc(this, disc[0], disc[1], disc[2], disc[3]) : disc;
-        console.log(disc)
- 
+        
+        
         if (disc instanceof Disc) {
             if (this.discs.includes(disc)){
                 throw new Error("Disc is already in the collection: " + disc);
@@ -132,8 +140,28 @@ console.log("while")
         
         return disc;
     }
-    selectDisc(disc, exclusive = true){
-        if (exclusive){
+    selectDisc(disc, deselect = true){
+        /**
+         * Selects one or more discs.
+         *
+         * The `disc` parameter may be:
+         * - a {@link Disc} instance,
+         * - the index of a disc,
+         * - or an array containing Disc instances and/or indices.
+         *
+         * By default, all currently selected discs are deselected before
+         * the new selection is applied.
+         *
+         * @param {Disc|number|Array{Disc|number}} disc
+         *        The disc(s) to select, specified either as Disc objects
+         *        or indices.
+         * @param {boolean} [deselect=true]
+         *        If `true`, all other discs are deselected before selecting
+         *        the specified disc(s).
+         * @returns {void}
+         */
+
+        if (deselect){
             this.discs.forEach(d => d.selected = false);
         }
 
@@ -142,12 +170,7 @@ console.log("while")
             return;
         }
         else {
-            disc = disc instanceof Disc ? disc : this.discs[disc];  // erlaubt die Übergabe eines Index statt eines Disc-Objekts
-
-            if (!this.discs.includes(disc)){
-                throw new Error("Disc not found in configuration: " + disc);
-            }
-
+            disc = disc instanceof Disc ? disc : this.discs[disc]; 
             disc.selected = true;
         }
     }

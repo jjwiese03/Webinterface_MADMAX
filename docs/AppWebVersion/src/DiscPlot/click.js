@@ -66,7 +66,6 @@ function onDisc(event) {
     discLeftSide = discplot.cm_to_pixel(leftOver.position) + discplot.padd[3]
     discRightSide = discplot.cm_to_pixel(leftOver.position + leftOver.width) + discplot.padd[3]
 
-    console.log(discplot.discConfig.discs)
     if (X > discLeftSide && X < discRightSide) {
         return leftOver;
     }
@@ -79,22 +78,32 @@ var actionIntervall;
 discplot.discCanvas.addEventListener("mousedown", (event) => {
     const disc = onDisc(event)
     
-    if (disc != null) disc.selected = true;
-    if (disc != null) console.log(disc.index);
+    if (disc != null) disc.selectDisc();
 
     else discplot.discConfig.clearSelection();
 
-    // actionIntervall = setInterval( (disc) => {
+    actionIntervall = setInterval( (disc, offset) => {
+        disc.movePosition(mouseX - offset);
+    }, 16, disc, discplot.pixel_to_cm(event.clientX - discplot.padd[3] - disc.position));
 
-    // }, 16, disc)
-
-    discplot.draw();
+    discplot.dispatchEvent("disc_position_change");
 })
 
 discplot.discCanvas.addEventListener("click", (event) => {
-    // clearIntervall(action)
+    clearInterval(actionIntervall)
 })
 
+
+// track mouse position
+const rect = discplot.discCanvas.getBoundingClientRect();
+
+export let mouseX = 0;
+export let mouseY = 0;
+
+discplot.discCanvas.addEventListener("mousemove", (event) => {
+    mouseX = event.clientX - rect.left;
+    mouseY = event.clientY - rect.top;
+});
 
 const Status = true;
 export default Status;

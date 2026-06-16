@@ -284,7 +284,11 @@ class Plot{
         null
     }
     dispatchEvent(event){
+        if (!(event instanceof PlotEvent)) {event = new PlotEvent(event)}
+        console.log(event)
         this.onchange(event);
+
+        return Event;
     }
 }
 
