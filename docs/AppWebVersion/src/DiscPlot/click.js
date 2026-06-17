@@ -14,6 +14,7 @@
  */
 
 
+import { Disc } from "./DiscCollection.js";
 import discplot from "./discplot.js"
 
 
@@ -73,36 +74,46 @@ function onDisc(event) {
     return null;
 }
 
-var actionIntervall;
-
-discplot.discCanvas.addEventListener("mousedown", (event) => {
-    const disc = onDisc(event)
-    
-    if (disc != null) disc.selectDisc();
-
-    else discplot.discConfig.clearSelection();
-
-    actionIntervall = setInterval( (disc, offset) => {
-        disc.movePosition(mouseX - offset);
-    }, 16, disc, discplot.pixel_to_cm(event.clientX - discplot.padd[3] - disc.position));
-
-    discplot.dispatchEvent("disc_position_change");
-})
-
-discplot.discCanvas.addEventListener("click", (event) => {
-    clearInterval(actionIntervall)
-})
-
-
-// track mouse position
+// rect einmal außerhalb berechnen (oder bei resize aktualisieren)
 const rect = discplot.discCanvas.getBoundingClientRect();
+let mouseX = 0;
+let mouseY = 0;
 
-export let mouseX = 0;
-export let mouseY = 0;
+// Handler als echte Closure mit disc im Scope
+let mouseMoveHandler = null;
 
-discplot.discCanvas.addEventListener("mousemove", (event) => {
+const handleMouseMove = (disc, offset) => (event) => {
     mouseX = event.clientX - rect.left;
     mouseY = event.clientY - rect.top;
+    
+    disc.move(discplot.pixel_to_cm(mouseX - discplot.padd[3]))
+};
+
+discplot.discCanvas.addEventListener("mousedown", (event) => {
+    const disc = onDisc(event);
+    if (disc != null) {
+        disc.selectDisc()
+
+        // Alten Listener entfernen, falls noch aktiv
+        if (mouseMoveHandler) {
+            discplot.discCanvas.removeEventListener("mousemove", mouseMoveHandler);
+        }
+
+        // Neue Closure mit aktuellem disc erstellen und speichern
+        mouseMoveHandler = handleMouseMove(disc, (event.clientX - rect.left) - discplot.cm_to_pixel(disc.position));
+        discplot.discCanvas.addEventListener("mousemove", mouseMoveHandler);
+        }
+    else discplot.discConfig.clearSelection();
+
+    
+});
+
+discplot.discCanvas.addEventListener("mouseup", () => {
+    console.log("drag end");
+    if (mouseMoveHandler) {
+        discplot.discCanvas.removeEventListener("mousemove", mouseMoveHandler);
+        mouseMoveHandler = null;
+    }
 });
 
 const Status = true;

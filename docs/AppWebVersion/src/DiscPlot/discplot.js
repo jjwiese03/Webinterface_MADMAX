@@ -35,33 +35,27 @@ const position_input = document.getElementById("position-input");
 const rel_poisition_input = document.getElementById("rel_position-input");
 const width_input = document.getElementById("width-input");
 
-const discCanvas = document.getElementById("discs");
-const Parent = discCanvas.parentElement
-discCanvas.width = Parent.clientWidth; // passt die Canvas-Breite an die tatsächliche Größe im Layout an
-discCanvas.height = Parent.clientHeight; // passt die Canvas-Größe an die tatsächliche Größe im Layout an
-const axisCanvas = document.getElementById("axis");
-axisCanvas.width = Parent.clientWidth; // passt die Canvas-Breite an die tatsächliche Größe im Layout an
-axisCanvas.height = Parent.clientHeight; // passt die Canvas-Größe an die tatsächliche Größe im Layout an
+function setCanvasSize() {
+    /**
+     * sets the canvas size of the discplot to the size of its wrapper div
+     */
+    const discCanvas = document.getElementById("discs");
+    const Parent = discCanvas.parentElement
+
+    discCanvas.width = Parent.clientWidth; // passt die Canvas-Breite an die tatsächliche Größe im Layout an
+    discCanvas.height = Parent.clientHeight; // passt die Canvas-Größe an die tatsächliche Größe im Layout an
+
+    const axisCanvas = document.getElementById("axis");
+    axisCanvas.width = Parent.clientWidth; // passt die Canvas-Breite an die tatsächliche Größe im Layout an
+    axisCanvas.height = Parent.clientHeight; // passt die Canvas-Größe an die tatsächliche Größe im Layout an
+
+    return null;    //returns nothing
+}
+setCanvasSize();
+
 
 const graph_pos_chkbx = document.getElementById("graph_pos_chkbx");
 const graph_dist_chkbx = document.getElementById("graph_dist_chkbx");
-
-class PlotEvent{
-    /**
-     * represents an event occurring in the disc plot.
-     *
-     * @param {string}  Event Type, e.g. "disc_position_change", "disc_selection_change", "scale_change", "disc_number_change"
-     */
-    constructor(type){
-        const events = ["disc_position_change", "disc_selection_change", "disc_number_change", "scale_change"]
-        if (!events.some(element => element == type)){throw new Error("unknown event type: " + type)}
-
-        this.type = type;
-        this.timeStamp = Date.now();
-        this.importance = "low";
-    }
-}
-
 
 class Plot{
     constructor(discCanvas, axisCanvas){
@@ -86,9 +80,9 @@ class Plot{
         this.updateScale(10, "cm");     // initiiert die Achse mit einem Standard Intervall von 10cm und der Einheit cm
         this.addDisc();
         this.addDisc();
-        this.addDisc();
-        this.addDisc();
-
+        this.addDisc(null, 0.7);
+        const disc = this.addDisc();
+        disc.move(7, true)
 
         this.draw(true);
     }
@@ -126,7 +120,7 @@ class Plot{
             this.axisContext.fillText(
                 "Position [" + this.axis.unit + "]",
                 this.padd[3] + (this.axisCanvas.width - this.padd[1] - this.padd[3]) / 2,
-                this.axisCanvas.height - this.padd[2] / 2 + this.axisContext.measureText("Position").emHeightAscent / 2 + 10
+                this.axisCanvas.height - this.padd[2] + this.axisContext.measureText("Position").emHeightAscent * 4.5
             );
 
             this.axisContext.stroke();
@@ -279,18 +273,10 @@ class Plot{
     cm_to_pixel(x){
         return Math.trunc(x*(this.axisCanvas.width-this.padd[1]-this.padd[3]-20)/this.axis.xmax)
     }
-    onchange(event){
-        // function to call when a change in the settings occurs
-        null
-    }
-    dispatchEvent(event){
-        if (!(event instanceof PlotEvent)) {event = new PlotEvent(event)}
-        console.log(event)
-        this.onchange(event);
-
-        return Event;
-    }
 }
 
+
+const discCanvas = document.getElementById("discs")
+const axisCanvas = document.getElementById("axis")
 const discplot = new Plot(discCanvas, axisCanvas);   
 export default discplot;

@@ -32,24 +32,12 @@ const rel_poisition_input = document.getElementById("rel_position-input");
 const width_input = document.getElementById("width-input");
 
 
+discplot.discConfig.on("change:position", (event) => {
+    position_input.value = this.selectedDiscs[0].position;
+    console.log("eventhit")
+    discplot.draw();
+})
 
-discplot.onchange = function(event) {
-  // function is called when a change in the settings occurs
-
-    switch (event.type) {
-        case "disc_position_change":
-            position_input.value = discplot.focusDiscs[0].position;
-            
-            discplot.draw();
-            // updateBoostplot();
-            break;
-        case "disc_selection_change":
-            
-            break;
-        default:
-            throw new Error("event type not recognized: " + event.type);  
-    }
-};
 
 
 let compilationStatus = true;
