@@ -49,7 +49,7 @@ discplot.discConfig.on("change:selection", function (selection) {
     discplot.draw();
 })
 
-discplot.discConfig.on(["disc:removed", "disc:removed"], function () {
+discplot.discConfig.on(["disc:removed", "disc:added"], function () {
     counter_field.value = String(this.discs.length);
     
     discplot.draw();
