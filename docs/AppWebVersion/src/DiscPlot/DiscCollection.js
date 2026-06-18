@@ -32,6 +32,12 @@ export class Disc {
          */
         return (this.index - 1 >= 0) ? this.collection.discs[this.index - 1] : null;
     }
+    get rightEdge() {
+        /**
+         * returns the position of the right edge of the disc
+         */
+        return this.position + this.width
+    }
     getBefore(n = 1){
         /**
          * time complexity: O(1)
@@ -93,7 +99,7 @@ export class DiscCollection {
         }
         else {
             if (!this.#listeners[event]) this.#listeners[event] = [];
-            this.#listeners[event].push(callback);
+            this.#listeners[event].push(callback.bind(this));
             return;
         }
     }
@@ -134,7 +140,7 @@ export class DiscCollection {
             return;
         }
         else {
-            this.#listeners[event]?.forEach(cb => cb.bind(this)(data));
+            this.#listeners[event]?.forEach(cb => cb(data));
         }
     }
 
@@ -188,7 +194,10 @@ export class DiscCollection {
         var end = Math.max(0, this.discs.length - 1);
         var mid;
 
+        var security = 0;
         while (end != start) {
+            security++;
+            if(security > 100) {throw new Error("possible infinity loop detected")}
             mid = start + Math.floor((end - start) / 2);
 
             if (this.discs[mid].position == position) {
@@ -292,8 +301,8 @@ export class DiscCollection {
                 throw new Error("Disc is already in the collection: " + disc);
             }
             this.discs.push(disc);
+            console.log("sd")
             this.emit("disc:added", disc);
-            this.emit("change:selection", disc);
         } else {
             throw new Error("Only Disc or a plain object are valid inputs. Got: " + String(disc));
         }
@@ -368,18 +377,36 @@ export class DiscCollection {
                 disc.position = value;
             }
             
-            // move overlapping discs
-            while(disc.after != null && disc.position + disc.width > disc.after.position) {
-                disc.after.position = disc.position + disc.width;
-                disc = disc.after;
-            }
+            if(errorCorrection){
+                // disc cascade to the left
+                while(disc.after != null && disc.rightEdge > disc.after.position) {
+                    disc.after.position = disc.rightEdge;
+                    disc = disc.after;
+                }
 
-            while(disc.before != null && disc.before.position + disc.before.width > disc.position) {
-                disc.before.position = disc.position - disc.before.width;
-                disc = disc.before;
+                // disc cascade to the right
+                while(disc.before != null && disc.before.rightEdge > disc.position) {
+                    disc.before.position = disc.position - disc.before.width;
+                    disc = disc.before;
+                }
             }
-
+            
         })
+
+        // correct the borders
+        if (errorCorrection){
+            // correct maxPosition
+            if (maxPosition != null && this.lastDisc.rightEdge >= this.maxPosition ){
+                this.moveDiscs(this.lastDisc, this.maxPosition - this.lastDisc.width)
+            }
+
+            // correct negative positions
+            if (this.firstDisc.position < 0) {
+                this.moveDiscs(this.firstDisc, 0)
+            }
+        }
+        
+
 
         this.emit("change:position")
     }

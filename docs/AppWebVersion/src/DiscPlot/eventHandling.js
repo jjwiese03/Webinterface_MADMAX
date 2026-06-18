@@ -32,15 +32,29 @@ const rel_poisition_input = document.getElementById("rel_position-input");
 const width_input = document.getElementById("width-input");
 
 
-discplot.discConfig.on("change:position", function() {
-    position_input.value = this.selectedDiscs[0].position;
+discplot.discConfig.on("change:position", function ()  {
+    const selection = this.selectedDiscs
+    position_input.value = (selection.length > 0) ? selection[0].position : "-";
+    rel_poisition_input.value = (selection.length > 0 && selection[0].before != null) ? selection[0].position - selection[0].before.rightEdge : "-";
     
     discplot.draw();
 })
-discplot.discConfig.on("change:selection", () => {
+
+
+discplot.discConfig.on("change:selection", function (selection) {
+    position_input.value = (selection.length > 0) ? selection[0].position : "-";
+    rel_poisition_input.value = (selection.length > 0 && selection[0].before != null) ? selection[0].position - selection[0].before.rightEdge : "-";
+    width_input.value = (selection.length > 0) ? selection[0].width : "-";
     
     discplot.draw();
 })
+
+discplot.discConfig.on(["disc:removed", "disc:removed"], function () {
+    counter_field.value = String(this.discs.length);
+    
+    discplot.draw();
+})
+
 
 
 let compilationStatus = true;

@@ -21,7 +21,7 @@ document.getElementById("mirror_checkbox").addEventListener("change", function()
 /* Plot Checkbox */
 document.getElementById("graph_dist_chkbx").addEventListener("change", function() {discplot.draw()});
 document.getElementById("graph_pos_chkbx").addEventListener("change", function() {discplot.draw()});
-
+document.getElementById("deleteDisc").addEventListener("click", (e) => {discplot.discConfig.deleteSelectedDiscs(); discplot.discConfig.emit("disc:removed")});
 
 /* Positioning Inputs */
 document.getElementById("disc-number-input").onchange = function() {
