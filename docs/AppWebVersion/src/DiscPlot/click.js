@@ -86,7 +86,7 @@ const handleMouseMove = (disc, offset) => (event) => {
     mouseX = event.clientX - rect.left;
     mouseY = event.clientY - rect.top;
     
-    disc.move(discplot.pixel_to_cm(mouseX - discplot.padd[3]))
+    disc.move(discplot.pixel_to_cm(mouseX - offset))
 };
 
 discplot.discCanvas.addEventListener("mousedown", (event) => {
@@ -109,7 +109,6 @@ discplot.discCanvas.addEventListener("mousedown", (event) => {
 });
 
 discplot.discCanvas.addEventListener("mouseup", () => {
-    console.log("drag end");
     if (mouseMoveHandler) {
         discplot.discCanvas.removeEventListener("mousemove", mouseMoveHandler);
         mouseMoveHandler = null;

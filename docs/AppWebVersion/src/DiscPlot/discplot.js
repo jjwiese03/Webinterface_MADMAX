@@ -244,16 +244,7 @@ class Plot{
     }
     addDisc(position=null, width=0.1, epsilon=1, select = false){
 
-        if (position == null) {
-            if (this.discConfig.lastDisc == null) {
-                position = 0;
-            }
-            else {
-                position = this.discConfig.lastDisc.position + this.discConfig.lastDisc.width
-            }
-        };
-        
-        const disc = this.discConfig.addDisc([position, width, epsilon, false]);
+        const disc = this.discConfig.addDisc({position, width, epsilon, select});
         if (select) {disc.select()}
         this.draw()
 
@@ -266,9 +257,9 @@ class Plot{
 
         this.draw();
     }
-
-    pixel_to_cm(x_pixel){
-        return (x_pixel/(this.axisCanvas.width-this.padd[1]-this.padd[3]-20)*this.axis.xmax)
+    pixel_to_cm(x_pixel, leftPadding = true) {
+        const usableWidth = this.axisCanvas.width - (leftPadding ? this.padd[1] + this.padd[3] : 0) - 20;
+        return (x_pixel / usableWidth) * this.axis.xmax;
     }
     cm_to_pixel(x){
         return Math.trunc(x*(this.axisCanvas.width-this.padd[1]-this.padd[3]-20)/this.axis.xmax)

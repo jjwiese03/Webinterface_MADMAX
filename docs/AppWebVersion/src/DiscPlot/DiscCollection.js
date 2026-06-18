@@ -18,19 +18,19 @@ export class Disc {
         this.selected = selected;   // Property: Determines wether a disc is currently selected via the interface
         // this.immovable = false      // Property: Determines whether this disc can be pushed by other discs
 
-        this.index = (index == null) ? this.collection.indexOf(this) : index;
+        this.index = index;
+    }
+    get after(){
+        /**
+         * time complexity: O(1)
+         */
+        return (this.index + 1 < this.collection.length) ? this.collection.discs[this.index + 1] : null;
     }
     get before(){
         /**
          * time complexity: O(1)
          */
-        return (this.index + 1 < this.collection.length) ? this.collection.discs[index + 1] : null;
-    }
-    get before(){
-        /**
-         * time complexity: O(1)
-         */
-        return (this.index - 1 >= 0) ? this.collection.discs[index - 1] : null;
+        return (this.index - 1 >= 0) ? this.collection.discs[this.index - 1] : null;
     }
     getBefore(n = 1){
         /**
@@ -63,6 +63,10 @@ export class Disc {
     }
 }
 
+
+
+
+
 export class DiscCollection {
     /**     
      * represents a collection of discs. Implements useful helper functions to manage multiple discs as well as error correction (f.e. overlapping discs).       
@@ -76,57 +80,62 @@ export class DiscCollection {
      * Registers a listener for the given event.
      * The callback will be invoked every time the event is emitted.
      *
-     * @param {string|Array{string}} events - The event name to listen for (e.g. 'change:position', 'change:selection', 'disc:added', 'disc:removed')
+     * @param {string|Array{string}} event - The event name to listen for (e.g. 'change:position', 'change:selection', 'disc:added', 'disc:removed')
      * @param {Function} callback - The function to call when the event fires.
      *                              Receives the data passed to emit() as its argument.
      * @example
      * DiscCollection.on('change:position', (disc) => console.log('position changed:', disc));
      */
-    on(events, callback) {
-        if (Array.isArray(events)) {
-            events.forEach(event => this.on(event, callback));
+    on(event, callback) {
+        if (Array.isArray(event)) {
+            event.forEach(e => this.on(e, callback));
             return;
         }
-        
-        if (!this.#listeners[event]) this.#listeners[event] = [];
+        else {
+            if (!this.#listeners[event]) this.#listeners[event] = [];
             this.#listeners[event].push(callback);
+            return;
         }
+    }
 
     /**
      * Removes a previously registered listener for the given event.
      * The callback reference must be identical to the one passed to on().
      *
-     * @param {string|Array{string}} events - The event name to remove the listener from.
+     * @param {string|Array{string}} event - The event name to remove the listener from.
      * @param {Function} callback - The exact function reference that was registered.
      * @example
      * const handler = (disc) => console.log(disc);
      * DiscCollection.on('change:position', handler);
      * DiscCollection.off('change:position', handler);
      */
-    off(events, callback) {
-        if (Array.isArray(events)) {
-            events.forEach(event => this.off(event, callback));
+    off(event, callback) {
+        if (Array.isArray(event)) {
+            event.forEach(e => this.off(e, callback));
             return;
         }
-        this.#listeners[event] = this.#listeners[event]?.filter(cb => cb !== callback);
+        else {
+            this.#listeners[event] = this.#listeners[event]?.filter(cb => cb !== callback);
+        }
     }
 
     /**
      * Emits an event, invoking all registered listeners with the provided data.
      * Does nothing if no listeners are registered for the event.
      *
-     * @param {string|Array{string}} events - The event name to emit.
+     * @param {string|Array{string}} event - The event name to emit.
      * @param {*} data - The data to pass to each listener callback.
      * @example
      * this.emit('change:position', { disc: hitDisc });
      */
-    emit(events, data) {
-        if (Array.isArray(events)) {
-            events.forEach(event => this.emit(event, callback));
+    emit(event, data) {
+        if (Array.isArray(event)) {
+            event.forEach(e => this.emit(e, callback));
             return;
         }
-
-        this.#listeners[event]?.forEach(cb => cb(data));
+        else {
+            this.#listeners[event]?.forEach(cb => cb.bind(this)(data));
+        }
     }
 
     get length(){
@@ -153,31 +162,70 @@ export class DiscCollection {
          */
         return this.discs.length > 0 ? this.discs[0] : null;
     }
-    indexOf(disc){
-        /**
-         * implentes binary search to find the index of given disc (
+    binSearch(position){
+    /**
+         * implentes binary search to find the index of the disc that is on the left side of the given position. Used in this.IndexOf and this.positionNeighbour.
+         * 
+         * @example 
+         * [DiscCollection consists of Discs with positions: 2, 3, 4, 5, 6]]
+         * 
+         * => binSearch(4.5) = 2
+         * => binSearch(4) = 2
+         * => binSearch(100) = 4
+         * 
+         * IMPORTANT !!!:
+         * => binSearch(x < poitions[0]) = 0
+         * 
+         * => binSearch(x < 2) = 0
+         * => binSearch(1) = 0
+         * => binSearch(0.5) = 0
+         * 
          * 
          * time complexity: O(log(n))  (n = number of discs in DiscCollection)
          */
-        if (this.length == 0) {return 0;}
 
         var start = 0;
-        var end = this.discs.length - 1;
+        var end = Math.max(0, this.discs.length - 1);
         var mid;
+
         while (end != start) {
             mid = start + Math.floor((end - start) / 2);
 
-            if (this.discs[mid] == disc) {
+            if (this.discs[mid].position == position) {
                 return mid;
             }
-            else if (this.discs[mid].position >= disc.position) {
+            else if (this.discs[mid].position >= position) {
                 end = mid - 1;
             }
             else {
                 start = mid + 1;
             }
         }
-        return (this.discs[start] == disc) ? start : null;
+        return start;
+    }
+    indexOf(disc){
+        /**
+         * returns the index of an given disc. If disc isnt part of DiscConfig it returns null.
+         * 
+         * time complexity: O(log(n))
+         */
+        binSearchResult = this.binSearch(disc.position)
+        return (this.discs[binSearchResult] == disc) ? start : null;
+    }
+    positionNeighbour(position, neighbour="right"){
+        /**
+         * returns the neighbouring disc for some position. If a disc is at exactly that position it returns its index when neighbour = "left" and otherwise its right neighbour. If there is no disc on the neighbour side it returns null.
+         * 
+         * time complexity: O(log(n))  (n = number of discs in DiscCollection)
+         */
+
+        if (!["right", "left"].includes(neighbour)) throw new Error("Invalid argument for neighbour: " + neighbour)
+
+        if (this.length > 0 && neighbour=="left" && position < this.discs[0].position) return null;
+
+        const result = (neighbour == "left") ? this.binSearch(position) : this.binSearch(position) + 1;
+
+        return (result >= this.length && neighbour == "right") ? null : result;
     }
     deleteDisc(disc){
         /**
@@ -215,26 +263,42 @@ export class DiscCollection {
         this.discs = this.discs.filter(disc => !disc.selected);
         this.emit("disc:removed", {});
     }
-    addDisc(disc){
-        if (disc == null) return;
+    addDisc(disc, deselectOthers = true) {
+        // turn the input into a Disc class
 
-        disc = (Array.isArray(disc) && disc.length >= 4) ? new Disc(this, disc[0], disc[1], disc[2], disc[3]) : disc;
-        
-        
+        if (deselectOthers) this.clearSelection(false);
+        if (disc == null) disc = {};
+
+        if (typeof disc === 'object' && !(disc instanceof Disc)) {
+            const defaultDisc = { position: null, width: 0.2, epsilon: 24, selected: false };
+            Object.entries(defaultDisc).forEach(([key, value]) => {
+                if (disc[key] == null) disc[key] = value;
+            });
+
+            if (disc.position == null) {
+                disc.position = (this.lastDisc == null) ? 0 : this.lastDisc.position + this.lastDisc.width;
+            }
+
+            disc = new Disc(this, disc.position, disc.width, disc.epsilon, disc.selected);
+        }
+
+        // determine its index
+        const index = this.positionNeighbour(disc.position, "right");
+        disc.index = (index == null) ? this.length : index;
+
+
         if (disc instanceof Disc) {
-            if (this.discs.includes(disc)){
+            if (this.discs.includes(disc)) {
                 throw new Error("Disc is already in the collection: " + disc);
             }
-            else {
-                this.discs.push(disc);
-                this.emit("disc:added", disc)
-            }
+            this.discs.push(disc);
+            this.emit("disc:added", disc);
+            this.emit("change:selection", disc);
+        } else {
+            throw new Error("Only Disc or a plain object are valid inputs. Got: " + String(disc));
         }
-        else {
-            throw new Error("Only Disc or a List are valid attributes. You tried to add: " + disc);
-        }
-        
         return disc;
+
     }
     selectDisc(disc, deselect = true, triggerEvent = true){
         /**
@@ -274,9 +338,10 @@ export class DiscCollection {
         if(triggerEvent) {this.emit("change:selection", this.selectedDiscs)}
         return;
     }
-    clearSelection(){
+    clearSelection(dispatchEvent = true){
         this.discs.forEach(d => d.selected = false);
-        this.emit("change:selection", [])
+        if(dispatchEvent) this.emit("change:selection", []);
+        return;
     }
     clear(){
         this.discs = [];
@@ -297,24 +362,26 @@ export class DiscCollection {
         discs.forEach((disc, index) => {
             // change position
             if (dx && value >= 0) {
-                this.position += value;
+                disc.position += value;
             }
             else {
-                this.position = value;
+                disc.position = value;
+            }
+            
+            // move overlapping discs
+            while(disc.after != null && disc.position + disc.width > disc.after.position) {
+                disc.after.position = disc.position + disc.width;
+                disc = disc.after;
             }
 
-            // move overlapping discs
-            disc = disc.after;
-            while(disc != null) {
-                if (disc.before.position){
-
-                }
-
+            while(disc.before != null && disc.before.position + disc.before.width > disc.position) {
+                disc.before.position = disc.position - disc.before.width;
+                disc = disc.before;
             }
 
         })
 
-        this.emit("position_change")
+        this.emit("change:position")
     }
     updateIndicies(start = 0, stop = null){
         /**

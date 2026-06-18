@@ -32,12 +32,15 @@ const rel_poisition_input = document.getElementById("rel_position-input");
 const width_input = document.getElementById("width-input");
 
 
-discplot.discConfig.on("change:position", (event) => {
+discplot.discConfig.on("change:position", function() {
     position_input.value = this.selectedDiscs[0].position;
-    console.log("eventhit")
+    
     discplot.draw();
 })
-
+discplot.discConfig.on("change:selection", () => {
+    
+    discplot.draw();
+})
 
 
 let compilationStatus = true;
