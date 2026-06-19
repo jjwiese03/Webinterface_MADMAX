@@ -53,6 +53,8 @@ function setCanvasSize() {
 }
 setCanvasSize();
 
+window.addEventListener('resize', setCanvasSize());
+
 
 const graph_pos_chkbx = document.getElementById("graph_pos_chkbx");
 const graph_dist_chkbx = document.getElementById("graph_dist_chkbx");
