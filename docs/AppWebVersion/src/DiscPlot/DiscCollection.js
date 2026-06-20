@@ -198,6 +198,7 @@ export class DiscCollection {
         while (end != start) {
             security++;
             if(security > 100) {throw new Error("possible infinity loop detected")}
+            
             mid = start + Math.floor((end - start) / 2);
 
             if (this.discs[mid].position == position) {
@@ -257,29 +258,38 @@ export class DiscCollection {
             disc.forEach(d => this.deleteDisc(d));
         }
         else {
-            const index = disc instanceof Disc ? this.indexOf(disc) : disc; // erlaubt die Übergabe eines Index statt eines Disc-Objekts
+            const index = disc instanceof Disc ? disc.index : disc; // erlaubt die Übergabe eines Index statt eines Disc-Objekts
 
             if (index >= 0 && index < this.discs.length) {
                 this.discs.splice(index, 1);
 
                 // update the indicies
                 this.updateIndicies(index - 1, index);
+
+                this.emit("disc:removed")
             }
             else {            throw new Error("Disc not found in configuration: " + disc);        }
+        }
+    }
+    deleteDiscs(n = 1){
+        for (let i = 0; i < n; i++) {
+            if(this.lastDisc == null) break;
+
+            this.lastDisc.delete();
         }
     }
     deleteSelectedDiscs(){
         this.discs = this.discs.filter(disc => !disc.selected);
         this.emit("disc:removed", {});
     }
-    addDisc(disc, deselectOthers = true) {
+    addDisc(disc = null, deselectOthers = true, throwEmit = true) {
         // turn the input into a Disc class
 
         if (deselectOthers) this.clearSelection(false);
         if (disc == null) disc = {};
 
         if (typeof disc === 'object' && !(disc instanceof Disc)) {
-            const defaultDisc = { position: null, width: 0.2, epsilon: 24, selected: false };
+            const defaultDisc = { position: null, width: 0.2, epsilon: 24, selected: true };
             Object.entries(defaultDisc).forEach(([key, value]) => {
                 if (disc[key] == null) disc[key] = value;
             });
@@ -301,13 +311,23 @@ export class DiscCollection {
                 throw new Error("Disc is already in the collection: " + disc);
             }
             this.discs.push(disc);
-            console.log("sd")
-            this.emit("disc:added", disc);
-        } else {
+            if(throwEmit){
+                this.emit("disc:added", disc);
+                this.emit("change:selection", this.selectedDiscs);
+            }
+        } 
+        else {
             throw new Error("Only Disc or a plain object are valid inputs. Got: " + String(disc));
         }
+
         return disc;
 
+    }
+    addDiscs(n) {
+        for (var i = 0; i < n - 1; i++) {
+            this.addDisc(null, false, false);
+        }
+        this.addDisc();
     }
     selectDisc(disc, deselect = true, triggerEvent = true){
         /**
@@ -421,7 +441,7 @@ export class DiscCollection {
         stop = (stop == null) ? this.discs.length - 1 : Math.min(stop, this.discs.length - 1);
         start = Math.max(0, start);
 
-        for (const i = start; i <= stop; i++) {
+        for (let i = start; i <= stop; i++) {
             this.discs[i].index = i;
         }
     }

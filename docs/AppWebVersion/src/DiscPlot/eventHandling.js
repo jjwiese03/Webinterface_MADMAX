@@ -42,10 +42,21 @@ discplot.discConfig.on("change:position", function ()  {
 
 
 discplot.discConfig.on("change:selection", function (selection) {
-    position_input.value = (selection.length > 0) ? selection[0].position : "-";
-    rel_poisition_input.value = (selection.length > 0 && selection[0].before != null) ? selection[0].position - selection[0].before.rightEdge : "-";
-    width_input.value = (selection.length > 0) ? selection[0].width : "-";
-    
+    console.log(selection.length)
+    if (selection.length > 0) {
+        position_input.value = selection[0].position;
+        rel_poisition_input.value = (selection[0].before != null) ? selection[0].position - selection[0].before.rightEdge : "-";
+        width_input.value = selection[0].width
+
+        discNumberString.innerHTML = (selection.length == 1) ? "selected disc: " + String(selection[0].index) : "selected disc" + String(selection[0].index) + " - " + String(selection[selection.length-1].index)
+    }
+    else {
+        position_input.value = "-";
+        rel_poisition_input.value = "-";
+        width_input.value = "-";
+        discNumberString.innerHTML = "no disc selected"
+    }
+
     discplot.draw();
 })
 

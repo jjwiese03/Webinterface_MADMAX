@@ -39,6 +39,7 @@ function setCanvasSize() {
     /**
      * sets the canvas size of the discplot to the size of its wrapper div
      */
+    console.log("resizing")
     const discCanvas = document.getElementById("discs");
     const Parent = discCanvas.parentElement
 
@@ -53,22 +54,15 @@ function setCanvasSize() {
 }
 setCanvasSize();
 
-window.addEventListener('resize', setCanvasSize());
-
-
 const graph_pos_chkbx = document.getElementById("graph_pos_chkbx");
 const graph_dist_chkbx = document.getElementById("graph_dist_chkbx");
 
 class Plot{
     constructor(discCanvas, axisCanvas){
-        this.discCanvas = discCanvas
-        this.axisCanvas = axisCanvas
+        this.discCanvas = discCanvas;
+        this.axisCanvas = axisCanvas;
         this.discContext = discCanvas.getContext("2d");
         this.axisContext = axisCanvas.getContext("2d");
-
-        this.padd = [discCanvas.height * 0.3, discCanvas.width * 0.1, discCanvas.height * 0.3, innerHeight * 0.05]
-        this.discContext.font = "15px Poppins";
-        this.axisContext.font = "15px Poppins";
 
         this.discConfig = new DiscCollection();
 
@@ -79,12 +73,11 @@ class Plot{
         this.init();
     }
     init(){
+        this.padd = [discCanvas.height * 0.3, discCanvas.width * 0.1, discCanvas.height * 0.3, innerHeight * 0.05]
+        this.discContext.font = "15px Poppins";
+        this.axisContext.font = "15px Poppins";
+
         this.updateScale(10, "cm");     // initiiert die Achse mit einem Standard Intervall von 10cm und der Einheit cm
-        this.discConfig.addDisc();
-        this.discConfig.addDisc();
-        this.discConfig.addDisc({"width": 0.7});
-        const disc = this.discConfig.addDisc();
-        disc.move(7, true)
 
         this.draw(true);
     }
@@ -204,10 +197,11 @@ class Plot{
                     this.discContext.save();
                     this.discContext.translate(
                         this.cm_to_pixel(disc.position + disc.width / 2) + this.padd[3],
-                        this.padd[0] - this.discContext.measureText(posLabel).width / 2 - 25
+                        this.padd[0] - 25
                     );
                     this.discContext.rotate(-Math.PI / 2);
                     this.discContext.textBaseline = "middle";
+                    this.discContext.textAlign    = "left"; 
                     this.discContext.fillStyle    = colors.color_dark_gray;
                     this.discContext.fillText(posLabel, 0, 0);
                     this.discContext.restore();
@@ -261,7 +255,16 @@ class Plot{
 }
 
 
-const discCanvas = document.getElementById("discs")
-const axisCanvas = document.getElementById("axis")
+const discCanvas = document.getElementById("discs");
+const axisCanvas = document.getElementById("axis");
 const discplot = new Plot(discCanvas, axisCanvas);   
 export default discplot;
+
+window.addEventListener('resize', () => {setCanvasSize(); discplot.init();});
+
+discplot.discConfig.addDisc();
+discplot.discConfig.addDisc();
+discplot.discConfig.addDisc({"width": 0.7});
+const disc = discplot.discConfig.addDisc();
+disc.move(7, true)
+discplot.draw(false)

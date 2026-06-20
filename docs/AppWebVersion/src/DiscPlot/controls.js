@@ -23,18 +23,21 @@ document.getElementById("graph_dist_chkbx").addEventListener("change", function(
 document.getElementById("graph_pos_chkbx").addEventListener("change", function() {discplot.draw()});
 document.getElementById("deleteDisc").addEventListener("click", (e) => {discplot.discConfig.deleteSelectedDiscs(); discplot.discConfig.emit("disc:removed")});
 
+
 /* Positioning Inputs */
 document.getElementById("disc-number-input").onchange = function() {
-    console.log("disc number input changed")
     const diff =  parseFloat(document.getElementById('disc-number-input').value) - discplot.discConfig.length;
+    console.log("diff", diff)
     if (diff > 0) {
-        discplot.addDisc(Math.abs(diff));
+        discplot.discConfig.addDiscs(Math.abs(diff));
     } else {
-        discplot.addDisc(Math.abs(diff));
+        discplot.discConfig.deleteDiscs(Math.abs(diff));
     }
 };
 
-const position_input = document.getElementById("position-input");
+document.getElementById("position-input").onchange = function() {
+
+};
 const rel_poisition_input = document.getElementById("rel_position-input");  
 const width_input = document.getElementById("width-input");
 
