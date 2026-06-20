@@ -47,7 +47,7 @@ discplot.discConfig.on("change:selection", function (selection) {
         rel_poisition_input.value = (selection[0].before != null) ? selection[0].position - selection[0].before.rightEdge : selection[0].position;
         width_input.value = selection[0].width
 
-        discNumberString.innerHTML = (selection.length == 1) ? "selected disc: " + String(selection[0].index) : "selected disc" + String(selection[0].index) + " - " + String(selection[selection.length-1].index)
+        discNumberString.innerHTML = (selection.length == 1) ? "selected disc: " + String(selection[0].index + 1) : "selected disc" + String(selection[0].index + 1) + " - " + String(selection[selection.length-1].index + 1)
     }
     else {
         position_input.value = "-";
