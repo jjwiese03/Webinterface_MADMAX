@@ -90,11 +90,9 @@ const handleMouseMove = (disc, offset) => (event) => {
 
 discplot.discCanvas.addEventListener("mousedown", (event) => {
     // const disc = onDisc(event);
-    const X = discplot.pixel_to_cm(event.clientX);
-    const binSearch = discplot.discConfig.binSearch(X)
-    console.log("binSearch: ", X, binSearch)
-    const disc = (discplot.discConfig.discs[binSearch].position <= X && discplot.discConfig.discs[binSearch].rightEdge >= X) ? discplot.discConfig.discs[binSearch] : null;
-    
+    const X = discplot.pixel_to_cm(event.clientX, false);
+    const disc = discplot.discConfig.onDisc(X)
+
     if (disc != null) {
         disc.selectDisc()
 

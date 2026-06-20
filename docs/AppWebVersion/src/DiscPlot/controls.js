@@ -25,9 +25,9 @@ document.getElementById("deleteDisc").addEventListener("click", (e) => {discplot
 
 
 /* Positioning Inputs */
-document.getElementById("disc-number-input").onchange = function() {
-    const diff =  parseFloat(document.getElementById('disc-number-input').value) - discplot.discConfig.length;
-    console.log("diff", diff)
+document.getElementById("disc-number-input").onchange = function(event) {
+    if(isNaN(event.target.value)) ;
+    const diff =  parseFloat(event.target.value) - discplot.discConfig.length;
     if (diff > 0) {
         discplot.discConfig.addDiscs(Math.abs(diff));
     } else {
@@ -38,6 +38,8 @@ document.getElementById("disc-number-input").onchange = function() {
 document.getElementById("position-input").onchange = function() {
 
 };
+
+
 const rel_poisition_input = document.getElementById("rel_position-input");  
 const width_input = document.getElementById("width-input");
 

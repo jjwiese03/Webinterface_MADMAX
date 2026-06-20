@@ -245,9 +245,9 @@ class Plot{
 
         this.draw();
     }
-    pixel_to_cm(x_pixel, leftPadding = true) {
-        const usableWidth = this.axisCanvas.width - (leftPadding ? this.padd[1] + this.padd[3] : 0) - 20;
-        return (x_pixel / usableWidth) * this.axis.xmax;
+    pixel_to_cm(x_pixel, includesPadding = true) {
+        const position = x_pixel - (includesPadding ? 0 : this.padd[3])
+        return (position / (this.axisCanvas.width - this.padd[1] - this.padd[3] - 20)) * this.axis.xmax;
     }
     cm_to_pixel(x){
         return Math.trunc(x*(this.axisCanvas.width-this.padd[1]-this.padd[3]-20)/this.axis.xmax)

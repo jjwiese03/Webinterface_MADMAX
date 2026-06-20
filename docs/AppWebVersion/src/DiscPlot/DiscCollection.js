@@ -136,7 +136,7 @@ export class DiscCollection {
      */
     emit(event, data) {
         if (Array.isArray(event)) {
-            event.forEach(e => this.emit(e, callback));
+            event.forEach(e => this.emit(e, data));
             return;
         }
         else {
@@ -170,21 +170,18 @@ export class DiscCollection {
     }
     binSearch(position){
     /**
-         * implentes binary search to find the index of the disc that is on the left side of the given position. Used in this.IndexOf and this.positionNeighbour.
+         * implentes binary search to find the index of the disc that is on the right side of the given position. If position is greater than the position of the last disc, it returns the last disc index. Used in this.IndexOf and this.positionNeighbour.
          * 
          * @example 
          * [DiscCollection consists of Discs with positions: 2, 3, 4, 5, 6]]
          * 
-         * => binSearch(4.5) = 2
+         * => binSearch(4.5) = 3
          * => binSearch(4) = 2
+         * => binSearch(2.5) = 1
          * => binSearch(100) = 4
          * 
          * IMPORTANT !!!:
-         * => binSearch(x < poitions[0]) = 0
-         * 
-         * => binSearch(x < 2) = 0
-         * => binSearch(1) = 0
-         * => binSearch(0.5) = 0
+         * => binSearch(x < lastDisc.position) = lastDisc.index
          * 
          * 
          * time complexity: O(log(n))  (n = number of discs in DiscCollection)
@@ -195,21 +192,21 @@ export class DiscCollection {
         var mid;
 
         var security = 0;
-        while (end != start) {
+        while (end - start >= 1) {
             security++;
             if(security > 100) {throw new Error("possible infinity loop detected")}
-            
             mid = start + Math.floor((end - start) / 2);
 
             if (this.discs[mid].position == position) {
                 return mid;
             }
-            else if (this.discs[mid].position >= position) {
-                end = mid - 1;
-            }
+            else if (this.discs[mid].position > position) {
+                end = mid;
+            } 
             else {
                 start = mid + 1;
             }
+
         }
         return start;
     }
@@ -219,8 +216,8 @@ export class DiscCollection {
          * 
          * time complexity: O(log(n))
          */
-        binSearchResult = this.binSearch(disc.position)
-        return (this.discs[binSearchResult] == disc) ? start : null;
+        const binSearchResult = this.binSearch(disc.position);
+        return (this.discs[binSearchResult] === disc) ? binSearchResult : null;
     }
     positionNeighbour(position, neighbour="right"){
         /**
@@ -231,13 +228,21 @@ export class DiscCollection {
 
         if (!["right", "left"].includes(neighbour)) throw new Error("Invalid argument for neighbour: " + neighbour)
 
-        if (this.length > 0 && neighbour=="left" && position < this.discs[0].position) return null;
+        if (this.length == 0 || (position > this.lastDisc.position && neighbour=="right")) return null;
 
-        const result = (neighbour == "left") ? this.binSearch(position) : this.binSearch(position) + 1;
+        const binSearch = this.discs[this.binSearch(position)]
 
-        return (result >= this.length && neighbour == "right") ? null : result;
+        if (binSearch == this.lastDisc && position > binSearch.position) {
+            return (neighbour == "right") ? null : binSearch;
+        }
+        return (neighbour == "right") ? binSearch : binSearch.before;
     }
-    deleteDisc(disc){
+    onDisc(position) {
+        const canidate = this.positionNeighbour(position, "left");
+
+        return (canidate.position <= position && canidate.rightEdge >= position) ? canidate : null;
+    }
+    deleteDisc(disc, triggerEvent = true){
         /**
          * 
          *  deletes single or multiple discs
@@ -258,38 +263,34 @@ export class DiscCollection {
             disc.forEach(d => this.deleteDisc(d));
         }
         else {
-            const index = disc instanceof Disc ? disc.index : disc; // erlaubt die Übergabe eines Index statt eines Disc-Objekts
+            const index = disc instanceof Disc ? this.indexOf(disc) : disc; // erlaubt die Übergabe eines Index statt eines Disc-Objekts
 
             if (index >= 0 && index < this.discs.length) {
                 this.discs.splice(index, 1);
-
-                // update the indicies
                 this.updateIndicies(index - 1, index);
-
-                this.emit("disc:removed")
+                if (triggerEvent) this.emit("disc:removed");
             }
             else {            throw new Error("Disc not found in configuration: " + disc);        }
         }
     }
-    deleteDiscs(n = 1){
-        for (let i = 0; i < n; i++) {
-            if(this.lastDisc == null) break;
-
-            this.lastDisc.delete();
+    deleteDiscs(n=1){
+        for (let i = 0; i<n; i++) {
+            this.deleteDisc(this.discs.length - 1)
         }
+        this.emit("disc:removed", {});
     }
     deleteSelectedDiscs(){
         this.discs = this.discs.filter(disc => !disc.selected);
         this.emit("disc:removed", {});
     }
-    addDisc(disc = null, deselectOthers = true, throwEmit = true) {
+    addDisc(disc = null, deselectOthers = true) {
         // turn the input into a Disc class
 
         if (deselectOthers) this.clearSelection(false);
         if (disc == null) disc = {};
 
         if (typeof disc === 'object' && !(disc instanceof Disc)) {
-            const defaultDisc = { position: null, width: 0.2, epsilon: 24, selected: true };
+            const defaultDisc = { position: null, width: 0.2, epsilon: 24, selected: false };
             Object.entries(defaultDisc).forEach(([key, value]) => {
                 if (disc[key] == null) disc[key] = value;
             });
@@ -305,29 +306,24 @@ export class DiscCollection {
         const index = this.positionNeighbour(disc.position, "right");
         disc.index = (index == null) ? this.length : index;
 
-
         if (disc instanceof Disc) {
             if (this.discs.includes(disc)) {
                 throw new Error("Disc is already in the collection: " + disc);
             }
-            this.discs.push(disc);
-            if(throwEmit){
-                this.emit("disc:added", disc);
-                this.emit("change:selection", this.selectedDiscs);
-            }
-        } 
-        else {
+            this.discs.splice(disc.index, 0, disc);
+            this.updateIndicies(disc.index);
+            this.emit("disc:added", disc);
+        } else {
             throw new Error("Only Disc or a plain object are valid inputs. Got: " + String(disc));
         }
-
         return disc;
 
     }
-    addDiscs(n) {
-        for (var i = 0; i < n - 1; i++) {
-            this.addDisc(null, false, false);
+    addDiscs(n=1){
+        for (let i = 1; i < n; i++){
+            this.addDisc(null, false);
         }
-        this.addDisc();
+        this.addDisc(null, true);
     }
     selectDisc(disc, deselect = true, triggerEvent = true){
         /**
@@ -356,7 +352,7 @@ export class DiscCollection {
 
         if (disc instanceof Array){
             disc.forEach(d => this.selectDisc(d, false, false));
-            this.emit("change:selection", this.selectedDiscs())
+            this.emit("change:selection", this.selectedDiscs)
             return;
         }
         else {
