@@ -8,8 +8,3 @@ export const colors = {
     madmax_yellow_light: "#eccd9b"
 };
 
-
-export function Round(value, decimals){
-    return parseFloat(value.toFixed(decimals))
-} 
-

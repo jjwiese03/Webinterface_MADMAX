@@ -319,6 +319,7 @@ export class DiscCollection {
             this.discs.splice(disc.index, 0, disc);
             this.updateIndicies(disc.index);
             this.emit("disc:added", disc);
+            if(disc.selected == true || deselectOthers == true) this.emit("change:selection", this.selectedDiscs);
         } else {
             throw new Error("Only Disc or a plain object are valid inputs. Got: " + String(disc));
         }

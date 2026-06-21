@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <!--font Poppins laden-->
+    <!--load font Poppins-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- pyodide.js  (Python Code Execution)-->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- stylesheets -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="custom-elements/navbar/navbar.css">
     <link rel="stylesheet" href="custom-elements/switch/switch.css">
@@ -28,7 +35,6 @@
 
                 <div style="position: absolute; top: 10%; right: 15%; display: flex; gap: 20%;">
                     <link rel="stylesheet" href="custom-elements/icon-checkbox/icon-checkbox.css">
-                    <!-- <h4 style="margin: 10px 0; text-align: center;">Show</h4> -->
                     
                     <label class="iconCheckbox" for="graph_dist_chkbx">
                         <input type="checkbox" name="graph_dist_chkbx" id="graph_dist_chkbx">
@@ -123,14 +129,14 @@
                             <div style="display: flex; justify-content: center; gap: 20px;">
                                 <div class="input-wrapper" style="font-size: small;">
                                     fmin
-                                    <input id="fmin"  type="text" name="position" class="standard-number-input">
+                                    <input id="fmin"  type="text" name="position" class="standard-number-input" value="0">
                                 </div>
 
                                 <h4>-</h4>
 
                                 <div class="input-wrapper" style="font-size: small;">
                                     fmax
-                                    <input id="fmax" type="text" name="distance" class="standard-number-input">
+                                    <input id="fmax" type="text" name="distance" class="standard-number-input" value="30">
                                 </div>
 
                             </div>
@@ -139,15 +145,55 @@
                 </div>
 
                 <!-- card 2 -->
-                 <div class="card" style="height: auto;">
+                 <div class="card" style="height: 100%; background-color: white; padding: 0;">
                     <h4>Advanced</h4>
+                    <div style="display: flex; margin: 10px 15px;">
+                        <button id="run" class="standard-button" style="width: fit-content;">Run</button>
 
+                    </div>
                     
+                    <div id="editor" style="flex: 1; margin: 0 10px 10px 10px;"></div>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+                    <script>
+                    require.config({
+                        paths: {
+                            vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
+                        }
+                    });
+
+                    require(["vs/editor/editor.main"], function () {
+
+                        const editor = monaco.editor.create(
+                            document.getElementById("editor"),
+                            {
+                                value: [
+                                    "def hello():",
+                                    "    print('Hallo Welt')",
+                                    "",
+                                    "hello()"
+                                ].join("\n"),
+                                language: 'python',
+                                theme: 'vs',
+                                minimap: { enabled: false },      // keine Minimap rechts
+                                lineNumbers: 'on',               // keine Zeilennummern
+                                folding: true,                   // kein Code-Folding
+                                lineDecorationsWidth: 0,          // kein linker Rand
+                                lineNumbersMinChars: 0,
+                                scrollBeyondLastLine: false,
+                                fontSize: 12,
+                                automaticLayout: true,
+                                // renderLineHighlight: 'none',
+                                overviewRulerLanes: 0
+                            }
+                        );
+                        define.amd = false;
+                    });
+                    </script>
                  </div>
 
                 <!-- card 2 -->
                  <div class="card" style="height: auto;">
-                    <h4>Plots</h4>
+                    <h4>Small Applications</h4>
 
                  </div>
             </div>

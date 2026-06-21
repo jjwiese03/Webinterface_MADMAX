@@ -14,12 +14,10 @@
  */
 
 
-import { Round, colors } from "../utils.js";
-import { updateBoostplot } from "../boostplot.js";
+import { colors } from "../utils.js";
 import { Disc, DiscCollection } from "./DiscCollection.js";
 import { Axis } from "./Axis.js";
 import MarqueeSelection from "./MarqueeSelection.js";
-
 
 
 // Section Material:

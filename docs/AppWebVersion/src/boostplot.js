@@ -30,18 +30,16 @@ const reflToString = (roundMantissa = 0) => (value) => {
 
     const exponent = Math.floor(Math.log10(Math.abs(1 - value)));
     const mantissa = (1 - value) / Math.pow(10, exponent);
-    console.log(mantissa.toFixed(roundMantissa), `${Math.abs(mantissa).toFixed(roundMantissa)}e${exponent}`)
-
+    
     return "1" +  ((mantissa > 0) ? " - " : " + ") + `${Math.abs(mantissa).toFixed(roundMantissa)}e${exponent}`;
 }
 
 function makeChartConfig(data, label, c) {
-    Chart.defaults.font.family = "sans-serif";
-
     const xS = Math.min(...data.map(d => d.x));
     const xE = Math.max(...data.map(d => d.x));
     return {
         type: 'line',
+        defaults: {font:{family: "sans-serif"}},
         data: {
             datasets: [{
                 label,
@@ -69,7 +67,7 @@ function makeChartConfig(data, label, c) {
                     borderColor: c.gridColor,
                     borderWidth: 1,
                     callbacks: {
-                        title: items => 'Freq: ' + items[0].parsed.x.toFixed(3),
+                        title: items => 'Freq: ' + items[0].parsed.x.toFixed(3) + ' GHz',
                         label: item => 'Boostfactor: ' + item.parsed.y.toFixed(2)
                     }
                 }
@@ -122,6 +120,9 @@ const linspace = (min, max, n) => Array.from({ length: n }, (_, i) => min + (i /
 export function updateBoostplot(discCollection) {
     const n = parseFloat(ResolutionSlider.value)
     const freq = linspace(parseFloat(fminInput.value), parseFloat(fmaxInput.value), n)
+
+    if (isNaN(freq[0])) console.error("fmin or fmax is missing!!!");
+
     const { boostfactor, reflectivity} = transfer_matrix(freq.map((e) => e*1e9), discCollection.discs.map(d => d.position), discCollection.discs.map(d => d.width));
     const dataBoost = Array.from(boostfactor, (val, i) => ({ x: freq[i], y: val }));
     const dataRefl = Array.from(reflectivity, (val, i) => ({ x: freq[i], y: val }));
@@ -148,3 +149,4 @@ export function updateBoostplot(discCollection) {
 
 
 initPlots();
+updateBoostplot(discplot.discConfig);
