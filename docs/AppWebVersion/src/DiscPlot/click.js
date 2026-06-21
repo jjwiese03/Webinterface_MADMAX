@@ -17,63 +17,6 @@
 import { Disc } from "./DiscCollection.js";
 import discplot from "./discplot.js"
 
-
-function onDisc(event) {
-    /** Returns the disc which is targeted by the event. If no disc is targeted it returns null. 
-     * 
-     * Function: Implements Binary search to find the disc.
-    *    
-    *   @param {Event} event 
-    */ 
-
-    const X = event.clientX
-
-    // start binary search
-    var start = 0;
-    var end = discplot.discConfig.discs.length - 1;
-    var mid = start + Math.floor((end - start) / 2);
-
-    var midDisc;
-    var discLeftSide;
-    var discRightSide;
-
-    let safety = 0;
-    while (start != end) {
-        if (++safety > 100000) {
-            throw new Error("Possible infinite loop detected");
-        }
-
-        mid = start + Math.floor((end - start) / 2);
-        
-
-        midDisc = discplot.discConfig.discs[mid]
-
-        discLeftSide = discplot.cm_to_pixel(midDisc.position) + discplot.padd[3]
-        discRightSide = discplot.cm_to_pixel(midDisc.position + midDisc.width) + discplot.padd[3]
-
-        if (X < discLeftSide) {
-            end = mid - 1;
-        }
-        else if (X > discRightSide) {
-            start = mid + 1;
-        }
-        else {
-            return midDisc;
-        }
-    }
-
-    // check the left over disc
-    const leftOver = discplot.discConfig.discs[start]
-    discLeftSide = discplot.cm_to_pixel(leftOver.position) + discplot.padd[3]
-    discRightSide = discplot.cm_to_pixel(leftOver.position + leftOver.width) + discplot.padd[3]
-
-    if (X > discLeftSide && X < discRightSide) {
-        return leftOver;
-    }
-
-    return null;
-}
-
 // rect einmal außerhalb berechnen (oder bei resize aktualisieren)
 const rect = discplot.discCanvas.getBoundingClientRect();
 let mouseX = 0;

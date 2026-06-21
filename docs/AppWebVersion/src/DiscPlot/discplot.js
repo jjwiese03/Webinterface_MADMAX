@@ -254,14 +254,15 @@ class Plot{
 
 const discCanvas = document.getElementById("discs");
 const axisCanvas = document.getElementById("axis");
-const discplot = new Plot(discCanvas, axisCanvas);   
-export default discplot;
+window.discplot = new Plot(discCanvas, axisCanvas); 
+
+export default window.discplot;
 
 window.addEventListener('resize', () => {setCanvasSize(); discplot.init();});
 
-discplot.discConfig.addDisc();
-discplot.discConfig.addDisc();
-discplot.discConfig.addDisc({"width": 0.7});
-const disc = discplot.discConfig.addDisc();
+window.discplot.discConfig.addDisc();
+window.discplot.discConfig.addDisc();
+window.discplot.discConfig.addDisc({"width": 0.7});
+const disc = window.discplot.discConfig.addDisc();
 disc.move(7, true)
-discplot.draw(false)
+window.discplot.draw(false)

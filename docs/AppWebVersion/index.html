@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="custom-elements/switch/switch.css">
     <link rel="stylesheet" href="custom-elements/range-slider/range-slider.css">
 
-    <script type="module" src="src/main.js" defer></script>
+    <script type="module" src="src/DiscPlot/index.js" defer></script>
 
 </head>
 <body>
@@ -149,46 +149,41 @@
                     <h4>Advanced</h4>
                     <div style="display: flex; margin: 10px 15px;">
                         <button id="run" class="standard-button" style="width: fit-content;">Run</button>
-
                     </div>
                     
                     <div id="editor" style="flex: 1; margin: 0 10px 10px 10px;"></div>
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
                     <script>
-                    require.config({
-                        paths: {
-                            vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs"
-                        }
-                    });
+                        require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor/min/vs' } });
 
-                    require(["vs/editor/editor.main"], function () {
-
-                        const editor = monaco.editor.create(
-                            document.getElementById("editor"),
-                            {
-                                value: [
-                                    "def hello():",
-                                    "    print('Hallo Welt')",
-                                    "",
-                                    "hello()"
-                                ].join("\n"),
-                                language: 'python',
-                                theme: 'vs',
-                                minimap: { enabled: false },      // keine Minimap rechts
-                                lineNumbers: 'on',               // keine Zeilennummern
-                                folding: true,                   // kein Code-Folding
-                                lineDecorationsWidth: 0,          // kein linker Rand
-                                lineNumbersMinChars: 0,
-                                scrollBeyondLastLine: false,
-                                fontSize: 12,
-                                automaticLayout: true,
-                                // renderLineHighlight: 'none',
-                                overviewRulerLanes: 0
-                            }
-                        );
-                        define.amd = false;
-                    });
+                        require(["vs/editor/editor.main"], function () {
+                            window.editor = monaco.editor.create(
+                                document.getElementById("editor"),
+                                {
+                                    value: [
+                                        "def hello():",
+                                        "    print('Hallo Welt')",
+                                        "",
+                                        "hello()"
+                                    ].join("\n"),
+                                    language: 'python',
+                                    theme: 'vs',
+                                    minimap: { enabled: false },      // keine Minimap rechts
+                                    lineNumbers: 'on',               // keine Zeilennummern
+                                    folding: true,                   // kein Code-Folding
+                                    lineDecorationsWidth: 0,          // kein linker Rand
+                                    lineNumbersMinChars: 0,
+                                    scrollBeyondLastLine: false,
+                                    fontSize: 12,
+                                    automaticLayout: true,
+                                    // renderLineHighlight: 'none',
+                                    overviewRulerLanes: 0
+                                }
+                            );
+                            define.amd = false;
+                        });
                     </script>
+                    <script type="module" src="/AppWebVersion/src/CodeEditor/pyodide-main.js"></script>
                  </div>
 
                 <!-- card 2 -->
