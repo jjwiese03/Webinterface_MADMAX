@@ -39,7 +39,6 @@ function setCanvasSize() {
     /**
      * sets the canvas size of the discplot to the size of its wrapper div
      */
-    console.log("resizing")
     const discCanvas = document.getElementById("discs");
     const Parent = discCanvas.parentElement
 

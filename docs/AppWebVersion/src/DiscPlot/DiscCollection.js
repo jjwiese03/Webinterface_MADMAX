@@ -168,6 +168,12 @@ export class DiscCollection {
          */
         return this.discs.length > 0 ? this.discs[0] : null;
     }
+    get positions(){
+        return this.discs.map(d => d.position);
+    }
+    get widths(){
+        return this.discs.map(d => d.width)
+    }
     binSearch(position){
     /**
          * implentes binary search to find the index of the disc that is on the right side of the given position. If position is greater than the position of the last disc, it returns the last disc index. Used in this.IndexOf and this.positionNeighbour.
@@ -422,8 +428,6 @@ export class DiscCollection {
             }
         }
         
-
-
         this.emit("change:position")
     }
     updateIndicies(start = 0, stop = null){

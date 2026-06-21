@@ -48,7 +48,7 @@ html, body{
 
 .card-grid{
     display: grid;
-    grid-template-columns: 250px 250px;
+    grid-template-columns: 1fr 1fr 1fr;
     height: 50%;
     width: 100%;
     padding: 5vh;
@@ -65,7 +65,7 @@ html, body{
     background-color: var(--color-light-gray);
     color: var(--color-dark-gray);
     border-radius: 20px;
-    padding: 15px 30px;
+    padding: 15px 0;
     box-sizing: border-box;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.132);
 }
@@ -95,7 +95,7 @@ html, body{
     padding: 0;
 }
 .tab-size-1 {
-    max-width: 230px;
+    max-width: 210px;
     min-width: 180px;
 }
 
@@ -214,6 +214,7 @@ html, body{
 
 .plots {
     display: flex;
+    height: 100vh;
     flex-direction: column;
     justify-content: space-evenly;
 }

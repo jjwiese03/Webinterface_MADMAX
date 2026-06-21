@@ -37,6 +37,7 @@ discplot.discConfig.on("change:position", function ()  {
     position_input.value = (selection.length > 0) ? selection[0].position : "-";
     rel_poisition_input.value = (selection.length > 0 && selection[0].before != null) ? selection[0].position - selection[0].before.rightEdge : "-";
     
+    updateBoostplot(this);
     discplot.draw();
 })
 
@@ -61,7 +62,8 @@ discplot.discConfig.on("change:selection", function (selection) {
 
 discplot.discConfig.on(["disc:removed", "disc:added"], function () {
     counter_field.value = String(this.discs.length);
-
+    
+    updateBoostplot(this);
     discplot.draw();
 })
 
