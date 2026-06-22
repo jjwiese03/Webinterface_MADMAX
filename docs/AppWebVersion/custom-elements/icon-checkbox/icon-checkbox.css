@@ -6,9 +6,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--madmax-yellow-light);
+    background-color: white;
     border-radius: 10px;
-    border: 1px solid transparent; /* statt border: none */
+    border: 2px solid var(--madmax-yellow); /* statt border: none */
     cursor: pointer;
     transition: all .2s;
 }
@@ -31,8 +31,7 @@
 .iconCheckbox svg {
     margin: 7px;
     transition: transform .15s ease;
-    stroke: gray;
-    fill: gray;
+    stroke: var(--madmax-yellow);
     transition: all .2s;
 
 }

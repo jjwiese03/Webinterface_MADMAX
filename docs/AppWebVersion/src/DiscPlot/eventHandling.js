@@ -14,14 +14,14 @@
  */
 
 import discplot from "./discplot.js";
-import { updateBoostplot } from "../boostplot.js";
+import updateBoostplot from "../boostplot.js";
 import { transfer_matrix } from "../transfer_matrix.js";
 
 
 // Section Material:
 const mirror_checkbox = document.getElementById("mirror_checkbox");
-const epsilon_input = document.getElementById("dielectric-input");
-const tan_delta_input = document.getElementById("tan-delta-input");
+const epsilon_input = document.getElementById("eps");
+const tan_delta_input = document.getElementById("tand");
 
 
 // Section Positioning:

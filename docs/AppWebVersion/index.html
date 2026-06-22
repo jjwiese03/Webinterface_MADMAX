@@ -38,12 +38,12 @@
                     
                     <label class="iconCheckbox" for="graph_dist_chkbx">
                         <input type="checkbox" name="graph_dist_chkbx" id="graph_dist_chkbx" checked>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M10 80V20m80 60V20"/><path stroke-width="5" stroke-linecap="round" d="M25 50h50"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M40 35 25 50l15 15m20-30 15 15-15 15"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M10 80V20m80 60V20"/><path stroke-width="5" stroke-linecap="round" d="M25 50h50"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M40 35 25 50l15 15m20-30 15 15-15 15"/></svg>
                     </label>
 
                     <label class="iconCheckbox" for="graph_pos_chkbx">
                         <input type="checkbox" name="graph_pos_chkbx" id="graph_pos_chkbx" checked>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M90 80V20"/><path stroke-width="5" stroke-linecap="round" d="M20 50h55"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m60 35 15 15-15 15"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M90 80V20"/><path stroke-width="5" stroke-linecap="round" d="M20 50h55"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m60 35 15 15-15 15"/></svg>
                     </label>
                 </div>
             </div>
@@ -104,12 +104,12 @@
 
                                 <div class="input-wrapper">
                                     <h5 style="height: 34px; margin: 0; display: flex; justify-content: center; align-items: center; font-size: small;">&epsilon;</h5>
-                                    <input id="dielectric-input"  type="text" name="position" class="standard-number-input">
+                                    <input id="eps"  type="text" name="position" class="standard-number-input" value="24" onchange="window.updateBoostplot(window.discplot.discConfig);">
                                 </div>
 
                                 <div class="input-wrapper">
                                     <h5 style="height: 34px; margin: 0; display: flex; justify-content: center; align-items: center; font-size: small;">tan(δ)e−6</h5>
-                                    <input id="tan-delta-input" type="text" name="distance" class="standard-number-input">
+                                    <input id="tand" type="text" name="distance" class="standard-number-input" value="6" onchange="window.updateBoostplot(window.discplot.discConfig);">
                                 </div>
                             </div>
                         </div>
@@ -128,14 +128,14 @@
                             <div style="display: flex; justify-content: center; gap: 20px;">
                                 <div class="input-wrapper" style="font-size: small;">
                                     fmin
-                                    <input id="fmin"  type="text" name="position" class="standard-number-input" value="0">
+                                    <input id="fmin"  type="text" name="position" class="standard-number-input" value="0" onchange="window.updateBoostplot(window.discplot.discConfig);">
                                 </div>
 
                                 <h4>-</h4>
 
                                 <div class="input-wrapper" style="font-size: small;">
                                     fmax
-                                    <input id="fmax" type="text" name="distance" class="standard-number-input" value="30">
+                                    <input id="fmax" type="text" name="distance" class="standard-number-input" value="30" onchange="window.updateBoostplot(window.discplot.discConfig);">
                                 </div>
 
                             </div>

@@ -112,7 +112,7 @@ function makeChartConfig(data, yLabel, c) {
     };
 }
 
-export function initPlots() {
+function initPlots() {
     const c = getColors();
     if (window.boostPlot) window.boostPlot.destroy();
     if (window.reflectivityPlot) window.reflectivityPlot.destroy();
@@ -127,13 +127,20 @@ export function initPlots() {
 
 const linspace = (min, max, n) => Array.from({ length: n }, (_, i) => min + (i / (n - 1)) * (max - min));
 
-export function updateBoostplot(discCollection) {
+export default window.updateBoostplot = (discCollection) => {
     const n = parseFloat(ResolutionSlider.value)
     const freq = linspace(parseFloat(fminInput.value), parseFloat(fmaxInput.value), n)
 
     if (isNaN(freq[0])) throw new Error("fmin or fmax is missing or invalid!!!");
+    var kwargs = {}
+    const eps = parseFloat(document.getElementById("eps").value)
+    if (!isNaN(eps)) kwargs["eps"] = eps;
+    const tand = parseFloat(document.getElementById("tand").value) * 1e-6
+    if (!isNaN(tand)) {kwargs["tand"] = tand;}
+    console.log(kwargs)
 
-    const { boostfactor, reflectivity} = transfer_matrix(freq.map((e) => e*1e9), discCollection.discs.map(d => d.position), discCollection.discs.map(d => d.width));
+
+    const { boostfactor, reflectivity} = transfer_matrix(freq.map((e) => e*1e9), discCollection.discs.map(d => d.position), discCollection.discs.map(d => d.width), kwargs);
     const dataBoost = Array.from(boostfactor, (val, i) => ({ x: freq[i], y: val }));
     const dataRefl = Array.from(reflectivity, (val, i) => ({ x: freq[i], y: val }));
 
@@ -166,5 +173,6 @@ export function updateBoostplot(discCollection) {
         initPlots()
     }
 }
+
 
 initPlots();
