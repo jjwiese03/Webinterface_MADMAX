@@ -37,13 +37,13 @@
                     <link rel="stylesheet" href="custom-elements/icon-checkbox/icon-checkbox.css">
                     
                     <label class="iconCheckbox" for="graph_dist_chkbx">
-                        <input type="checkbox" name="graph_dist_chkbx" id="graph_dist_chkbx">
-                        <svg xmlns="http://www.w3.org/2000/svg" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M10 80V20m80 60V20"/><path stroke-width="5" stroke-linecap="round" d="M25 50h50"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M40 35 25 50l15 15m20-30 15 15-15 15"/></svg>
+                        <input type="checkbox" name="graph_dist_chkbx" id="graph_dist_chkbx" checked>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M10 80V20m80 60V20"/><path stroke-width="5" stroke-linecap="round" d="M25 50h50"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M40 35 25 50l15 15m20-30 15 15-15 15"/></svg>
                     </label>
 
                     <label class="iconCheckbox" for="graph_pos_chkbx">
-                        <input type="checkbox" name="graph_pos_chkbx" id="graph_pos_chkbx">
-                        <svg xmlns="http://www.w3.org/2000/svg" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M90 80V20"/><path stroke-width="5" stroke-linecap="round" d="M20 50h55"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m60 35 15 15-15 15"/></svg>
+                        <input type="checkbox" name="graph_pos_chkbx" id="graph_pos_chkbx" checked>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" width="20px" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M90 80V20"/><path stroke-width="5" stroke-linecap="round" d="M20 50h55"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m60 35 15 15-15 15"/></svg>
                     </label>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                             <div class="input-row">
                                 <div class="input-wrapper">
                                     <svg xmlns="http://www.w3.org/2000/svg" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M10 80V20m80 60V20"/><path stroke-width="5" stroke-linecap="round" d="M25 50h50"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M40 35 25 50l15 15m20-30 15 15-15 15"/></svg>
-                                    <input id="rel_position-input"  type="text" name="position" class="standard-number-input" value="-">
+                                    <input id="rel-position-input"  type="text" name="position" class="standard-number-input" value="-">
                                 </div>
 
                                 <div class="input-wrapper">
@@ -144,11 +144,11 @@
                 </div>
 
                 <!-- card 2 -->
-                 <div class="card" style="height: 100%; background-color: white; padding: 0;">
+                 <div class="card" style="height: 100%; padding: 0;">
                     <h4>Advanced</h4>
                     <div style="display: flex; margin: 10px 15px; gap: 10px;">
                         <button id="run" class="standard-button">Run</button>
-                        <button id="Console" class="standard-button">Terminal</button>
+                        <button id="Terminal" class="standard-button">Terminal</button>
                         <a id="docs" class="standard-button" style="margin-left: auto;" href="../index.html">Docs</a>
                     </div>
                     
@@ -159,7 +159,7 @@
 
 
                         const example = [
-                                        "# -- EXAMPLE CODE -- ",
+                                        "# -- CODE EXAMPLE -- ",
                                         "import js",
                                         "import asyncio",
                                         "",
@@ -224,14 +224,46 @@
                 <canvas id="boostplot" aria-label="Plot for boostfactor curve"></canvas>
             </div>
 
+            <!-- Reflectivity Plot -->
             <div  style="width: auto; height: 40%; margin-bottom: 50px;">
                 <canvas id="reflectivityplot" aria-label="Plot for reflectivity curve"></canvas>
             </div>
-            <!-- range slider for resolution -->
-             <div class="range-slider-container">
-                <label for="ResolutionSlider">Resolution</label>
-                <input type="range" min="5" max="1000" value="50" id="ResolutionSlider">
-             </div>
+
+            <div style="display: flex; align-items: center;">
+                <!-- range slider for resolution -->
+                <div class="range-slider-container">
+                    <label for="ResolutionSlider">Resolution</label>
+                    <input type="range" min="5" max="1000" value="50" id="ResolutionSlider">
+                </div>
+                
+                <!-- en-/disable marker -->
+                <!-- <label class="iconCheckbox" for="marker_chkbx">
+                    <script>
+                        function EnableDisableMarker(state){
+                            if(window.boostPlot){
+                                window.boostPlot.options.plugins.tooltip.enabled = state;
+                                window.boostPlot.data.datasets[0].pointRadius = state ? 3 : 0;
+                                window.boostPlot.data.datasets[0].borderWidth = state ? 1.5 : 1;
+                                window.boostPlot.update();
+                            }
+
+                            if(window.reflectivityPlot){
+                                window.reflectivityPlot.options.plugins.tooltip.enabled = state;
+                                window.reflectivityPlot.data.datasets[0].pointRadius = state ? 3 : 0;
+                                window.reflectivityPlot.data.datasets[0].borderWidth = state ? 1.5 : 1;
+                                window.reflectivityPlot.update();
+                            }
+
+
+                        }
+                    </script>
+                    <input type="checkbox" name="marker_chkbx" id="marker_chkbx" checked onchange="EnableDisableMarker(event.target.checked); ">
+                    <svg xmlns="http://www.w3.org/2000/svg" height = "15px" width="15px" stroke="#000" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" fill="none" stroke-width="18"/>
+                    </svg>
+                </label> -->
+            </div>
+            
 
         </div>
     </div>

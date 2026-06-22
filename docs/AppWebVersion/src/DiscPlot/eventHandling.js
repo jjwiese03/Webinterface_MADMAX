@@ -28,11 +28,11 @@ const tan_delta_input = document.getElementById("tan-delta-input");
 const discNumberString = document.getElementById("discNumberString");
 const counter_field = document.getElementById("disc-number-input");
 const position_input = document.getElementById("position-input");
-const rel_poisition_input = document.getElementById("rel_position-input");
+const rel_poisition_input = document.getElementById("rel-position-input");
 const width_input = document.getElementById("width-input");
 
 
-discplot.discConfig.on("change:position", function ()  {
+discplot.discConfig.on("disc:position", function ()  {
     const selection = this.selectedDiscs
     position_input.value = (selection.length > 0) ? selection[0].position : "-";
     rel_poisition_input.value = (selection.length > 0 && selection[0].before != null) ? selection[0].position - selection[0].before.rightEdge : "-";
@@ -42,7 +42,7 @@ discplot.discConfig.on("change:position", function ()  {
 })
 
 
-discplot.discConfig.on("change:selection", function (selection) {
+discplot.discConfig.on("disc:selected", function (selection) {
     if (selection.length > 0) {
         position_input.value = selection[0].position;
         rel_poisition_input.value = (selection[0].before != null) ? selection[0].position - selection[0].before.rightEdge : selection[0].position;
@@ -67,6 +67,11 @@ discplot.discConfig.on(["disc:removed", "disc:added"], function () {
     discplot.draw();
 })
 
+discplot.discConfig.on("disc:property", function () {
+    window.discplot.draw();
+})
+
+window.discplot.discConfig.addDiscs(4)
 
 
 let compilationStatus = true;

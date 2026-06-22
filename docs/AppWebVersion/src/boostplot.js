@@ -7,9 +7,8 @@ ResolutionSlider.addEventListener("change", () => updateBoostplot(discplot.discC
 const fminInput = document.getElementById("fmin");
 const fmaxInput = document.getElementById("fmax");
 
-
-export let boostPlot = null;
-export let reflectivityPlot = null;
+window.boostPlot = null;
+window.reflectivityPlot = null;
 
 function getColors() {
   const dark = matchMedia('(prefers-color-scheme: dark)').matches;
@@ -115,14 +114,14 @@ function makeChartConfig(data, yLabel, c) {
 
 export function initPlots() {
     const c = getColors();
-    if (boostPlot) boostPlot.destroy();
-    if (reflectivityPlot) reflectivityPlot.destroy();
+    if (window.boostPlot) window.boostPlot.destroy();
+    if (window.reflectivityPlot) window.reflectivityPlot.destroy();
 
-    boostPlot = new Chart(document.getElementById('boostplot').getContext('2d'), makeChartConfig([], 'Boostfactor', c));
+    window.boostPlot = new Chart(document.getElementById('boostplot').getContext('2d'), makeChartConfig([], 'Boostfactor', c));
 
-    reflectivityPlot = new Chart(document.getElementById('reflectivityplot').getContext('2d'), makeChartConfig([], 'Reflectivity', c));
-    reflectivityPlot.options.scales.y.ticks.callback = reflToString();
-    reflectivityPlot.options.plugins.tooltip.callbacks.label = (item) => reflToString(2)(item.parsed.y);
+    window.reflectivityPlot = new Chart(document.getElementById('reflectivityplot').getContext('2d'), makeChartConfig([], 'Reflectivity', c));
+    window.reflectivityPlot.options.scales.y.ticks.callback = reflToString();
+    window.reflectivityPlot.options.plugins.tooltip.callbacks.label = (item) => reflToString(2)(item.parsed.y);
 }
 
 
@@ -132,32 +131,40 @@ export function updateBoostplot(discCollection) {
     const n = parseFloat(ResolutionSlider.value)
     const freq = linspace(parseFloat(fminInput.value), parseFloat(fmaxInput.value), n)
 
-    if (isNaN(freq[0])) console.error("fmin or fmax is missing!!!");
+    if (isNaN(freq[0])) throw new Error("fmin or fmax is missing or invalid!!!");
 
     const { boostfactor, reflectivity} = transfer_matrix(freq.map((e) => e*1e9), discCollection.discs.map(d => d.position), discCollection.discs.map(d => d.width));
     const dataBoost = Array.from(boostfactor, (val, i) => ({ x: freq[i], y: val }));
     const dataRefl = Array.from(reflectivity, (val, i) => ({ x: freq[i], y: val }));
 
 
-    if (boostPlot) {
-        boostPlot.data.datasets[0].data = dataBoost;
-        boostPlot.options.scales.x.min = freq[0];
-        boostPlot.options.scales.x.max = freq[freq.length - 1];
-        boostPlot.update();
+    if (window.boostPlot) {
+        window.boostPlot.data.datasets[0].data = dataBoost;
+
+        const n = window.boostPlot.data.datasets[0].data.length
+        window.boostPlot.data.datasets[0].pointRadius = n > 200 ? 0 : n > 80 ? 1 : 3
+        window.boostPlot.data.datasets[0].borderWidth = n > 300 ? 1 : 1.5
+
+        window.boostPlot.options.scales.x.min = freq[0];
+        window.boostPlot.options.scales.x.max = freq[freq.length - 1];
+        window.boostPlot.update();
     } else {
         initPlots();
     }
 
-    if (reflectivityPlot) {
-        reflectivityPlot.data.datasets[0].data = dataRefl;
-        reflectivityPlot.options.scales.x.min = freq[0];
-        reflectivityPlot.options.scales.x.max = freq[freq.length - 1];
-        reflectivityPlot.update();
+    if (window.reflectivityPlot) {
+        window.reflectivityPlot.data.datasets[0].data = dataRefl;
+
+        const n = window.reflectivityPlot.data.datasets[0].data.length
+        window.reflectivityPlot.data.datasets[0].pointRadius = n > 200 ? 0 : n > 80 ? 1 : 3
+        window.reflectivityPlot.data.datasets[0].borderWidth = n > 300 ? 1 : 1.5
+
+        window.reflectivityPlot.options.scales.x.min = freq[0];
+        window.reflectivityPlot.options.scales.x.max = freq[freq.length - 1];
+        window.reflectivityPlot.update();
     } else {
         initPlots()
     }
 }
 
-
 initPlots();
-// updateBoostplot(discplot.discConfig);

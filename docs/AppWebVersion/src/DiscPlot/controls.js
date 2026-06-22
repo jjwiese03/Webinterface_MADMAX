@@ -35,13 +35,40 @@ document.getElementById("disc-number-input").onchange = function(event) {
     }
 };
 
-document.getElementById("position-input").onchange = function() {
+document.getElementById("position-input").onchange = function(event) {
+    try {
+        let dx = parseFloat(event.target.value) - window.discplot.discConfig.firstSelectedDisc.position
 
+        window.discplot.discConfig.loopSelection((disc, i, kwargs) => {
+            disc.move(kwargs.dx, true)
+        }, {dx})
+    } catch (error) {
+        console.log("no position change possible: ", error)
+    }
 };
 
+document.getElementById("rel-position-input").onchange = function(event) {
+    try {
+        let dx = parseFloat(event.target.value) - (window.discplot.discConfig.firstSelectedDisc.position - window.discplot.discConfig.firstSelectedDisc.before.rightEdge)
 
-const rel_poisition_input = document.getElementById("rel_position-input");  
-const width_input = document.getElementById("width-input");
+        window.discplot.discConfig.loopSelection((disc, i, kwargs) => {
+            disc.move(kwargs.dx, true)
+        }, {dx})
+    } catch (error) {
+        console.log("no relative position change possible: ", error)
+    }
+};
+
+document.getElementById("width-input").onchange = function(event) {
+    try {
+        let width = parseFloat(event.target.value)
+        window.discplot.discConfig.loopSelection((disc, i, kwargs) => {
+            disc.changeProperty(kwargs)
+        }, {width})
+    }catch (error) {
+        console.log("no relative position change possible: ", error)
+    }
+};
 
 
 

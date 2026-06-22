@@ -30,7 +30,7 @@ const tan_delta_input = document.getElementById("tan-delta-input");
 const discNumberString = document.getElementById("discNumberString");
 const counter_field = document.getElementById("disc-number-input");
 const position_input = document.getElementById("position-input");
-const rel_poisition_input = document.getElementById("rel_position-input");
+const rel_poisition_input = document.getElementById("rel-position-input");
 const width_input = document.getElementById("width-input");
 
 function setCanvasSize() {
@@ -69,8 +69,10 @@ class Plot{
         
         this.init();
     }
-    init(){
+    async init(){
         this.padd = [discCanvas.height * 0.3, discCanvas.width * 0.1, discCanvas.height * 0.3, innerHeight * 0.05]
+
+        await document.fonts.ready;
         this.discContext.font = "15px Poppins";
         this.axisContext.font = "15px Poppins";
 
@@ -123,10 +125,10 @@ class Plot{
             // ── Scheiben ─────────────────────────────────────────────────────────────
             this.discContext.clearRect(0, 0, this.discCanvas.width, this.discCanvas.height);
 
-            var prev_disc  = { position: 0, width: 0 };
+            var prev_disc  = {};
             var arrow_y    = this.discCanvas.height / 2;
 
-            this.discConfig.discs.forEach(disc => {
+            this.discConfig.discs.forEach((disc, index) => {
                 const x = this.padd[3] + this.cm_to_pixel(disc.position);
                 const bodyH = this.discCanvas.height - this.padd[0] - this.padd[2];
 
@@ -146,7 +148,7 @@ class Plot{
                 this.discContext.stroke();
 
                 // Abstandspfeil zur vorherigen Scheibe
-                if (graph_dist_chkbx.checked) {
+                if (graph_dist_chkbx.checked && index > 0) {
                     const gap = parseFloat(-(prev_disc.position + prev_disc.width - disc.position).toFixed(3));
                     if (gap !== 0) {
                         const arrow_start = this.cm_to_pixel(prev_disc.position + prev_disc.width) + this.padd[3];

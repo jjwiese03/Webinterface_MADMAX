@@ -67,6 +67,9 @@ export class Disc {
 
         this.collection.moveDiscs(this, value, dx)
     }
+    changeProperty(properties){
+        this.collection.changeDiscProperty(this, properties)
+    }
 }
 
 
@@ -86,11 +89,11 @@ export class DiscCollection {
      * Registers a listener for the given event.
      * The callback will be invoked every time the event is emitted.
      *
-     * @param {string|Array{string}} event - The event name to listen for (e.g. 'change:position', 'change:selection', 'disc:added', 'disc:removed')
+     * @param {string|Array{string}} event - The event name to listen for (e.g. 'disc:position', 'disc:selected', 'disc:added', 'disc:removed')
      * @param {Function} callback - The function to call when the event fires.
      *                              Receives the data passed to emit() as its argument.
      * @example
-     * DiscCollection.on('change:position', (disc) => console.log('position changed:', disc));
+     * DiscCollection.on('disc:position', (disc) => console.log('position changed:', disc));
      */
     on(event, callback) {
         if (Array.isArray(event)) {
@@ -112,8 +115,8 @@ export class DiscCollection {
      * @param {Function} callback - The exact function reference that was registered.
      * @example
      * const handler = (disc) => console.log(disc);
-     * DiscCollection.on('change:position', handler);
-     * DiscCollection.off('change:position', handler);
+     * DiscCollection.on('disc:position', handler);
+     * DiscCollection.off('disc:position', handler);
      */
     off(event, callback) {
         if (Array.isArray(event)) {
@@ -132,7 +135,7 @@ export class DiscCollection {
      * @param {string|Array{string}} event - The event name to emit.
      * @param {*} data - The data to pass to each listener callback.
      * @example
-     * this.emit('change:position', { disc: hitDisc });
+     * this.emit('disc:position', { disc: hitDisc });
      */
     emit(event, data) {
         if (Array.isArray(event)) {
@@ -146,16 +149,7 @@ export class DiscCollection {
 
     get length(){
         return this.discs.length;
-    }
-    get selectedDiscs(){
-        /**
-         * returns the discs, that are currently selected
-         */
-        return this.discs.filter(disc => disc.selected);
-    }
-    get selectedDiscIndices(){
-        return this.discs.map(disc => disc.selected ? this.indexOf(disc) : null).filter(index => index !== null);
-    }
+    }  
     get lastDisc(){
         /**
          * time complexity: O(1)
@@ -167,6 +161,27 @@ export class DiscCollection {
          * time complexity: O(1)
          */
         return this.discs.length > 0 ? this.discs[0] : null;
+    }
+    get firstSelectedDisc(){
+        for (let disc of this.discs) {
+            if (disc.selected) return disc;
+        }
+    }
+    get lastSelectedDisc(){
+        let canidate = this.discs.firstDisc
+        for (let disc of this.discs) {
+            if (disc.selected) canidate = disc;
+        }
+        return disc;
+    }
+    get selectedDiscs(){
+        /**
+         * returns the discs, that are currently selected
+         */
+        return this.discs.filter(disc => disc.selected);
+    }
+    get selectedDiscIndices(){
+        return this.discs.map(disc => disc.selected ? this.indexOf(disc) : null).filter(index => index !== null);
     }
     get positions(){
         return this.discs.map(d => d.position);
@@ -289,6 +304,12 @@ export class DiscCollection {
         this.discs = this.discs.filter(disc => !disc.selected);
         this.emit("disc:removed", {});
     }
+    loopSelection(callback, kwargs = {}) {
+        /**
+         * loops through the selected discs and calls the callback function
+         */
+        this.discs.forEach((disc, i) => {if(disc.selected){callback(disc, i, kwargs)}})
+    }
     addDisc(disc = null, deselectOthers = true) {
         // turn the input into a Disc class
 
@@ -319,7 +340,7 @@ export class DiscCollection {
             this.discs.splice(disc.index, 0, disc);
             this.updateIndicies(disc.index);
             this.emit("disc:added", disc);
-            if(disc.selected == true || deselectOthers == true) this.emit("change:selection", this.selectedDiscs);
+            if(disc.selected == true || deselectOthers == true) this.emit("disc:selected", this.selectedDiscs);
         } else {
             throw new Error("Only Disc or a plain object are valid inputs. Got: " + String(disc));
         }
@@ -359,7 +380,7 @@ export class DiscCollection {
 
         if (disc instanceof Array){
             disc.forEach(d => this.selectDisc(d, false, false));
-            this.emit("change:selection", this.selectedDiscs)
+            this.emit("disc:selected", this.selectedDiscs)
             return;
         }
         else {
@@ -367,12 +388,12 @@ export class DiscCollection {
             disc.selected = true;
         }
 
-        if(triggerEvent) {this.emit("change:selection", this.selectedDiscs)}
+        if(triggerEvent) {this.emit("disc:selected", this.selectedDiscs)}
         return;
     }
     clearSelection(dispatchEvent = true){
         this.discs.forEach(d => d.selected = false);
-        if(dispatchEvent) this.emit("change:selection", []);
+        if(dispatchEvent) this.emit("disc:selected", []);
         return;
     }
     clear(){
@@ -393,7 +414,7 @@ export class DiscCollection {
 
         discs.forEach((disc, index) => {
             // change position
-            if (dx && value >= 0) {
+            if (dx) {
                 disc.position += value;
             }
             else {
@@ -429,7 +450,19 @@ export class DiscCollection {
             }
         }
         
-        this.emit("change:position")
+        this.emit("disc:position")
+    }
+    changeDiscProperty(discs, properties, triggerEvent = true){
+        if(Array.isArray(discs)) {discs.forEach((disc) => this.changeDiscs(disc, properties))}
+        else{
+            for (const [key, value] of Object.entries(properties)) {
+                if(discs[key]) continue;
+                
+                discs[key] = value;
+                if(triggerEvent) this.emit("disc:property");
+            }
+        }
+        return;
     }
     updateIndicies(start = 0, stop = null){
         /**
