@@ -48,7 +48,7 @@ html, body{
 
 .card-grid{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 3fr 2fr;
     height: 50%;
     width: 100%;
     padding: 5vh;
@@ -141,13 +141,22 @@ html, body{
 
 .standard-button{
     height: var(--standard-height);
+    width: fit-content;
+    color: black;
     font-family: inherit;
+    font-size: small;
     cursor: pointer;
     border-radius: 5px;
     border: 1px solid rgba(176, 176, 176, 0.404);
     background-color: var(--line-color-1);
     transition: all .2s;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.132);
+}
+a.standard-button{
+    text-decoration: none;
+    box-sizing: border-box;
+    align-content: center;
+    padding: 1px 4px;
 }
 
 .standard-button:hover{

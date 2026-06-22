@@ -34,7 +34,7 @@ const reflToString = (roundMantissa = 0) => (value) => {
     return "1" +  ((mantissa > 0) ? " - " : " + ") + `${Math.abs(mantissa).toFixed(roundMantissa)}e${exponent}`;
 }
 
-function makeChartConfig(data, label, c) {
+function makeChartConfig(data, yLabel, c) {
     const xS = Math.min(...data.map(d => d.x));
     const xE = Math.max(...data.map(d => d.x));
     return {
@@ -42,7 +42,6 @@ function makeChartConfig(data, label, c) {
         defaults: {font:{family: "sans-serif"}},
         data: {
             datasets: [{
-                label,
                 data,
                 parsing: { xAxisKey: 'x', yAxisKey: 'y' },
                 borderColor: c.line,
@@ -70,6 +69,9 @@ function makeChartConfig(data, label, c) {
                         title: items => 'Freq: ' + items[0].parsed.x.toFixed(3) + ' GHz',
                         label: item => 'Boostfactor: ' + item.parsed.y.toFixed(2)
                     }
+                },
+                legend: {
+                    display: false
                 }
             },
             scales: {
@@ -95,7 +97,16 @@ function makeChartConfig(data, label, c) {
                         color: c.tickColor, 
                         font: { size: 11 }
                     },
-                    grid: { color: c.gridColor }
+                    grid: { color: c.gridColor },
+                    title: {
+                        display: true,       // Make sure to set display to true
+                        text: yLabel,
+                        // color: 'darkgray',
+                        font: {
+                            size: 12,
+                            style: 'italic'
+                        }
+                    }
                 }
             }
         }
@@ -149,4 +160,4 @@ export function updateBoostplot(discCollection) {
 
 
 initPlots();
-updateBoostplot(discplot.discConfig);
+// updateBoostplot(discplot.discConfig);

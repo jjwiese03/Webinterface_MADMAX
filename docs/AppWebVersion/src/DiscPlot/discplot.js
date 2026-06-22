@@ -259,10 +259,3 @@ window.discplot = new Plot(discCanvas, axisCanvas);
 export default window.discplot;
 
 window.addEventListener('resize', () => {setCanvasSize(); discplot.init();});
-
-window.discplot.discConfig.addDisc();
-window.discplot.discConfig.addDisc();
-window.discplot.discConfig.addDisc({"width": 0.7});
-const disc = window.discplot.discConfig.addDisc();
-disc.move(7, true)
-window.discplot.draw(false)

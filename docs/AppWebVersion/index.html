@@ -46,7 +46,6 @@
                         <svg xmlns="http://www.w3.org/2000/svg" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M90 80V20"/><path stroke-width="5" stroke-linecap="round" d="M20 50h55"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m60 35 15 15-15 15"/></svg>
                     </label>
                 </div>
-
             </div>
             <div class="card-grid">
                 <!--card 1-->
@@ -66,7 +65,7 @@
                     <div class="tab-window" id="DiscSettings">
                         <div class="tab tab-size-1" id="tab-Positioning">
                             <div style="text-align: center;" id="discNumberString">
-                                selected disc: 4
+                                no disc selected
                             </div>
                             <div class="standard-counter-wrapper">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g fill="#fff" stroke=var(--madmax-yellow) stroke-width="5"><ellipse rx="15" ry="45" cx="65" cy="50"/><ellipse rx="15" ry="45" cx="50" cy="50"/><ellipse rx="15" ry="45" cx="35" cy="50"/></g></svg><div class="standard-counter">
@@ -74,7 +73,7 @@
                                     <button id="disc-number-minus" class="standard-counter-btn border-left" onclick="const numberInput = document.getElementById('disc-number-input'); numberInput.value = Math.max(parseInt(numberInput.value) - 1, 0); numberInput.dispatchEvent(new Event('change'));">
                                         <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 -960 960 960" width="80%" fill="#000000"><path d="M200-440v-80h560v80H200Z"/></svg>
                                     </button>
-                                    <input id="disc-number-input" type="text" class="standard-number-input" style="border-radius: 0; width: 40px; box-shadow: none; border: none;" name="">
+                                    <input id="disc-number-input" type="text" class="standard-number-input" style="border-radius: 0; width: 40px; box-shadow: none; border: none;" value="0">
                                     <button class="standard-counter-btn border-right" onclick="const numberInput = document.getElementById('disc-number-input'); numberInput.value = parseInt(numberInput.value) + 1; numberInput.dispatchEvent(new Event('change'));">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="80%" fill="#000000"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
                                     </button>
@@ -84,17 +83,17 @@
                             <div class="input-row">
                                 <div class="input-wrapper">
                                     <svg xmlns="http://www.w3.org/2000/svg" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M10 80V20m80 60V20"/><path stroke-width="5" stroke-linecap="round" d="M25 50h50"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M40 35 25 50l15 15m20-30 15 15-15 15"/></svg>
-                                    <input id="rel_position-input"  type="text" name="position" class="standard-number-input">
+                                    <input id="rel_position-input"  type="text" name="position" class="standard-number-input" value="-">
                                 </div>
 
                                 <div class="input-wrapper">
                                     <svg xmlns="http://www.w3.org/2000/svg" stroke="#000" viewBox="0 0 100 100"><path stroke-width="13" stroke-linecap="round" d="M90 80V20"/><path stroke-width="5" stroke-linecap="round" d="M20 50h55"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="m60 35 15 15-15 15"/></svg>
-                                    <input id="position-input" type="text" name="distance" class="standard-number-input">
+                                    <input id="position-input" type="text" name="distance" class="standard-number-input" value="-">
                                 </div>
 
                                 <div class="input-wrapper">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20 40h60v60H20z"/><path stroke-width="5" stroke-linecap="round" d="M20 20h60"/><path fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M30 10 20 20l10 10m40-20 10 10-10 10"/></svg>
-                                    <input id="width-input" type="text" name="thickness" class="standard-number-input">
+                                    <input id="width-input" type="text" name="thickness" class="standard-number-input" value="-">
                                 </div>
                             </div>
                             <button id="deleteDisc" class="standard-button" style="width: 100%;">Delete</button>
@@ -147,8 +146,10 @@
                 <!-- card 2 -->
                  <div class="card" style="height: 100%; background-color: white; padding: 0;">
                     <h4>Advanced</h4>
-                    <div style="display: flex; margin: 10px 15px;">
-                        <button id="run" class="standard-button" style="width: fit-content;">Run</button>
+                    <div style="display: flex; margin: 10px 15px; gap: 10px;">
+                        <button id="run" class="standard-button">Run</button>
+                        <button id="Console" class="standard-button">Terminal</button>
+                        <a id="docs" class="standard-button" style="margin-left: auto;" href="../index.html">Docs</a>
                     </div>
                     
                     <div id="editor" style="flex: 1; margin: 0 10px 10px 10px;"></div>
@@ -156,16 +157,34 @@
                     <script>
                         require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor/min/vs' } });
 
+
+                        const example = [
+                                        "# -- EXAMPLE CODE -- ",
+                                        "import js",
+                                        "import asyncio",
+                                        "",
+                                        "async def Animation(disc):",
+                                        "    # animate the disc while moving 2cm to the right",
+                                        "    for i in range(200):",
+                                        "        disc.move(0.01, dx=True)",
+                                        "        await asyncio.sleep(0.1)",
+                                        "    return None",
+                                        "",
+                                        "# add a disc to the discplot",
+                                        "disc = js.window.discplot.discConfig.addDisc()",
+                                        "print(disc.position)",
+                                        "",
+                                        "# wait for 3 seconds",
+                                        "await asyncio.sleep(3)",
+                                        "",
+                                        "await Animation(disc)"
+                                    ].join("\n")
+
                         require(["vs/editor/editor.main"], function () {
                             window.editor = monaco.editor.create(
                                 document.getElementById("editor"),
                                 {
-                                    value: [
-                                        "def hello():",
-                                        "    print('Hallo Welt')",
-                                        "",
-                                        "hello()"
-                                    ].join("\n"),
+                                    value: example,
                                     language: 'python',
                                     theme: 'vs',
                                     minimap: { enabled: false },      // keine Minimap rechts
@@ -220,8 +239,5 @@
 
     <!-- Scripte -->
     <script src="custom-elements/navbar/navbar.js"></script>
-
-
-
 </body>
 </html>

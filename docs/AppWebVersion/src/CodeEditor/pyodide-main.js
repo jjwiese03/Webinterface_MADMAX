@@ -3,8 +3,8 @@ const pyodide = await loadPyodide();
 // load Packages
 await pyodide.loadPackage(["numpy"]);
 
-document.getElementById("run").addEventListener("click", (event) => {
+document.getElementById("run").addEventListener("click", async (event) => {
     if(window.editor == null) return;
 
-    pyodide.runPython(window.editor.getValue());
+    await pyodide.runPythonAsync(window.editor.getValue());
 })
