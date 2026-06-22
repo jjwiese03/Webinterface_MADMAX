@@ -137,7 +137,6 @@ export default window.updateBoostplot = (discCollection) => {
     if (!isNaN(eps)) kwargs["eps"] = eps;
     const tand = parseFloat(document.getElementById("tand").value) * 1e-6
     if (!isNaN(tand)) {kwargs["tand"] = tand;}
-    console.log(kwargs)
 
 
     const { boostfactor, reflectivity} = transfer_matrix(freq.map((e) => e*1e9), discCollection.discs.map(d => d.position), discCollection.discs.map(d => d.width), kwargs);
